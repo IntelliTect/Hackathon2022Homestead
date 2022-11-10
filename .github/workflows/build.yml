@@ -22,11 +22,11 @@ jobs:
       with:
         dotnet-version: 6.0.x
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore Homestead
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build Homestead --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test Homestead --no-build --verbosity normal
     - name: Publish
       run: dotnet publish Homestead/Server/Homestead.Server.csproj -c Release -o website
     - name: Upload a Build Artifact
