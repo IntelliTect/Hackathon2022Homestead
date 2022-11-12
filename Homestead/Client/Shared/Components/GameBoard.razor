@@ -50,12 +50,13 @@
                 SkinTone = Player.SkinTones.Light,
                 Gender = Player.Genders.Female
             };
-        player.Hand.Add(Cards.Shovel);
-        player.Hand.Add(Cards.Seeds);
-        player.Hand.Add(Cards.Livestock);
-        player.Hand.Add(Cards.Wood);
-        player.Hand.Add(Cards.Saw);
-        player.Hand.Add(Cards.Hammer);
+        player.Board.Add(Cards.Shovel);
+        player.Board.Add(Cards.Seeds);
+        player.Board.Add(Cards.Livestock);
+        player.Board.Add(Cards.Wood);
+        player.Board.Add(Cards.Saw);
+        player.Board.Add(Cards.Hammer);
+        player.Hand.Add(Cards.Well);
         GameState.Players.Add(player);
 
         var player2 = new Player()

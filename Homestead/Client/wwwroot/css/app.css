@@ -13,8 +13,6 @@ html, body {
 
 img {
     image-rendering: pixelated;
-    image-rendering: -moz-crisp-edges;
-    image-rendering: crisp-edges;
 }
 
 .player-hand {
@@ -26,18 +24,39 @@ img {
     padding: 15px;
 }
 
+
+
+.board-card {
+    width: 80px;
+    height: 90px;
+    background-color: transparent;
+}
+
 .hand-card {
-    background-color: white;
-    height: 100%;       
+    background-color: rgba(10,10,10,.2);
+    height: 100%;
+    width: 100%;
+    border-radius: 5px;
 }
 
 .card-image {
-    height: 60%;
-    margin:10px;
+    height: 70px;
+    width: 70px;
+    margin-left: 3px;
+    background-size: cover;
+    background-color: transparent;
+    border-radius: 5px 5px 0 0;
 }
+
 .card-text {
-    height: 40%;
-    margin: 10px;
+    height: 20px;
+    width: 100%;
+    font-size: .9em;
+    text-align: center;
+    overflow: hidden;
+    color: white;
+    background-color: rgba(0, 0, 0, .3);
+    border-radius: 0 0 5px 5px;
 }
 
 

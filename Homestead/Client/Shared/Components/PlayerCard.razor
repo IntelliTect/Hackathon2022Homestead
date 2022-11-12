@@ -1,14 +1,14 @@
-﻿<div class="hand-card">
-   <div class="card-image">
-       <img src="@Image" alt="card-image"/>
+﻿@using Homestead.Shared
+<div class="hand-card">
+   <div class="card-image" style="background-image: url(@Card.ImageUrl)">
    </div>
    <div class="card-text">
-       
+       @(Card.Name)
    </div>
 </div>
 @code {
     [Parameter]
-    public string Image { get; set; } = string.Empty;
+    public CardInfo Card { get; set; } = null!;
 
     //[Parameter]
     //public string CardText { get; set; } = string.Empty;
