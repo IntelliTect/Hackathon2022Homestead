@@ -7,8 +7,6 @@
 
     public class GameEngine : IGameEngine
     {
-        //private Game CurrentState { get; set;  }
-
         public Game Start()
         {
             Game game = new();
@@ -33,39 +31,27 @@
             if (action.Type is Action.ActionType.DrawFromDeck)
             {
                 // Disallow if hand.count > 4, then they'll have to discard
-                game.Players[game.ActivePlayer].Hand.Add(DrawCard());
+                game.Players[action.PlayerNumber].Hand.Add(Cards.GetCard());
             }
             else if(action.Type is Action.ActionType.Discard)
             {
                 // Do not leave in!
-                if (string.IsNullOrWhiteSpace(action.TargetCard)) throw new NullReferenceException();
-                game.Players[game.ActivePlayer].Hand.Remove(action.TargetCard);
-                game.DiscardPile.Add(action.TargetCard);
+                if (string.IsNullOrWhiteSpace(action.PlayerCard)) throw new NullReferenceException();
+                game.Players[action.PlayerNumber].Hand.Remove(action.PlayerCard);
+                game.DiscardPile.Add(action.PlayerCard);
             }
             else if(action.Type is Action.ActionType.EndTurn)
             {
-                // Need to revert to 0 on 3
+                // Need to revert to 1 on 4
                 game.ActivePlayer++;
             }
 
             return game;
         }
 
-        public string DrawCard(/*Game game*/)
+        public List<Action> PlayCard(string card)
         {
-            // TODO: Randomly pick a card from the list of strings
-            return Well;
-        }
-
-        public void DiscardCard(string card)
-        {
-            // Does all of these return game state?
-            // Player[0].Hand.Delete(card)
-        }
-
-        public List<GameAction> PlayCard(string card)
-        {
-            return new List<GameAction>();
+            return new List<Action>();
         }
 
         private void EvaluateActions(Game game)
@@ -100,12 +86,5 @@
         {
             return new Action(Action.ActionType.Play, 1);
         }
-
-        private const string Well = "Well";
-    }
-
-    public class GameAction
-    {
-
     }
 }

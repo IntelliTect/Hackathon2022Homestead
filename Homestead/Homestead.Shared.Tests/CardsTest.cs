@@ -18,7 +18,8 @@ namespace Homestead.Shared.Tests
             var info = Cards.GetCardInfo(Cards.FloodAll);
             Assert.AreEqual(CardInfo.CardImpact.All, info.Impact);
             Assert.AreEqual(CardInfo.CardSuit.Disaster, info.Suit);
-
+            Assert.AreEqual("flood.png", info.ImageFilename);
+            Assert.AreEqual("/Assets/Images/cards/flood.png", info.ImageUrl);
         }
     }
 }
