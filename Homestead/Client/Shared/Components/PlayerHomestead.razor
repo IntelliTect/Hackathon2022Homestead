@@ -1,8 +1,16 @@
 ﻿@using Homestead.Client.ViewModels
+@inject LobbyVm Lobby
 
 <div>
     <!-- Visuals -->
     <div class="container">
+        <div style="font-size:2em;">
+            @if (Player.IsCurrentPlayer)
+            {
+                <span>🚩</span>
+            }
+            <span>@Player.PlayerNumber: @Player.Player.Name</span>
+        </div>
         <div class="row">
             <!-- House -->
             <div class="home col-1">

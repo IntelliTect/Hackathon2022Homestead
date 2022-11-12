@@ -11,7 +11,7 @@ namespace Homestead.Client.ViewModels
         /// The local player is always index 0
         /// </summary>
         public int PlayerIndex { get; }
-
+        public bool IsCurrentPlayer { get; internal set; }
 
         public List<PlayerCardVm> Hand
         { get; } = new();
