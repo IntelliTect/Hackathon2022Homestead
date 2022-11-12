@@ -25,8 +25,8 @@ namespace Homestead.Shared
         public string Name { get; set; }
         public SkinTones SkinTone { get; set; }
         public Genders Gender { get; set; }
-        public List<string> Hand { get; } = new List<string>();
-        public List<string> Board { get; } = new List<string>();
+        public List<string> Hand { get; set; } = new List<string>();
+        public List<string> Board { get; set; } = new List<string>();
 
         /// <summary>
         /// This should only be called by the SignalR deserializer

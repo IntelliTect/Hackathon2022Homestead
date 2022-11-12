@@ -16,9 +16,9 @@
         }
     </div>
     <div class=row gx-1 mb-1>
-        @if(IsOwnerOfGame)
+        @if (IsOwnerOfGame)
         {
-        <button type="button">Start</button>
+            <button type="button">Start</button>
         }
     </div>
 
@@ -34,14 +34,14 @@
     //[CascadingParameter]
     public bool IsOwnerOfGame => CurrentPlayer.PlayerNumber == 1;
 
-    private BoardVm Board => Lobby.Board!;
+    private BoardVm Board => Lobby.Board;
 
     public List<PlayerVm> Opponents { get => Board.OtherPlayers; }
-    public PlayerVm CurrentPlayer { get =>Board.LocalPlayer; }
+    public PlayerVm CurrentPlayer { get => Board.LocalPlayer; }
 
     protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine("Game Board Component");
+        Console.WriteLine($"Game Board Component with {Opponents.Count() + 1} Players");
         hubConnection.On<Game>("ActionReceived", (state) =>
         {
             Board.Update(state);
@@ -49,8 +49,8 @@
         });
 
         await base.OnInitializedAsync();
-    }   
-        public void Dispose()
+    }
+    public void Dispose()
     {
         hubConnection.Remove("ActionReceived");
     }
