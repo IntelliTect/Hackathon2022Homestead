@@ -14,11 +14,18 @@ public class CommunicationHub : Hub
         this.gameLookup = gameLookup;
     }
 
-    public async Task ActionReceived(string gameId, Shared.PlayerAction action)
+    public async Task ExecuteAction(string gameId, PlayerAction action)
     {
         var game = gameLookup.GetGame(gameId);
         if (game == null) throw new ArgumentNullException(nameof(game));
         var newState = engine.ProcessAction(game, action);  
         await Clients.Group(newState.GameId).SendAsync("ActionRecieved", newState);
+    }
+    
+    public async Task RequestPushGameState(string gameId)
+    {
+        var game = gameLookup.GetGame(gameId);
+        if (game == null) throw new ArgumentNullException(nameof(game));
+        await Clients.Group(gameId).SendAsync("ActionRecieved", game);
     }
 }
