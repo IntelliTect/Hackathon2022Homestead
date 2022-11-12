@@ -1,4 +1,4 @@
-﻿@using Homestead.Shared;
+﻿@using Homestead.Client.ViewModels
 
 <div>
     <!-- Visuals -->
@@ -6,15 +6,15 @@
         <div class="row">
             <!-- House -->
             <div class="home col-1">
-                <img height="200" src="/Assets/Images/house/house@(BoardHouse.Count).png" />
+                <img height="200" src="/Assets/Images/house/house@(Player.BoardHouse.Count()).png" />
             </div>
             <!-- Player -->
             <div class="player col-1">
-                <img style="margin-top: 150px" height="70" src="@Player.GetPlayerImageUrl()" />
+                <img style="margin-top: 150px" height="70" src="@Player.GetImageUrl()" />
             </div>
             <!-- Garden -->
             <div class="garden col-12 col-md-1 mt-5">
-                <img height="200" src="/Assets/Images/garden/garden@(BoardGarden.Count).png" />
+                <img height="200" src="/Assets/Images/garden/garden@(Player.BoardGarden.Count()).png" />
             </div>
         </div>
     </div>
@@ -23,27 +23,27 @@
         <div class="container">
             <!-- House Cards -->
             <div class="row gx-1 mb-1">
-                @foreach (var card in BoardHouse)
+                @foreach (var card in Player.BoardHouse)
                 {
                     <div class="col-1 board-card">
-                        <PlayerCard Card="@card"/>
+                        <PlayerCard Card="@card" />
                     </div>
                 }
             </div>
 
             <!-- Farm Cards -->
             <div class="row gx-1">
-                @foreach (var card in BoardGarden)
+                @foreach (var card in Player.BoardGarden)
                 {
                     <div class="col-1 board-card">
-                        <PlayerCard Image="@card"/>
+                        <PlayerCard Image="@card" />
                     </div>
                 }
                 <!-- Livestock Cards -->
-                @foreach (var card in BoardLivestock)
+                @foreach (var card in Player.BoardLivestock)
                 {
                     <div class="col-1 board-card">
-                        <PlayerCard Image="@card"/>
+                        <PlayerCard Image="@card" />
                     </div>
                 }
             </div>
@@ -56,16 +56,16 @@
 
 @code {
     [Parameter]
-    public Player Player { get; set; } = new();
+    public PlayerVm Player { get; set; } = null!;
 
-    public List<CardInfo> BoardLivestock { get => Player.BoardBySuit(CardInfo.CardSuit.LiveStock).Select(card => Cards.GetCardInfo(card)).ToList(); }
-    public List<CardInfo> BoardGarden { get => Player.BoardBySuit(CardInfo.CardSuit.Garden).Select(card => Cards.GetCardInfo(card)).ToList(); } 
-    public List<CardInfo> BoardHouse { get => Player.BoardBySuit(CardInfo.CardSuit.House).Select(card => Cards.GetCardInfo(card)).ToList(); } 
+    //public List<CardInfo> BoardLivestock { get => Player.BoardBySuit(CardInfo.CardSuit.LiveStock).Select(card => Cards.GetCardInfo(card)).ToList(); }
+    //public List<CardInfo> BoardGarden { get => Player.BoardBySuit(CardInfo.CardSuit.Garden).Select(card => Cards.GetCardInfo(card)).ToList(); }
+    //public List<CardInfo> BoardHouse { get => Player.BoardBySuit(CardInfo.CardSuit.House).Select(card => Cards.GetCardInfo(card)).ToList(); }
 
     protected override void OnInitialized()
     {
-
+        Console.WriteLine($"Player {Player.PlayerNumber}");
     }
 
-  
+
 }

@@ -3,11 +3,12 @@ using System.Net.Http.Json;
 
 namespace Homestead.Client.ViewModels
 {
-    public class LobbyVm : ILobbyVm
+    public class LobbyVm
     {
-        public BoardVm? Board { get; internal set; }
+        private BoardVm? _Board;
+        public BoardVm Board => _Board ?? throw new NullReferenceException("No Board Found");
         public int PlayerNumber => _PlayerNumber;
-        public int _PlayerNumber;
+        private int _PlayerNumber;
         public bool InGame { get; set; }
 
 
@@ -16,18 +17,18 @@ namespace Homestead.Client.ViewModels
             var result = await http.PostAsync($"Join/{gameId}", null);
             var startGameResult = await result.Content.ReadFromJsonAsync<StartGameDto>();
             if (startGameResult == null) throw new ArgumentException("Game not found");
-            
+
             _PlayerNumber = startGameResult?.PlayerId ?? 0;
             if (_PlayerNumber > 0)
             {
                 InGame = true;
-                UpdateBoard(startGameResult!.Game);
+                _Board = new BoardVm(startGameResult!.Game, PlayerNumber);
                 return true;
             }
             InGame = false;
             return false;
         }
-        
+
         public async Task<bool> CreateGame(HttpClient http)
         {
             try
@@ -35,7 +36,7 @@ namespace Homestead.Client.ViewModels
                 var result = await http.GetFromJsonAsync<StartGameDto>("Create");
                 if (result == null) throw new ArgumentException("Game not found");
                 _PlayerNumber = result.PlayerId;
-                UpdateBoard(result.Game);
+                _Board = new BoardVm(result!.Game, PlayerNumber);
                 InGame = true;
                 return true;
             }
@@ -46,16 +47,13 @@ namespace Homestead.Client.ViewModels
             }
         }
 
+        /// <summary>
+        /// Update the current board.
+        /// </summary>
+        /// <param name="game"></param>
         public void UpdateBoard(Game game)
         {
-            if (Board == null)
-            {
-                Board = new BoardVm(game, PlayerNumber);
-            }
-            else
-            {
-                Board.Update(game);
-            }
+            Board.Update(game);
         }
     }
 }

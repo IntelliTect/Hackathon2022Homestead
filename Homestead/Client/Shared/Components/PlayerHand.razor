@@ -2,7 +2,7 @@
 @using Homestead.Shared;
 
 <div class="player-hand">
-    @foreach (var card in CardInfoList)
+    @foreach (var card in HandList)
     {
        <PlayerCard Card="@card"/>      
     }
@@ -12,5 +12,4 @@
     [Parameter]
     public List<CardVm> HandList { get; set; } = new();
 
-    public List<CardInfo> CardInfoList { get => HandList.Select(x => x.CardInfo).ToList(); } 
 }
