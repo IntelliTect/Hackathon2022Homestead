@@ -3,34 +3,34 @@
 
 <div>
     <!-- Visuals -->
-    <div class="container">
-        <div style="font-size:2em; float:left;">
+    <div class="" style="min-width: 600px; min-height:250px; border: 2px solid black; ">
+        <div style="font-size:2em;">
             @if (Player.IsCurrentPlayer)
             {
                 <span>🚩</span>
             }
             <span>@Player.PlayerNumber: @Player.Player.Name</span>
         </div>
-        <div class="row">
+        <div>
             <!-- House -->
-            <div class="home col-1">
+            <span class="home" style="min-width:200px; min-height: 200px;">
                 <img height="200" src="/Assets/Images/house/house@(Player.BoardHouse.Count()).png" />
-            </div>
+            </span>
             <!-- Player -->
-            <div class="player col-1">
-                <img style="margin-top: 150px" height="70" src="@Player.GetImageUrl()" />
-            </div>
+            <span class="player" style="width:200px; height: 200px;">
+                <img style="" height="70" src="@Player.GetImageUrl()" />
+            </span>
             <!-- Garden -->
-            <div class="garden col-12 col-md-1 mt-5">
+            <span class="garden" style="width:200px; height: 200px;">
                 <img height="200" src="/Assets/Images/garden/garden@(Player.BoardGarden.Count()).png" />
-            </div>
+            </span>
         </div>
     </div>
     <!-- Card Slots -->
     <div class="container">
         <div class="container">
             <!-- House Cards -->
-            <div class="row gx-1 mb-1">
+            <div class="row gx-1 mb-1" style="min-height:100px;">
                 @foreach (var card in Player.BoardHouse)
                 {
                     <div class="col-1 board-card">
@@ -40,7 +40,7 @@
             </div>
 
             <!-- Farm Cards -->
-            <div class="row gx-1">
+            <div class="row gx-1"  style="min-height:100px;">
                 @foreach (var card in Player.BoardGarden)
                 {
                     <div class="col-1 board-card">
