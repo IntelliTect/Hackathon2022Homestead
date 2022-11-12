@@ -1,3 +1,4 @@
+using Blazored.LocalStorage;
 using Homestead.Server.SignalR;
 using Homestead.Shared;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -13,6 +14,8 @@ builder.Services.AddSingleton<IGameEngine, GameEngine>();
 builder.Services.AddSingleton<IGameLookup, GameLookup>();
 
 builder.Services.AddSwaggerGen();
+builder.Services.AddBlazoredLocalStorage();
+
 
 var app = builder.Build();
 

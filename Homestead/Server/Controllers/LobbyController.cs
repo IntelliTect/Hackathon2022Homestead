@@ -21,14 +21,14 @@ public class LobbyController
 	}
 
 	[HttpGet("/Create")]
-	public async Task<int> CreateGame([FromServices] IGameEngine engine)
+	public async Task<Game> CreateGame([FromServices] IGameEngine engine)
 	{
 		var game = engine.Start();
 
 		lookup.AddGame(game);
 
         await hub.Groups.AddToGroupAsync(game.GameId, game.GameId);
-		return 1;
+		return game;
 	}
 
 	[HttpPost("/Join/{gameId}")]
