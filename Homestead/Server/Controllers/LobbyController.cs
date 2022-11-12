@@ -54,7 +54,30 @@ public class LobbyController
 		return 1;
 	}
 
-	[HttpGet]
+	[HttpPost("/JoinWithUrl/{gameId}")]
+	public async Task<int> JoinGameTest(string gameId)
+	{
+        var game = lookup.GetGame(gameId);
+        int playerNumber;
+
+        lock (game)
+        {
+            var player = game.Players.FirstOrDefault(x => x.IsBot);
+
+            if (player is null)
+            {
+                return 0;
+            }
+
+            player.IsBot = false;
+            playerNumber = player.PlayerNumber;
+        }
+
+        await hub.Groups.AddToGroupAsync(game.GameId, gameId);
+        return playerNumber;
+    }
+
+    [HttpGet]
 	public IEnumerable<Game> GetOpenGames() 
 	{
 		return lookup.ListGames.Where(x => x.State == GameState.Joining);

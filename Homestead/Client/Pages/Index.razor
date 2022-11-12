@@ -44,6 +44,19 @@ else
 
     private async void JoinGame(string gameId)
     {
+        var payload = new
+        {
+            gameId = gameId
+        };
+        var jsonPayload = System.Text.Json.JsonSerializer.Serialize(payload);
+        HttpContent content = new StringContent(gameId);
+
+        var playerNum = await Http.PostAsync($"Join", content);
+
+        playerNum = await Http.PostAsync($"JoinWithUrl/{gameId}", null);
+
+        
+        Console.WriteLine("Player " + await playerNum.Content.ReadAsStringAsync());
         var playerNum = await Http.GetAsync($"Join?gameId={gameId}");
     }
 }
