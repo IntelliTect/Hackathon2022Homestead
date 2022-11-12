@@ -22,6 +22,12 @@ public class LobbyController
 	public async Task<int> JoinGame(string gameId)
 	{
 		var game = lookup.GetGame(gameId);
+
+		if (game is null)
+		{
+			return 0;
+		}
+
 		int playerNumber;
 
 		lock (game)
