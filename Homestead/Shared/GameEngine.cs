@@ -21,26 +21,26 @@
                 game.Players.Add(player);
             }
             game.ActivePlayer = firstPlayer;
-            game.Actions.Add(new Action(Action.ActionType.DrawFromDeck, firstPlayer));
+            game.AvailableActions.Add(new Action(Action.ActionType.DrawFromDeck, firstPlayer));
             return game;
         }
 
         public Game ProcessAction(Game game, Action action)
         {
-            game.LastAction = action;
+            game.LastActions.Add(action);
             if (action.Type is Action.ActionType.DrawFromDeck)
             {
                 // Disallow if hand.count > 4, then they'll have to discard
                 game.Players[action.PlayerNumber].Hand.Add(Cards.GetCard());
             }
-            else if(action.Type is Action.ActionType.Discard)
+            else if (action.Type is Action.ActionType.Discard)
             {
                 // Do not leave in!
                 if (string.IsNullOrWhiteSpace(action.PlayerCard)) throw new NullReferenceException();
                 game.Players[action.PlayerNumber].Hand.Remove(action.PlayerCard);
                 game.DiscardPile.Add(action.PlayerCard);
             }
-            else if(action.Type is Action.ActionType.EndTurn)
+            else if (action.Type is Action.ActionType.EndTurn)
             {
                 // Need to revert to 1 on 4
                 game.ActivePlayer++;
@@ -56,12 +56,12 @@
 
         private void EvaluateActions(Game game)
         {
-            
+
         }
 
         private void UpdateHomestead()
         {
-            
+
         }
 
         private bool HasShelter()

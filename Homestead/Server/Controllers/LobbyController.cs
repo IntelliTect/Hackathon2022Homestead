@@ -24,7 +24,7 @@ public class LobbyController
 	{
         var game = lookup.GetGame(lobbyId);
 
-		if (game.Players.Count > 4)
+		if (game is null || game.Players.Count > 4)
 			return new BadRequestResult();
 
 		await hub.Groups.AddToGroupAsync(hub.Context.ConnectionId, lobbyId, token);
