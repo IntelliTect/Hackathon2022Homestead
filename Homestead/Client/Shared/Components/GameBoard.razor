@@ -5,7 +5,7 @@
 @inject HubConnection hubConnection
 @inject LobbyVm Lobby
 @implements IDisposable
-@inject HttpClient Http;
+@inject HttpClient Http
 
 <div class="map">
     <div class="row gx-1 mb-1">
@@ -16,16 +16,18 @@
             </div>
         }
     </div>
-    <div class=row gx-1 mb-1>
-        @if (IsOwnerOfGame)
-        {
-            <button type="button" class="btn btn-success" onclick="StartGame">Start</button>
-        }
-    </div>
 
     <div class="col">
         <PlayerHomestead Player="CurrentPlayer" />
     </div>
+
+    <div class=row gx-1 mb-1>
+        @if (IsOwnerOfGame && Board.State == Game.GameState.Joining)
+        {
+            <button type="button" class="btn btn-success" @onclick="StartGame">Start</button>
+        }
+    </div>
+
 </div>
 
 <PlayerHand HandList="@CurrentPlayer.Hand" />
@@ -48,8 +50,14 @@
             Board.Update(state);
             StateHasChanged();
         });
+        Board.PerformAction += SendAction!;
 
         await base.OnInitializedAsync();
+    }
+
+    public async void SendAction(object sender, BoardVm.ActionEventArgs args)
+    {
+       await hubConnection.InvokeAsync("ExecuteAction", Board.GameId, args.Action);
     }
 
     public async Task StartGame()
