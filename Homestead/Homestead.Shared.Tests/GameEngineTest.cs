@@ -17,7 +17,7 @@ namespace Homestead.Shared.Tests
             Assert.AreEqual(1, game.ActivePlayer);
             Assert.IsTrue(game.AvailableActions.Any());
             //CollectionAssert.Contains(game.Actions, Action.ActionType.DrawFromDeck);
-            Assert.AreEqual(Action.ActionType.DrawFromDeck, game.AvailableActions[0].Type);
+            Assert.AreEqual(PlayerAction.ActionType.DrawFromDeck, game.AvailableActions[0].Type);
             Assert.AreEqual(1, game.AvailableActions[0].PlayerNumber);
         }
 
@@ -28,7 +28,7 @@ namespace Homestead.Shared.Tests
             GameEngine engine = new();
             Game game = engine.Start();
 
-            game = engine.ProcessAction(game, new Action(Action.ActionType.DrawFromDeck, game.ActivePlayer));
+            game = engine.ProcessAction(game, new PlayerAction(PlayerAction.ActionType.DrawFromDeck, game.ActivePlayer));
             Assert.IsTrue(game.Players[game.ActivePlayer].Hand.Any());
         }
 
@@ -38,7 +38,7 @@ namespace Homestead.Shared.Tests
             GameEngine engine = new();
             Game game = engine.Start();
 
-            Action action = new(Action.ActionType.Discard, game.ActivePlayer);
+            PlayerAction action = new(PlayerAction.ActionType.Discard, game.ActivePlayer);
             action.PlayerCard = Cards.Well;
 
             game.Players[game.ActivePlayer].Hand.Add(Cards.Well);
@@ -57,7 +57,7 @@ namespace Homestead.Shared.Tests
             GameEngine engine = new();
             Game game = engine.Start();
 
-            Action action = new(Action.ActionType.DrawFromDiscard, game.ActivePlayer);
+            PlayerAction action = new(PlayerAction.ActionType.DrawFromDiscard, game.ActivePlayer);
             game.DiscardPile.Add(Cards.Well);
 
             game = engine.ProcessAction(game, action);
@@ -72,7 +72,7 @@ namespace Homestead.Shared.Tests
             GameEngine engine = new();
             Game game = engine.Start();
 
-            Action action = new(Action.ActionType.DrawFromDiscard, game.ActivePlayer);
+            PlayerAction action = new(PlayerAction.ActionType.DrawFromDiscard, game.ActivePlayer);
             game.DiscardPile.Add(Cards.Well);
             game.DiscardPile.Add(Cards.Seeds);
             game.DiscardPile.Add(Cards.Wood);
@@ -96,12 +96,12 @@ namespace Homestead.Shared.Tests
             Game game = engine.Start();
 
             game.Players[game.ActivePlayer].Hand.Add(Cards.Well);
-            Action action = new(Action.ActionType.Play, game.ActivePlayer);
+            PlayerAction action = new(PlayerAction.ActionType.Play, game.ActivePlayer);
             action.PlayerCard = Cards.Well;
 
             game = engine.ProcessAction(game, action);
 
-            Assert.AreEqual(Action.ActionType.Play, game.LastActions[0].Type);
+            Assert.AreEqual(PlayerAction.ActionType.Play, game.LastActions[0].Type);
             Assert.AreEqual(Cards.Well, game.LastActions[0].PlayerCard);
         }
 
@@ -111,7 +111,7 @@ namespace Homestead.Shared.Tests
             GameEngine engine = new();
             Game game = engine.Start();
 
-            Action action = new(Action.ActionType.Play, game.ActivePlayer);
+            PlayerAction action = new(PlayerAction.ActionType.Play, game.ActivePlayer);
             action.PlayerCard = Cards.Well;
 
             Assert.ThrowsException<KeyNotFoundException>(() => engine.ProcessAction(game, action));
@@ -129,7 +129,7 @@ namespace Homestead.Shared.Tests
 
             game.Players[game.ActivePlayer].Hand.Add(Cards.Well);
             game.Players[game.ActivePlayer].Hand.Add(Cards.GoodNeighbor);
-            Action action = new(Action.ActionType.Play, game.ActivePlayer);
+            PlayerAction action = new(PlayerAction.ActionType.Play, game.ActivePlayer);
             action.TargetPlayer = 2;
             action.PlayerCard = Cards.GoodNeighbor;
             action.TargetCard = Cards.Well;
@@ -152,7 +152,7 @@ namespace Homestead.Shared.Tests
             game.Players.Add(new Player());
 
             game.Players[game.ActivePlayer].Hand.Add(Cards.GoodNeighbor);
-            Action action = new(Action.ActionType.Play, game.ActivePlayer);
+            PlayerAction action = new(PlayerAction.ActionType.Play, game.ActivePlayer);
             action.PlayerCard = Cards.GoodNeighbor;
 
             Assert.AreEqual(1, game.Players[game.ActivePlayer].Hand.Count);
@@ -173,7 +173,7 @@ namespace Homestead.Shared.Tests
 
             game.Players[game.ActivePlayer].Hand.Add(Cards.BadNeighbor);
             game.Players[2].Hand.Add(Cards.Well);
-            Action action = new(Action.ActionType.Play, game.ActivePlayer);
+            PlayerAction action = new(PlayerAction.ActionType.Play, game.ActivePlayer);
             action.TargetPlayer = 2;
             action.PlayerCard = Cards.BadNeighbor;
             action.TargetCard = Cards.Well;

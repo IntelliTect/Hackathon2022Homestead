@@ -35,6 +35,7 @@ public class LobbyController
 	public async Task<int> Join(string gameId)
 	{
         var game = lookup.GetGame(gameId);
+        if (game == null) throw new ArgumentException("Game not found");
         int playerNumber;
 
         lock (game)

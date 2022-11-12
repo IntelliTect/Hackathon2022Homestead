@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Homestead.Shared
 {
-    public class Action
+    public class PlayerAction
     {
         public enum ActionType
         {
@@ -24,11 +24,14 @@ namespace Homestead.Shared
         public string? PlayerCard { get; set; }
         public int? TargetPlayer { get; set; }
         public string? TargetCard { get; set; }
-
-        public Action(ActionType type, int playerNumber)
+        
+        public PlayerAction(ActionType type, int playerNumber, string? PlayerCard = null, int? TargetPlayer = null, string? TargetCard = null)
         {
-            Type = type;
-            PlayerNumber = playerNumber;
+            this.Type = type;
+            this.PlayerNumber = playerNumber;
+            this.PlayerCard = PlayerCard;
+            this.TargetPlayer = TargetPlayer;
+            this.TargetCard = TargetCard;
         }
     }
 }

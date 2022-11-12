@@ -22,7 +22,7 @@
                 game.Players.Add(player);
             }
             game.ActivePlayer = firstPlayer;
-            game.AvailableActions.Add(new Action(Action.ActionType.DrawFromDeck, firstPlayer));
+            game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.DrawFromDeck, firstPlayer));
             return game;
         }
 
@@ -34,20 +34,20 @@
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"></exception>
         /// <exception cref="NullReferenceException"></exception>
-        public Game ProcessAction(Game game, Action action)
+        public Game ProcessAction(Game game, PlayerAction action)
         {
             game.LastActions.Add(action);
             string? playerCard = action.PlayerCard;
             List<string> playerHand = game.Players[action.PlayerNumber].Hand;
             // Probably change these to switch statements
-            if (action.Type is Action.ActionType.DrawFromDeck)
+            if (action.Type is PlayerAction.ActionType.DrawFromDeck)
             {
                 // Disallow if hand.count > 4, then they'll have to discard
                 // Whenever time allows, give a friendly message back to the players.
                 if (game.Players[action.PlayerNumber].Hand.Count > 4) throw new OverflowException("Too much want!");
                 playerHand.Add(Cards.GetCard());
             }
-            else if (action.Type is Action.ActionType.DrawFromDiscard)
+            else if (action.Type is PlayerAction.ActionType.DrawFromDiscard)
             {
                 // Do not leave in!
                 // Whenever time allows, give a friendly message back to the players.
@@ -59,7 +59,7 @@
                 playerHand.Add(card);
                 game.DiscardPile.RemoveAt(game.DiscardPile.Count - 1);
             }
-            else if (action.Type is Action.ActionType.Discard)
+            else if (action.Type is PlayerAction.ActionType.Discard)
             {
                 // Do not leave in!
                 // Whenever time allows, give a friendly message back to the players.
@@ -70,7 +70,7 @@
                 game.DiscardPile.Add(playerCard);
             }
             // Do we throw if playerCard is null?
-            else if (action.Type is Action.ActionType.Play && playerCard is not null)
+            else if (action.Type is PlayerAction.ActionType.Play && playerCard is not null)
             {
                 if (!playerHand.Contains(playerCard)) throw new KeyNotFoundException("False!");
                 // One day, we we may to check if there is more than one of this card type and to discard the chosen instance.
@@ -115,7 +115,7 @@
                 }
                 // If an action goes against everyone, then that's one action per person
             }
-            else if (action.Type is Action.ActionType.EndTurn)
+            else if (action.Type is PlayerAction.ActionType.EndTurn)
             {
                 if (game.ActivePlayer < 4)
                 {
@@ -131,9 +131,9 @@
             return game;
         }
 
-        public List<Action> PlayCard(string card)
+        public List<PlayerAction> PlayCard(string card)
         {
-            return new List<Action>();
+            return new List<PlayerAction>();
         }
 
         private void EvaluateActions(Game game)
@@ -164,9 +164,9 @@
             return true;
         }
 
-        private Action BotChoice()
+        private PlayerAction BotChoice()
         {
-            return new Action(Action.ActionType.Play, 1);
+            return new PlayerAction(PlayerAction.ActionType.Play, 1);
         }
     }
 }

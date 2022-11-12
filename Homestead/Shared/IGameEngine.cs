@@ -2,7 +2,7 @@
 {
     public interface IGameEngine
     {
-        Game ProcessAction(Game game, Action action);
+        Game ProcessAction(Game game, PlayerAction action);
         Game Start();
     }
 }

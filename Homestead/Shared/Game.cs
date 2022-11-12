@@ -21,7 +21,7 @@ namespace Homestead.Shared
         public List<Player> Players { get; } = new();
         public List<string> DiscardPile { get; } = new ();
         public int ActivePlayer { get; set; } = 1;
-        public List<Action> AvailableActions { get; } = new ();
-        public List<Action> LastActions { get; } = new();
+        public List<PlayerAction> AvailableActions { get; } = new ();
+        public List<PlayerAction> LastActions { get; } = new();
     }
 }

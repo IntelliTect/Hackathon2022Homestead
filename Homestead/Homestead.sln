@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Homestead.Shared", "Shared\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Homestead.Shared.Tests", "Homestead.Shared.Tests\Homestead.Shared.Tests.csproj", "{A68F5D32-6179-4595-AF55-C7D6B8B535C3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Homestead.Client.Tests", "Homestead.Client.Tests\Homestead.Client.Tests.csproj", "{8D5DA602-B96D-4B97-98B8-5DA9568CAEEE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{A68F5D32-6179-4595-AF55-C7D6B8B535C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A68F5D32-6179-4595-AF55-C7D6B8B535C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A68F5D32-6179-4595-AF55-C7D6B8B535C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D5DA602-B96D-4B97-98B8-5DA9568CAEEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D5DA602-B96D-4B97-98B8-5DA9568CAEEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D5DA602-B96D-4B97-98B8-5DA9568CAEEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D5DA602-B96D-4B97-98B8-5DA9568CAEEE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
