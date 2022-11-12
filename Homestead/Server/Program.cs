@@ -30,7 +30,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.MapHub<ChatHub>("/chathub");
+app.MapHub<CommunicationHub>("/comms");
 app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
