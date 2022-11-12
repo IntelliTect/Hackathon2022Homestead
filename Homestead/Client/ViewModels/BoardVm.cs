@@ -31,7 +31,7 @@ namespace Homestead.Client.ViewModels
                 Action = action;
             }
         }
-        public event EventHandler<ActionEventArgs> PerformAction;
+        public event EventHandler<ActionEventArgs> PerformAction = null!;
 
         protected virtual void OnPerformAction(PlayerAction action)
         {

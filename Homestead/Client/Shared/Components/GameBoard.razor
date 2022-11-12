@@ -21,12 +21,17 @@
         <PlayerHomestead Player="CurrentPlayer" />
     </div>
 
-    <div class=row gx-1 mb-1>
+    <div class="row">
         @if (IsOwnerOfGame && Board.State == Game.GameState.Joining)
         {
-            <button type="button" class="btn btn-success" @onclick="StartGame">Start</button>
+            <button type="button" class="btn btn-success btn-lg" @onclick="StartGame">Start</button>
+        }
+        else
+        {
+            <button type="button" class="btn btn-danger btn-lg" @onclick="DrawFromDeck">Draw from Deck</button>
         }
     </div>
+    
 
 </div>
 
@@ -50,14 +55,19 @@
             Board.Update(state);
             StateHasChanged();
         });
-        Board.PerformAction += SendAction!;
+        Board.PerformAction += SendActionEvent!;
 
         await base.OnInitializedAsync();
     }
 
-    public async void SendAction(object sender, BoardVm.ActionEventArgs args)
+    public async void SendActionEvent(object sender, BoardVm.ActionEventArgs args)
     {
-       await hubConnection.InvokeAsync("ExecuteAction", Board.GameId, args.Action);
+        await SendAction(args.Action);
+    }
+
+    public async Task SendAction (PlayerAction action)
+    {
+        await hubConnection.InvokeAsync("ExecuteAction", Board.GameId, action);
     }
 
     public async Task StartGame()
@@ -70,6 +80,12 @@
 
         Board.Update(game);
         Console.WriteLine("Game Started");
+    }
+
+    public async Task DrawFromDeck()
+    {
+        var action = new PlayerAction(PlayerAction.ActionType.DrawFromDeck, Board.LocalPlayerNumber);
+        await SendAction(action);
     }
 
 
