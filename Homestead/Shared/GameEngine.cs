@@ -75,10 +75,12 @@
                 // Do not leave in!
                 // Whenever time allows, give a friendly message back to the players.
                 if (!game.DiscardPile.Any()) throw new InvalidOperationException("Sad day!");
-                // Disallow if hand.count > 4, then they'll have to discard
                 // Whenever time allows, give a friendly message back to the players.
                 if (game.Players[action.PlayerNumber].Hand.Count > 4) throw new OverflowException("Too much want!");
+
                 string card = game.DiscardPile.Last();
+                // Need to disallow if last discarded card was a disaster or something destroyed by a disaster.
+                // Or maybe those cards never make it to discard and they just g away.
                 playerHand.Add(card);
                 game.DiscardPile.RemoveAt(game.DiscardPile.Count - 1);
 
@@ -106,6 +108,7 @@
                 // One day, we we may to check if there is more than one of this card type and to discard the chosen instance.
                 // Today is not that day.
                 playerHand.Remove(playerCard);
+
                 CardInfo info = Cards.GetCardInfo(playerCard);
                 if (info.Suit is CardInfo.CardSuit.LiveStock
                     || info.Suit is CardInfo.CardSuit.Garden
@@ -144,10 +147,22 @@
                 }
                 else if (info.Suit is CardInfo.CardSuit.Disaster)
                 {
-
+                    if(info.Card is Cards.WolfAll)
+                    {
+                        for(int i = 1; i < 5; i++)
+                        {
+                            game.AvailableActions.Add(
+                                new PlayerAction(
+                                    PlayerAction.ActionType.Discard,
+                                    action.PlayerNumber,
+                                    info.Card, i,
+                                    info.ImpactedCard));
+                            // Need to handle how to prevent.
+                        }
+                    }
                 }
                 // If an action goes against everyone, then that's one action per person
-                game = EvaluateActions(game);
+                // game = EvaluateActions(game);
             }
             else if (action.Type is PlayerAction.ActionType.EndTurn)
             {
@@ -165,7 +180,7 @@
                 {
                     game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.DrawFromDiscard, game.ActivePlayer));
                 }
-                game.LastActions.Clear();
+                //game.LastActions.Clear();
             }
 
             return game;

@@ -44,8 +44,7 @@ namespace Homestead.Shared.Tests
             GameEngine engine = new();
             Game game = engine.Start();
 
-            PlayerAction action = new(PlayerAction.ActionType.Discard, game.ActivePlayer);
-            action.PlayerCard = Cards.Well;
+            PlayerAction action = new(PlayerAction.ActionType.Discard, game.ActivePlayer, Cards.Well);
 
             game.Players[game.ActivePlayer].Hand.Add(Cards.Well);
 
@@ -111,8 +110,7 @@ namespace Homestead.Shared.Tests
             Game game = engine.Start();
 
             game.Players[game.ActivePlayer].Hand.Add(Cards.Well);
-            PlayerAction action = new(PlayerAction.ActionType.Play, game.ActivePlayer);
-            action.PlayerCard = Cards.Well;
+            PlayerAction action = new(PlayerAction.ActionType.Play, game.ActivePlayer, Cards.Well);
 
             game = engine.ProcessAction(game, action);
 
@@ -219,11 +217,26 @@ namespace Homestead.Shared.Tests
             game.Players[game.ActivePlayer].Hand.Add(Cards.Well);
             game.Players[game.ActivePlayer].Hand.Add(Cards.Well);
 
-            PlayerAction action = new(PlayerAction.ActionType.Discard, game.ActivePlayer);
-            action.PlayerCard = Cards.Well;
+            PlayerAction action = new(PlayerAction.ActionType.Discard, game.ActivePlayer, Cards.Well);
 
             game = engine.ProcessAction(game, action);
             Assert.IsFalse(game.AvailableActions.Any(a => a.Type is PlayerAction.ActionType.EndTurn));
+        }
+
+        [TestMethod]
+        public void Wolves()
+        {
+            GameEngine engine = new();
+            Game game = engine.Start();
+            game.AvailableActions.Clear();
+
+            game.Players[game.ActivePlayer].Hand.Add(Cards.WolfAll);
+
+            PlayerAction action = new(PlayerAction.ActionType.Play, game.ActivePlayer, Cards.WolfAll);
+
+            game = engine.ProcessAction(game, action);
+            Assert.AreEqual(4, game.AvailableActions.Count);
+            Assert.IsTrue(game.AvailableActions.All(a => a.Type is PlayerAction.ActionType.Discard));
         }
     }
 }
