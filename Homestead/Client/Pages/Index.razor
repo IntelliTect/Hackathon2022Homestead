@@ -38,17 +38,20 @@
            {
                 <tr>
                     <td style="padding-right:20px">@(Array.IndexOf(games, item) + 1)</td>
-                    <td style="padding-right:20px">@item.Players.Where(x => !x.IsBot).Count()</td>
-                    <td style="padding-right:20px"><button class="btn btn-success" type="button" @onclick="()=>JoinGame(item.GameId)">Join</button></td>
+                    <td style="padding-right:20px">@GetHumanPlayerCount(item)</td>
+                    <td style="padding-right:20px">
+                        <button class="btn btn-success" disabled="@(GetHumanPlayerCount(item) > 3)" type="button" @onclick="()=>JoinGame(item.GameId)">Join</button>
+                    </td>
                 </tr>
             }
-
          </table>
     }
 </div>
 
 @code {
     private Game[]? games;
+
+    private int GetHumanPlayerCount(Game game) => game.Players.Where(x => !x.IsBot).Count();
 
     protected override async Task OnInitializedAsync()
     {
