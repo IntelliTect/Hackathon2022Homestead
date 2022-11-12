@@ -15,28 +15,13 @@ namespace Homestead.Shared
             Complete,
         }
 
-        public string GameId { get; }
+        public string GameId { get; set; }
         public GameState State { get; set; }
         public int? Winner { get; set; }
-        public List<Player> Players { get; }
+        public List<Player> Players { get; } = new();
         public List<string> DiscardPile { get; } = new List<string>();
         public int ActivePlayer { get; set; } = 1;
         public List<Action> Actions { get; } = new List<Action>();
         public Action? LastAction { get; set; } = null;
-
-
-
-        public Game()
-        {
-            GameId = Guid.NewGuid().ToString();
-            Players = new List<Player>();
-            // Create 4 players
-            for (int i = 1; i <=4 ; i++)
-            {
-                var player = new Player(i);
-                if (i != 1) player.IsBot = true;
-                Players.Add(player);
-            }
-        }
     }
 }
