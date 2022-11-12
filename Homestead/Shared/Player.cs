@@ -37,11 +37,19 @@ namespace Homestead.Shared
             Name = "";
         }
 
-        /// <summary>
-        /// This is called by the Game when it gets created
-        /// </summary>
-        /// <param name="playerNumber"></param>
-        public Player(int playerNumber)
+        public string GetPlayerImageUrl()
+        {
+            string genderCode = Gender == Genders.Male ? "m" : "f";
+            string skinToneCode = SkinTone == SkinTones.Light ? "w" : "b";
+            string fileName = $"p{PlayerNumber}-{genderCode}{skinToneCode}-single.png";
+            return $"/Assets/Images/player/{fileName}";
+        }
+
+    /// <summary>
+    /// This is called by the Game when it gets created
+    /// </summary>
+    /// <param name="playerNumber"></param>
+    public Player(int playerNumber)
         {
             PlayerNumber = playerNumber;
             var personGenerator = new PersonNameGenerator();
