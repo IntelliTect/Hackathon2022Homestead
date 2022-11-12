@@ -56,6 +56,11 @@
         Console.WriteLine($"Game Board Component with {Opponents.Count() + 1} Players");
         hubConnection.On<Game>("ActionReceived", (state) =>
         {
+            Console.WriteLine("Got Game Update");
+            foreach(var action in ((Game)state).LastActions)
+            {
+            Console.WriteLine($"Last Action: {action.Type}");            
+            }
             Board.Update(state);
             StateHasChanged();
         });
@@ -66,6 +71,7 @@
 
     public async void SendActionEvent(object sender, BoardVm.ActionEventArgs args)
     {
+        Console.WriteLine($"Sending Action: {args.Action.Type}");
         await SendAction(args.Action);
     }
 
