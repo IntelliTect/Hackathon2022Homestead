@@ -9,6 +9,7 @@ namespace Homestead.Shared
     public static class Cards
     {
         const string Well = "Well";
+
         // TODO: Add the rest of the cards
     }
 }
