@@ -21,6 +21,8 @@ namespace Homestead.Client.ViewModels
         public bool CanEndTurn { get; internal set; } = false;
         public CardVm? TopDiscardCard { get; internal set; } = null;
         public int DiscardCardCount { get; internal set; } = 0;
+        public PlayerVm? WinningPlayer { get; internal set; }
+
 
         public class ActionEventArgs : EventArgs
         {
@@ -169,6 +171,18 @@ namespace Homestead.Client.ViewModels
             {
                 // Clear the playable cards
                 LocalPlayer.ClearPlayableCards();
+            }
+
+            if (game.State == Game.GameState.Complete)
+            {
+                if (game.Winner == LocalPlayerNumber)
+                {
+                    this.WinningPlayer = LocalPlayer;
+                }
+                else
+                {
+                    this.WinningPlayer = OtherPlayers.First(f => f.PlayerNumber == game.Winner);
+                }
             }
 
         }

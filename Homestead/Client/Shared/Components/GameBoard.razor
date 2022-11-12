@@ -26,6 +26,12 @@
             <button type="button" class="btn btn-success btn-lg col-sm" @onclick="StartGame">Start</button>
         </div>
     }
+    else if (Board.State == Game.GameState.Complete && Board.WinningPlayer != null)
+    {
+        <div class="row justify-content-md-center">
+            <div >@Board.WinningPlayer.Player.Name Won the game!</div>
+        </div>
+    }
     else
     {
         <div class="row justify-content-md-center">
