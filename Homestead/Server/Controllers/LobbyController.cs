@@ -18,6 +18,8 @@ public class LobbyController
 	{
 		this.hub = hub;
 		this.lookup = lookup;
+
+
 	}
 
 	[HttpGet("/Create")]
