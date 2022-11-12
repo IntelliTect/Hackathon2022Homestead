@@ -13,15 +13,17 @@
         {
             Game game = new();
             game.GameId = Guid.NewGuid().ToString();
+            const int firstPlayer = 1;
+
             // Create 4 players
-            for (int i = 1; i <= 4; i++)
+            for (int i = firstPlayer; i <= 4; i++)
             {
                 var player = new Player(i);
-                if (i != 1) player.IsBot = true;
+                if (i != firstPlayer) player.IsBot = true;
                 game.Players.Add(player);
             }
-            game.ActivePlayer = 0;
-            game.Actions.Add(new Action(Action.ActionType.DrawFromDeck, 0));
+            game.ActivePlayer = firstPlayer;
+            game.Actions.Add(new Action(Action.ActionType.DrawFromDeck, firstPlayer));
             return game;
         }
 

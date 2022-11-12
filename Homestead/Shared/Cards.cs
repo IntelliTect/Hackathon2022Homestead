@@ -19,6 +19,9 @@ namespace Homestead.Shared
         public const string FloodSelf = "FloodSelf";
         public const string FloodOther = "FloodOther";
         public const string FloodAll = "FloodAll";
+        public const string WolfSelf = "WolfSelf";
+        public const string WolfOther = "WolfOther";
+        public const string WolfAll = "WolfAll";
         public const string GoodNeighbor = "GoodNeighbor";
         public const string Hammer = "Hammer";
         public const string BadNeighbor = "BadNeighbor";
@@ -28,11 +31,10 @@ namespace Homestead.Shared
         public const string Saw = "Saw";
         public const string Seeds = "Seeds";
         public const string Shovel = "Shovel";
-        public const string Wolf = "Wolf";
         public const string Wood = "Wood";
         public const string Stove = "Stove";
 
-        private static List<CardRatio> MasterDeck { get; } = new List<CardRatio>();
+        private static List<CardInfo> MasterDeck { get; } = new List<CardInfo>();
         private static List<string> Deck { get; } = new List<string>();
         private static Random staticRandom = new Random(1);
 
@@ -41,38 +43,53 @@ namespace Homestead.Shared
             int lots = 5;
             int some = 3;
             int few = 1;
-            MasterDeck.Add(new CardRatio(Well, lots));
-            MasterDeck.Add(new CardRatio(Dog, lots));
-            MasterDeck.Add(new CardRatio(EarthquakeSelf, few));
-            MasterDeck.Add(new CardRatio(EarthquakeOther, few));
-            MasterDeck.Add(new CardRatio(EarthquakeAll, few));
-            MasterDeck.Add(new CardRatio(FireSelf, few));
-            MasterDeck.Add(new CardRatio(FireOther, few));
-            MasterDeck.Add(new CardRatio(FireAll, few));
-            MasterDeck.Add(new CardRatio(FloodSelf, few));
-            MasterDeck.Add(new CardRatio(FloodOther, few));
-            MasterDeck.Add(new CardRatio(FloodAll, few));
-            MasterDeck.Add(new CardRatio(GoodNeighbor, some));
-            MasterDeck.Add(new CardRatio(Hammer, lots));
-            MasterDeck.Add(new CardRatio(BadNeighbor, some));
-            MasterDeck.Add(new CardRatio(Levee, some));
-            MasterDeck.Add(new CardRatio(Livestock, lots));
-            MasterDeck.Add(new CardRatio(Rain, some));
-            MasterDeck.Add(new CardRatio(Saw, lots));
-            MasterDeck.Add(new CardRatio(Seeds, lots));
-            MasterDeck.Add(new CardRatio(Shovel, lots));
-            MasterDeck.Add(new CardRatio(Wolf, lots));
-            MasterDeck.Add(new CardRatio(Wood, lots));
-            MasterDeck.Add(new CardRatio(Stove, lots));
+            MasterDeck.Add(new CardInfo(EarthquakeSelf, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Self, few));
+            MasterDeck.Add(new CardInfo(EarthquakeOther, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Other, few));
+            MasterDeck.Add(new CardInfo(EarthquakeAll, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.All, few));
+            MasterDeck.Add(new CardInfo(FireSelf, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Self, few));
+            MasterDeck.Add(new CardInfo(FireOther, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Other, few));
+            MasterDeck.Add(new CardInfo(FireAll, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.All, few));
+            MasterDeck.Add(new CardInfo(FloodSelf, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Self, few));
+            MasterDeck.Add(new CardInfo(FloodOther, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Other, few));
+            MasterDeck.Add(new CardInfo(FloodAll, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.All, few));
+            MasterDeck.Add(new CardInfo(WolfSelf, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Self, lots));
+            MasterDeck.Add(new CardInfo(WolfOther, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Other, lots));
+            MasterDeck.Add(new CardInfo(WolfAll, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.All, lots));
+
+            MasterDeck.Add(new CardInfo(GoodNeighbor, CardInfo.CardSuit.Action, false, CardInfo.CardImpact.None, some));
+            MasterDeck.Add(new CardInfo(BadNeighbor, CardInfo.CardSuit.Action, false, CardInfo.CardImpact.None, some));
+
+            MasterDeck.Add(new CardInfo(Levee, CardInfo.CardSuit.Prevention, false, CardInfo.CardImpact.None, some));
+            MasterDeck.Add(new CardInfo(Dog, CardInfo.CardSuit.Prevention, false, CardInfo.CardImpact.None, lots));
+            MasterDeck.Add(new CardInfo(Rain, CardInfo.CardSuit.Prevention, false, CardInfo.CardImpact.None, some));
+            
+            MasterDeck.Add(new CardInfo(Livestock, CardInfo.CardSuit.LiveStock, true, CardInfo.CardImpact.None, lots));
+            MasterDeck.Add(new CardInfo(Seeds, CardInfo.CardSuit.Garden, true, CardInfo.CardImpact.None, lots));
+            MasterDeck.Add(new CardInfo(Well, CardInfo.CardSuit.Garden, true, CardInfo.CardImpact.None, lots));
+            MasterDeck.Add(new CardInfo(Shovel, CardInfo.CardSuit.Garden, true, CardInfo.CardImpact.None, lots));
+            MasterDeck.Add(new CardInfo(Saw, CardInfo.CardSuit.House, true, CardInfo.CardImpact.None, lots));
+            MasterDeck.Add(new CardInfo(Hammer, CardInfo.CardSuit.House, true, CardInfo.CardImpact.None, lots));
+            MasterDeck.Add(new CardInfo(Wood, CardInfo.CardSuit.House, true, CardInfo.CardImpact.None, lots));
+            MasterDeck.Add(new CardInfo(Stove, CardInfo.CardSuit.House, true, CardInfo.CardImpact.None, lots));
 
             // Create a deck to choose cards from
-            foreach(var cardRatio in MasterDeck)
+            foreach (var cardRatio in MasterDeck)
             {
-                for(int i = 0; i < cardRatio.NumberOfCardsInDeck; i++)
+                for (int i = 0; i < cardRatio.NumberOfCardsInDeck; i++)
                 {
                     Deck.Add(cardRatio.Card);
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets info about a card.
+        /// </summary>
+        /// <param name="card"></param>
+        /// <returns></returns>
+        public static CardInfo GetCardInfo(string card)
+        {
+            return MasterDeck.First(f => f.Card == card);
         }
 
         public static string GetCard(bool deterministic = false)
@@ -90,14 +107,38 @@ namespace Homestead.Shared
         }
     }
 
-    public class CardRatio
+    public class CardInfo
     {
+        public enum CardSuit
+        {
+            Garden,
+            House,
+            LiveStock,
+            Action,
+            Prevention,
+            Disaster,
+        }
+
+        public enum CardImpact
+        {
+            None,
+            Self,
+            All,
+            Other,
+        }
+
         public string Card { get; }
         public int NumberOfCardsInDeck { get; }
+        public CardSuit Suit { get; }
+        public bool RequiredToWin { get; }
+        public CardImpact Impact { get; }
 
-        public CardRatio(string card, int numberOfCardsInDeck)
+        public CardInfo(string card, CardSuit suit, bool requiredToWin, CardImpact impact, int numberOfCardsInDeck)
         {
             Card = card;
+            Suit = suit;
+            RequiredToWin = requiredToWin;
+            Impact = impact;
             NumberOfCardsInDeck = numberOfCardsInDeck;
         }
     }

@@ -4,6 +4,7 @@ html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+
 .map {
     background-image: url("/Assets/Images/map.png");
     width: 100%;
@@ -14,6 +15,29 @@ img {
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;
     image-rendering: crisp-edges;
+}
+
+.player-hand {
+    background-color: sandybrown;
+    height: 25vh;
+    display: grid;
+    grid-template-columns: .2fr .2fr .2fr .2fr .2fr;
+    column-gap: 20px;
+}
+
+.hand-card {
+    margin: 15px;
+    background-color: white;
+    height: 80%;       
+}
+
+.card-image {
+    height: 60%;
+    margin:10px;
+}
+.card-text {
+    height: 40%;
+    margin: 10px;
 }
 
 
