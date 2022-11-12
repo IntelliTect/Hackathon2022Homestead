@@ -3,12 +3,23 @@
 @inject LobbyVm Lobby;
 
 
-<div class="hand-card  @(Lobby.Board.CanDrawFromDeck ? "selected" : "")" @onclick="click">
-   <div class="card-image" style="background-image: url(@Card.ImageUrl)">
-   </div>
-   <div class="card-text">
-       @(Card.CardInfo.Name)
-   </div>
+<div class="hand-card  @(Lobby.Board.CanDrawFromDiscard ? "selected" : "")" @onclick="click">
+    @if (Card == null)
+    {
+        <div class="card-image" style="background-color: cadetblue;">
+        </div>
+        <div class="card-text">
+            None
+        </div>
+    }
+    else
+    {
+        <div class="card-image" style="background-image: url(@Card.ImageUrl)">
+        </div>
+        <div class="card-text">
+            @(Card.CardInfo.Name)
+        </div>
+    }
 </div>
 @code {
     [Parameter]
@@ -16,6 +27,8 @@
 
     private void click()
     {
-        Lobby.Board.DrawFromDiscard();
+        if(Lobby.Board.CanDrawFromDiscard){
+            Lobby.Board.DrawFromDiscard();
+        }
     }
 }

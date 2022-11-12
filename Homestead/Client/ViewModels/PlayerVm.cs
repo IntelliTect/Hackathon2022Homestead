@@ -1,4 +1,5 @@
 ﻿using Homestead.Shared;
+using System.Text;
 using static Homestead.Shared.PlayerAction;
 
 namespace Homestead.Client.ViewModels
@@ -11,7 +12,7 @@ namespace Homestead.Client.ViewModels
         /// The local player is always index 0
         /// </summary>
         public int PlayerIndex { get; }
-
+        public bool IsCurrentPlayer { get; internal set; }
 
         public List<PlayerCardVm> Hand
         { get; } = new();
@@ -97,7 +98,8 @@ namespace Homestead.Client.ViewModels
                     {
                         cardVm.IsPlayable = true;
                     }
-                }else if (action.Type == ActionType.Discard)
+                }
+                else if (action.Type == ActionType.Discard)
                 {
                     foreach (var card in Hand)
                     {
@@ -124,5 +126,15 @@ namespace Homestead.Client.ViewModels
             return $"/Assets/Images/player/{fileName}";
         }
 
+        public override string ToString()
+        {
+            var output = new StringBuilder();
+            output.Append($"{PlayerNumber}:");
+            output.Append(IsCurrentPlayer ? "Active" : "Waiting");
+            output.AppendLine();
+            output.AppendLine($"Hand: {string.Join(", ", Hand.Select(f=>f.Card))}");
+            output.AppendLine($"Board: {string.Join(", ", Board.Select(f => f.Card))}");
+            return output.ToString();
+        }
     }
 }

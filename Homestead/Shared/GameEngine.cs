@@ -36,9 +36,11 @@
         /// <exception cref="NullReferenceException"></exception>
         public Game ProcessAction(Game game, PlayerAction action)
         {
+            game.LastActions.Clear();
             game.LastActions.Add(action);
             string? playerCard = action.PlayerCard;
-            List<string> playerHand = game.Players[action.PlayerNumber].Hand;
+            Player player = game.Players[action.PlayerNumber - 1];
+            List<string> playerHand = player.Hand;
             // Probably change these to switch statements
             // Or investigate different ways to do this a bit cleaner.
             if (action.Type is PlayerAction.ActionType.DrawFromDeck)
@@ -48,21 +50,23 @@
                 var drawnCard = Cards.GetCard();
                 playerHand.Add(drawnCard);
 
-                if (Cards.GetCardInfo(drawnCard).Suit is CardInfo.CardSuit.Disaster)
-                {
-                    game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.Play, game.ActivePlayer, drawnCard));
-                }
-                else
-                {
-                    game = EvaluateActions(game);
-                    // To alleviate exception above,
-                    //  maybe change this to disallow ending the turn if hand.count > 4
-                    // Actually... We also need to make sure the player does not have two of the same homestead card in-hand.
-                    // Maybe now we resurrect EvaluateActions?
-                    //game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.Play, game.ActivePlayer));
-                    //game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.EndTurn, game.ActivePlayer));
-                    //game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.Discard, game.ActivePlayer));
-                }
+                game = EvaluateNextActions(game);
+
+                //if (Cards.GetCardInfo(drawnCard).Suit is CardInfo.CardSuit.Disaster)
+                //{
+                //    game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.Play, game.ActivePlayer, drawnCard));
+                //}
+                //else
+                //{
+                //    game = EvaluateActions(game);
+                //    // To alleviate exception above,
+                //    //  maybe change this to disallow ending the turn if hand.count > 4
+                //    // Actually... We also need to make sure the player does not have two of the same homestead card in-hand.
+                //    // Maybe now we resurrect EvaluateActions?
+                //    //game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.Play, game.ActivePlayer));
+                //    //game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.EndTurn, game.ActivePlayer));
+                //    //game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.Discard, game.ActivePlayer));
+                //}
             }
             else if (action.Type is PlayerAction.ActionType.DrawFromDiscard)
             {
@@ -84,7 +88,7 @@
                 playerHand.Add(card);
                 game.DiscardPile.RemoveAt(game.DiscardPile.Count - 1);
 
-                game = EvaluateActions(game);
+                game = EvaluateNextActions(game);
                 //game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.Play, game.ActivePlayer));
                 //game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.EndTurn, game.ActivePlayer));
                 //game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.Discard, game.ActivePlayer));
@@ -99,7 +103,7 @@
                 playerHand.Remove(playerCard);
                 game.DiscardPile.Add(playerCard);
 
-                game = EvaluateActions(game);
+                game = EvaluateNextActions(game);
             }
             // Do we throw if playerCard is null?
             else if (action.Type is PlayerAction.ActionType.Play && playerCard is not null)
@@ -107,65 +111,73 @@
                 if (!playerHand.Contains(playerCard)) throw new KeyNotFoundException("False!");
                 // One day, we we may to check if there is more than one of this card type and to discard the chosen instance.
                 // Today is not that day.
-                playerHand.Remove(playerCard);
 
-                CardInfo info = Cards.GetCardInfo(playerCard);
-                if (info.Suit is CardInfo.CardSuit.LiveStock
-                    || info.Suit is CardInfo.CardSuit.Garden
-                    || info.Suit is CardInfo.CardSuit.House)
+                if (!player.Board.Contains(playerCard))
                 {
-                    // Need to add all sorts of logic around:
-                    //  Does the card already exist?
-                    //  Does it form a group?
-                    //  Does it result in victory?
-                    game.Players[action.PlayerNumber].Board.Add(info.Card);
+                    playerHand.Remove(playerCard);
+                    player.Board.Add(playerCard);
                 }
-                else if (info.Suit is CardInfo.CardSuit.Action)
-                {
-                    // What happens if they draw a Good Neighbor card on the first round?
-                    if (info.Name.ToUpperInvariant() is "GIVE")
-                    {
-                        if (string.IsNullOrWhiteSpace(action.TargetCard)) throw new NullReferenceException("Oh no!");
-                        if (action.TargetPlayer is null || action.TargetPlayer is 0) throw new ArgumentException("It hurts!");
-                        if (game.Players[(int)action.TargetPlayer].Hand.Count > 4) throw new ArgumentOutOfRangeException("Too much give!");
 
-                        playerHand.Remove(action.TargetCard);
-                        // Can we do this if the target player already has 5 cards?
-                        game.Players[(int)action.TargetPlayer].Hand.Add(action.TargetCard);
-                    }
-                    else
-                    {
-                        if (string.IsNullOrWhiteSpace(action.TargetCard)) throw new NullReferenceException("!on hO");
-                        if (action.TargetPlayer is null || action.TargetPlayer is 0) throw new ArgumentException("!struh tI");
+                game = EvaluateNextActions(game);
 
-                        // One day, we we may to check if there is more than one of this card type and to discard the chosen instance.
-                        // Today is not that day.
-                        playerHand.Remove(playerCard);
-                        game.Players[(int)action.TargetPlayer].Hand.Remove(action.TargetCard);
-                        playerHand.Add(action.TargetCard);
-                    }
-                }
-                else if (info.Suit is CardInfo.CardSuit.Disaster)
-                {
-                    if(info.Card is Cards.WolfAll)
-                    {
-                        for(int i = 1; i < 5; i++)
-                        {
-                            game.AvailableActions.Add(
-                                new PlayerAction(
-                                    PlayerAction.ActionType.Discard,
-                                    action.PlayerNumber,
-                                    info.Card, i,
-                                    info.ImpactedCard));
-                            // Need to handle how to prevent.
-                        }
-                    }
-                }
+                //CardInfo info = Cards.GetCardInfo(playerCard);
+                //if (info.Suit is CardInfo.CardSuit.LiveStock
+                //    || info.Suit is CardInfo.CardSuit.Garden
+                //    || info.Suit is CardInfo.CardSuit.House)
+                //{
+                //    // Need to add all sorts of logic around:
+                //    //  Does the card already exist?
+                //    //  Does it form a group?
+                //    //  Does it result in victory?
+                //    game.Players[action.PlayerNumber].Board.Add(info.Card);
+                //}
+                //else if (info.Suit is CardInfo.CardSuit.Action)
+                //{
+                //    // What happens if they draw a Good Neighbor card on the first round?
+                //    if (info.Name.ToUpperInvariant() is "GIVE")
+                //    {
+                //        if (string.IsNullOrWhiteSpace(action.TargetCard)) throw new NullReferenceException("Oh no!");
+                //        if (action.TargetPlayer is null || action.TargetPlayer is 0) throw new ArgumentException("It hurts!");
+                //        if (game.Players[(int)action.TargetPlayer].Hand.Count > 4) throw new ArgumentOutOfRangeException("Too much give!");
+
+                //        playerHand.Remove(action.TargetCard);
+                //        // Can we do this if the target player already has 5 cards?
+                //        game.Players[(int)action.TargetPlayer].Hand.Add(action.TargetCard);
+                //    }
+                //    else
+                //    {
+                //        if (string.IsNullOrWhiteSpace(action.TargetCard)) throw new NullReferenceException("!on hO");
+                //        if (action.TargetPlayer is null || action.TargetPlayer is 0) throw new ArgumentException("!struh tI");
+
+                //        // One day, we we may to check if there is more than one of this card type and to discard the chosen instance.
+                //        // Today is not that day.
+                //        playerHand.Remove(playerCard);
+                //        game.Players[(int)action.TargetPlayer].Hand.Remove(action.TargetCard);
+                //        playerHand.Add(action.TargetCard);
+                //    }
+                //}
+                //else if (info.Suit is CardInfo.CardSuit.Disaster)
+                //{
+                //    if(info.Card is Cards.WolfAll)
+                //    {
+                //        for(int i = 1; i < 5; i++)
+                //        {
+                //            game.AvailableActions.Add(
+                //                new PlayerAction(
+                //                    PlayerAction.ActionType.Discard,
+                //                    action.PlayerNumber,
+                //                    info.Card, i,
+                //                    info.ImpactedCard));
+                //            // Need to handle how to prevent.
+                //        }
+                //    }
+                //}
                 // If an action goes against everyone, then that's one action per person
                 // game = EvaluateActions(game);
             }
             else if (action.Type is PlayerAction.ActionType.EndTurn)
             {
+                game.AvailableActions.Clear();
                 if (game.ActivePlayer < 4)
                 {
                     game.ActivePlayer++;
@@ -180,7 +192,6 @@
                 {
                     game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.DrawFromDiscard, game.ActivePlayer));
                 }
-                //game.LastActions.Clear();
             }
 
             return game;
@@ -191,11 +202,11 @@
             return new List<PlayerAction>();
         }
 
-        private Game EvaluateActions(Game game)
+        private Game EvaluateNextActions(Game game)
         {
             game.AvailableActions.Clear();
 
-            Player player = game.Players[game.ActivePlayer];
+            Player player = game.Players[game.ActivePlayer - 1];
             List<string> hand = player.Hand;
 
             List<CardInfo> cards = new();
@@ -207,47 +218,13 @@
                 cards.Add(Cards.GetCardInfo(card));
             }
 
-            if (game.LastActions.Any(a =>
-                a.Type is PlayerAction.ActionType.DrawFromDeck
-                || a.Type is PlayerAction.ActionType.DrawFromDiscard))
-            {
-                // Cannot draw
-            }
-
-            if (hand.Count < 1)
-            {
-                game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.EndTurn, game.ActivePlayer));
-            }
-            else
-            {
-                if (cards.Any(c => c.Suit is CardInfo.CardSuit.Disaster))
-                {
-                    game.AvailableActions.Add(
-                        new PlayerAction(
-                            PlayerAction.ActionType.Play, 
-                            game.ActivePlayer, 
-                            cards.First(c => c.Suit is CardInfo.CardSuit.Disaster).Card));
-                }
-                else
-                {
-                    if (hand.Count < 5
-                        && hand.Count(c => c is Cards.Livestock) < 2
-                        && hand.Count(c => c is Cards.Seeds) < 2
-                        && hand.Count(c => c is Cards.Well) < 2
-                        && hand.Count(c => c is Cards.Shovel) < 2
-                        && hand.Count(c => c is Cards.Saw) < 2
-                        && hand.Count(c => c is Cards.Hammer) < 2
-                        && hand.Count(c => c is Cards.Wood) < 2
-                        && hand.Count(c => c is Cards.Stove) < 2)
-                    {
-                        game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.EndTurn, game.ActivePlayer));
-                    }
-                    game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.Play, game.ActivePlayer));
-                    game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.Discard, game.ActivePlayer));
-                }
-            }
-
-            // Make sure player cannot play a homestead card if it's already on the board
+            //if (game.LastActions.Any(a =>
+            //    a.Type is PlayerAction.ActionType.DrawFromDeck
+            //    || a.Type is PlayerAction.ActionType.DrawFromDiscard))
+            //{
+            //    throw new InvalidOperationException("Cannot draw");
+            //    // Cannot draw
+            //}
 
             if (player.Board.Contains(Cards.Livestock)
                 && player.Board.Contains(Cards.Seeds)
@@ -258,10 +235,95 @@
                 && player.Board.Contains(Cards.Wood)
                 && player.Board.Contains(Cards.Stove))
             {
-                // Victoooory!
+                game.State = Game.GameState.Complete;
+                game.Winner = game.ActivePlayer;
+            }
+            else
+            {
+                if (!hand.Any())
+                {
+                    game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.EndTurn, game.ActivePlayer));
+                }
+                else
+                {
+                    var playableCards = hand.Except(player.Board);
+                    if (playableCards.Any())
+                    {
+                        foreach (string card in playableCards)
+                        {
+                            game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.Play, game.ActivePlayer, card));
+                        }
+                    }
+                    else
+                    {
+                        //if (hand.Count < 5)
+                        //{
+                        //    game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.EndTurn, game.ActivePlayer));
+                        //}
+                        game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.Discard, game.ActivePlayer));
+                    }
+                }
             }
 
+
+
+
+
             return game;
+
+            //if (hand.Any())
+            //{
+            //    game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.Discard, game.ActivePlayer));
+            //}
+
+
+
+
+
+
+
+
+
+
+
+
+
+            //if (hand.Count < 1)
+            //{
+            //    game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.EndTurn, game.ActivePlayer));
+            //}
+            //else
+            //{
+            //    if (cards.Any(c => c.Suit is CardInfo.CardSuit.Disaster))
+            //    {
+            //        game.AvailableActions.Add(
+            //            new PlayerAction(
+            //                PlayerAction.ActionType.Play, 
+            //                game.ActivePlayer, 
+            //                cards.First(c => c.Suit is CardInfo.CardSuit.Disaster).Card));
+            //    }
+            //    else
+            //    {
+            //        if (hand.Count < 5
+            //            && hand.Count(c => c is Cards.Livestock) < 2
+            //            && hand.Count(c => c is Cards.Seeds) < 2
+            //            && hand.Count(c => c is Cards.Well) < 2
+            //            && hand.Count(c => c is Cards.Shovel) < 2
+            //            && hand.Count(c => c is Cards.Saw) < 2
+            //            && hand.Count(c => c is Cards.Hammer) < 2
+            //            && hand.Count(c => c is Cards.Wood) < 2
+            //            && hand.Count(c => c is Cards.Stove) < 2)
+            //        {
+            //            game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.EndTurn, game.ActivePlayer));
+            //        }
+            //        game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.Play, game.ActivePlayer));
+            //        game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.Discard, game.ActivePlayer));
+            //    }
+            //}
+
+            //// Make sure player cannot play a homestead card if it's already on the board
+
+            //return game;
         }
 
         private void UpdateHomestead()

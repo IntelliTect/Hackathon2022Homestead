@@ -21,20 +21,29 @@
         <PlayerHomestead Player="CurrentPlayer" />
     </div>
 
-    <div class="row justify-content-md-center">
-        @if (IsOwnerOfGame && Board.State == Game.GameState.Joining)
-        {
+    @if (IsOwnerOfGame && Board.State == Game.GameState.Joining)
+    {
+        <div class="row justify-content-md-center">
             <button type="button" class="btn btn-success btn-lg col-sm" @onclick="StartGame">Start</button>
-        }
-        else
+        </div>
+    }
+    else
+    {
+        @if (Board.CanEndTurn)
         {
-            <DeckPile></DeckPile>
-            if (Board.TopDiscardCard != null)
-            {
-                <DiscardPile Card="@Board.TopDiscardCard"></DiscardPile>
-            }
+            <div class="row justify-content-md-center">
+                <button type="button" class="btn btn-warning btn-lg col-sm" @onclick="EndTurn">End Turn</button>
+            </div>
         }
-    </div>
+        <div class="row justify-content-md-center">
+            <DeckPile></DeckPile>
+
+            @if (Board.TopDiscardCard != null)
+            {
+            <DiscardPile Card="@Board.TopDiscardCard"></DiscardPile>
+            }
+        </div>
+    }
 
 
 </div>
@@ -54,14 +63,23 @@
     protected override async Task OnInitializedAsync()
     {
         Console.WriteLine($"Game Board Component with {Opponents.Count() + 1} Players");
-        hubConnection.On<Game>("ExecuteAction", (state) =>
+        hubConnection.On<Game>("ExecuteAction", (game) =>
         {
             Console.WriteLine("Got Game Update");
-            foreach(var action in ((Game)state).LastActions)
+            foreach (var action in game.LastActions)
             {
-            Console.WriteLine($"Last Action: {action.Type}");            
+                Console.WriteLine($"Last Action: {action.Type}");
             }
-            Board.Update(state);
+            Board.Update(game);
+            Console.WriteLine(Board.LocalPlayer.ToString());
+            if (Board.CanDrawFromDeck) Console.WriteLine("Can Draw from Deck");
+            if (Board.CanDrawFromDiscard) Console.WriteLine("Can Draw from Discard");
+          
+            foreach (var action in game.AvailableActions)
+            {
+                Console.WriteLine($"Available Action: {action.Type}");
+            }
+            Console.WriteLine($"Cards: Hand: {Board.LocalPlayer.Hand.Count}  Board: {Board.LocalPlayer.Board.Count}");
             StateHasChanged();
         });
         Board.PerformAction += SendActionEvent!;
@@ -97,6 +115,14 @@
         var action = new PlayerAction(PlayerAction.ActionType.DrawFromDeck, Board.LocalPlayerNumber);
         await SendAction(action);
     }
+
+
+    public async Task EndTurn()
+    {
+        var action = new PlayerAction(PlayerAction.ActionType.EndTurn, Board.LocalPlayerNumber);
+        await SendAction(action);
+    }
+  
 
 
     public void Dispose()
