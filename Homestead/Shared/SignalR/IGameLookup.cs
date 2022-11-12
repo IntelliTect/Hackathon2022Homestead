@@ -3,7 +3,7 @@
 namespace Homestead.Server.SignalR;
 public interface IGameLookup
 {
-    IEnumerable<string> ListGames { get; }
+    IEnumerable<Game> ListGames { get; }
 
     Game? GetGame(string gameId);
 
