@@ -8,12 +8,9 @@ namespace Homestead.Shared.SignalR
 
         public static HubConnection Initialize(string localUrl)
         {
-
             return new HubConnectionBuilder()
                 .WithUrl(string.Concat(localUrl, _url))
                 .Build();
-
-
         }
     }
 

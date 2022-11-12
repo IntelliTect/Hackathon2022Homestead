@@ -1,6 +1,8 @@
 ﻿using Homestead.Server.SignalR;
 using Homestead.Shared;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using System.Linq;
 using static Homestead.Shared.Game;
 
 namespace Homestead.Server.Controllers;
@@ -9,10 +11,10 @@ namespace Homestead.Server.Controllers;
 [Route("[controller]")]
 public class LobbyController
 {
-	private readonly CommunicationHub hub;
+	private readonly IHubContext<CommunicationHub> hub;
 	private readonly IGameLookup lookup;
 
-	public LobbyController(CommunicationHub hub, IGameLookup lookup)
+	public LobbyController(IHubContext<CommunicationHub> hub, IGameLookup lookup)
 	{
 		this.hub = hub;
 		this.lookup = lookup;
@@ -22,7 +24,6 @@ public class LobbyController
 	public async Task<int> JoinGame(string gameId)
 	{
 		var game = lookup.GetGame(gameId);
-		if (game == null) throw new ArgumentException("Game not found");
 		int playerNumber;
 
 		lock (game)
@@ -38,21 +39,22 @@ public class LobbyController
 			playerNumber = player.PlayerNumber;
 		}
 
-		await hub.Groups.AddToGroupAsync(hub.Context.ConnectionId, gameId);
+		await hub.Groups.AddToGroupAsync(game.GameId, gameId);
 		return playerNumber;
 	}
 
 	[HttpGet("/Create")]
-	public async Task<int> CreateGame([FromServices] GameEngine engine)
+	public async Task<int> CreateGame([FromServices] IGameEngine engine)
 	{
 		var game = engine.Start();
 
-		// add game to lookup.
-		//lookup
-		await hub.Groups.AddToGroupAsync(hub.Context.ConnectionId, game.GameId);
+		lookup.AddGame(game);
+
+        await hub.Groups.AddToGroupAsync(game.GameId, game.GameId);
 		return 1;
 	}
 
+	[HttpGet]
 	public IEnumerable<Game> GetOpenGames() 
 	{
 		return lookup.ListGames.Where(x => x.State == GameState.Joining);

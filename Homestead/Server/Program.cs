@@ -1,4 +1,5 @@
 using Homestead.Server.SignalR;
+using Homestead.Shared;
 using Microsoft.AspNetCore.ResponseCompression;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,7 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddSignalR();
+builder.Services.AddSingleton<IGameEngine, GameEngine>();
 builder.Services.AddSingleton<IGameLookup, GameLookup>();
+
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
@@ -23,6 +27,9 @@ else
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
