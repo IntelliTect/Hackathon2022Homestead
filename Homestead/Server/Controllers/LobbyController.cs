@@ -1,6 +1,7 @@
 ﻿using Homestead.Server.SignalR;
 using Homestead.Shared;
 using Microsoft.AspNetCore.Mvc;
+using static Homestead.Shared.Game;
 
 namespace Homestead.Server.Controllers;
 
@@ -52,9 +53,9 @@ public class LobbyController
 		return 1;
 	}
 
-	public async Task<IEnumerable<string>> GetOpenGames() 
+	public IEnumerable<Game> GetOpenGames() 
 	{
-        lookup.
+		return lookup.ListGames.Where(x => x.State == GameState.Joining);
 
     }
 }
