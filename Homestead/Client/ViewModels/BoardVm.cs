@@ -91,6 +91,8 @@ namespace Homestead.Client.ViewModels
 
         public void Update(Game game)
         {
+            Console.WriteLine($"Draw from deck? {CanDrawFromDeck}");
+            Console.WriteLine($"Draw from discard? {CanDrawFromDiscard}");
             State = game.State;
 
             // Update the players in the A, B, C, D slots

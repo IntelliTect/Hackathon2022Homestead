@@ -29,20 +29,20 @@
     }
     else
     {
+        <div class="row justify-content-md-center">
+            <DeckPile  CanDraw="@Board.CanDrawFromDeck"></DeckPile>
+
+            @if (Board.TopDiscardCard != null)
+            {
+            <DiscardPile Card="@Board.TopDiscardCard" CanDraw="@Board.CanDrawFromDiscard"></DiscardPile>
+            }
+        </div>
         @if (Board.CanEndTurn)
         {
             <div class="row justify-content-md-center">
                 <button type="button" class="btn btn-warning btn-lg col-sm" @onclick="EndTurn">End Turn</button>
             </div>
         }
-        <div class="row justify-content-md-center">
-            <DeckPile></DeckPile>
-
-            @if (Board.TopDiscardCard != null)
-            {
-            <DiscardPile Card="@Board.TopDiscardCard"></DiscardPile>
-            }
-        </div>
     }
 
 
@@ -72,6 +72,10 @@
             }
             Board.Update(game);
             Console.WriteLine(Board.LocalPlayer.ToString());
+            foreach(var player in Board.OtherPlayers)
+            {
+                Console.WriteLine(player);
+            }
             if (Board.CanDrawFromDeck) Console.WriteLine("Can Draw from Deck");
             if (Board.CanDrawFromDiscard) Console.WriteLine("Can Draw from Discard");
           
