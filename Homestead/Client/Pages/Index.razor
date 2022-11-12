@@ -2,6 +2,7 @@
 @using System.Net.Http
 @using Homestead.Shared;
 @inject HttpClient Http
+@inject NavigationManager NavManager
 
 <PageTitle>Index</PageTitle>
 
@@ -40,6 +41,7 @@ else
     {
         var playerNum = await Http.GetFromJsonAsync<int>("Create");
         games = await Http.GetFromJsonAsync<Game[]>("Lobby");
+        NavManager.NavigateTo("/gameboardpage");
     }
 
     private async void JoinGame(string gameId)
@@ -51,14 +53,18 @@ else
         var jsonPayload = System.Text.Json.JsonSerializer.Serialize(payload);
         HttpContent content = new StringContent(gameId);
 
-        var playerNum = await Http.PostAsync($"Join", content);
+        //var playerNum = await Http.PostAsync($"Join", content);
 
-        
+
         //var playerNum = await Http.GetAsync($"Join?gameId={gameId}");
-        playerNum = await Http.PostAsync($"JoinWithUrl/{gameId}", null);
-
+        var result = await Http.PostAsync($"Join/{gameId}", null);
+        string playerNum = await result.Content.ReadAsStringAsync();
+        if(int.Parse(playerNum) > 0)
+        {
+              NavManager.NavigateTo("/gameboardpage");
+        }
 
         
-        Console.WriteLine("Player " + await playerNum.Content.ReadAsStringAsync());
+        Console.WriteLine("Player " + playerNum);
     }
 }

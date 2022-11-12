@@ -20,29 +20,6 @@ public class LobbyController
 		this.lookup = lookup;
 	}
 
-	[HttpGet("/Join")]
-	public async Task<int> JoinGame(string gameId)
-	{
-		var game = lookup.GetGame(gameId);
-		int playerNumber;
-
-		lock (game)
-		{
-			var player = game.Players.FirstOrDefault(x => x.IsBot);
-
-			if (player is null)
-			{
-				return 0;
-			}
-
-			player.IsBot = false;
-			playerNumber = player.PlayerNumber;
-		}
-
-		await hub.Groups.AddToGroupAsync(game.GameId, gameId);
-		return playerNumber;
-	}
-
 	[HttpGet("/Create")]
 	public async Task<int> CreateGame([FromServices] IGameEngine engine)
 	{
@@ -54,8 +31,8 @@ public class LobbyController
 		return 1;
 	}
 
-	[HttpPost("/JoinWithUrl/{gameId}")]
-	public async Task<int> JoinGameTest(string gameId)
+	[HttpPost("/Join/{gameId}")]
+	public async Task<int> Join(string gameId)
 	{
         var game = lookup.GetGame(gameId);
         int playerNumber;
