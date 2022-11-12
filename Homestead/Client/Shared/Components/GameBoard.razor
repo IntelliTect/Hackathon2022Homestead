@@ -5,6 +5,7 @@
 @inject HubConnection hubConnection
 @inject LobbyVm Lobby
 @implements IDisposable
+@inject HttpClient Http;
 
 <div class="map">
     <div class="row gx-1 mb-1">
@@ -18,7 +19,7 @@
     <div class=row gx-1 mb-1>
         @if (IsOwnerOfGame)
         {
-            <button type="button">Start</button>
+            <button type="button" class="btn btn-success" onclick="StartGame">Start</button>
         }
     </div>
 
@@ -50,6 +51,20 @@
 
         await base.OnInitializedAsync();
     }
+
+    public async Task StartGame()
+    {
+        Console.WriteLine("Starting the game");
+        var result = await Http.PostAsync($"start/{Board.GameId}", null);
+        var game = await result.Content.ReadFromJsonAsync<Game>();
+        if (game == null) throw new ArgumentException("Game could not start");
+        // TODO: Do something with this failure case
+
+        Board.Update(game);
+        Console.WriteLine("Game Started");
+    }
+
+
     public void Dispose()
     {
         hubConnection.Remove("ActionReceived");

@@ -7,6 +7,7 @@ namespace Homestead.Client.ViewModels
     /// </summary>
     public class BoardVm
     {
+        public string GameId { get; internal set; }
         public PlayerVm LocalPlayer { get; } = null!;
         public List<PlayerVm> OtherPlayers { get; } = new();
         public int LocalPlayerNumber { get; }
@@ -29,6 +30,7 @@ namespace Homestead.Client.ViewModels
 
         public BoardVm(Game game, int localPlayerNumber)
         {
+            GameId = game.GameId;
             LocalPlayerNumber = localPlayerNumber;
             // Map the players into the A, B, C, D slot
             int otherPlayerCount = 0;
