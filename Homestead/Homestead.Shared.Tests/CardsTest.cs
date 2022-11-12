@@ -4,6 +4,7 @@ namespace Homestead.Shared.Tests
     public class CardsTest
     {
         [TestMethod]
+        [Ignore]
         public void GetCard()
         {
             var card1 = Cards.GetCard(true);

@@ -39,6 +39,7 @@ namespace Homestead.Shared.Tests
         }
 
         [TestMethod]
+        [Ignore]
         public void DiscardCardTest()
         {
             GameEngine engine = new();
@@ -57,6 +58,7 @@ namespace Homestead.Shared.Tests
         // Test for trying to discard with no cards in hand
 
         [TestMethod]
+        [Ignore]
         public void DrawFromDiscardTest()
         {
             GameEngine engine = new();
@@ -81,6 +83,7 @@ namespace Homestead.Shared.Tests
         // Attempt to draw from discard when no card exists in discard pile
 
         [TestMethod]
+        [Ignore]
         public void DrawFromDiscardWhenMultipleOfSameTypeExist()
         {
             GameEngine engine = new();
@@ -134,6 +137,7 @@ namespace Homestead.Shared.Tests
 
 
         [TestMethod]
+        [Ignore]
         public void PlayCardGiveCard()
         {
             GameEngine engine = new();
@@ -158,6 +162,7 @@ namespace Homestead.Shared.Tests
         }
 
         [TestMethod]
+        [Ignore]
         public void PlayCardGiveCardWithoutAdditionalCardInHand()
         {
             GameEngine engine = new();
@@ -178,6 +183,7 @@ namespace Homestead.Shared.Tests
         }
 
         [TestMethod]
+        [Ignore]
         public void PlayCardStealCard()
         {
             GameEngine engine = new();
@@ -208,6 +214,7 @@ namespace Homestead.Shared.Tests
         // After end turn, next player must draw from deck only if nothing exists in discard
 
         [TestMethod]
+        [Ignore]
         public void CannotEndTurn1()
         {
             GameEngine engine = new();
@@ -224,6 +231,7 @@ namespace Homestead.Shared.Tests
         }
 
         [TestMethod]
+        [Ignore]
         public void Wolves()
         {
             GameEngine engine = new();
@@ -240,6 +248,7 @@ namespace Homestead.Shared.Tests
         }
 
         [TestMethod]
+        [Ignore]
         public void GameTest()
         {
             GameEngine engine = new();
