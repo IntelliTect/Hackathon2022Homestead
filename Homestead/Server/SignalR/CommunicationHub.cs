@@ -30,6 +30,6 @@ public class CommunicationHub : Hub
     }
     public async Task SubscribeToGame(string gameId)
     {
-        
+        await Groups.AddToGroupAsync(Context.ConnectionId, gameId);
     }
 }
