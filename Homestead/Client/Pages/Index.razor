@@ -36,7 +36,7 @@ else
 
     private async Task CreateGame()
     {
-        playerNumber = await Http.GetStringAsync("/Lobby/Create");
+        playerNumber = await Http.GetStringAsync("/Create");
         // TODO: remove this
         Console.WriteLine($"playerNumber: {playerNumber}");
     }
