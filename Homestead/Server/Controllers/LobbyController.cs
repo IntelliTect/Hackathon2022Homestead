@@ -21,7 +21,7 @@ public class LobbyController
 	}
 
 	[HttpGet("/Create")]
-	public async Task<StartGameDto> CreateGame([FromServices] IGameEngine engine)
+	public async Task<StartGameDto> CreateGame(HttpContext context, [FromServices] IGameEngine engine)
 	{
 		var game = engine.Start();
 
