@@ -177,6 +177,7 @@
             }
             else if (action.Type is PlayerAction.ActionType.EndTurn)
             {
+                game.AvailableActions.Clear();
                 if (game.ActivePlayer < 4)
                 {
                     game.ActivePlayer++;
@@ -255,10 +256,10 @@
                     }
                     else
                     {
-                        if (hand.Count < 5)
-                        {
-                            game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.EndTurn, game.ActivePlayer));
-                        }
+                        //if (hand.Count < 5)
+                        //{
+                        //    game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.EndTurn, game.ActivePlayer));
+                        //}
                         game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.Discard, game.ActivePlayer));
                     }
                 }
