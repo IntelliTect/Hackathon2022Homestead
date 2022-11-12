@@ -5,7 +5,7 @@ namespace Homestead.Server.SignalR;
 public class GameLookup : IGameLookup
 {
     ConcurrentDictionary<string, Game> _gameLookup = new();
-    public IEnumerable<string> ListGames { get => _gameLookup.Keys.ToList(); }
+    public IEnumerable<Game> ListGames { get => _gameLookup.Values.ToList(); }
 
     public Game? GetGame(string gameId)
     {
