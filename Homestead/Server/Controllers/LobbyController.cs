@@ -20,7 +20,7 @@ public class LobbyController
 		this.lookup = lookup;
 	}
 
-	[HttpPost("/Join")]
+	[HttpGet("/Join")]
 	public async Task<int> JoinGame(string gameId)
 	{
 		var game = lookup.GetGame(gameId);

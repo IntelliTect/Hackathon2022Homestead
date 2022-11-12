@@ -39,19 +39,11 @@ else
     private async void CreateGame()
     {
         var playerNum = await Http.GetFromJsonAsync<int>("Create");
-        Console.WriteLine("Player " + playerNum);
+        games = await Http.GetFromJsonAsync<Game[]>("Lobby");
     }
 
     private async void JoinGame(string gameId)
     {
-        var payload = new
-        {
-            gameId = gameId
-        };
-        var jsonPayload = System.Text.Json.JsonSerializer.Serialize(payload);
-        HttpContent content = new StringContent(gameId);
-
-        var playerNum = await Http.PostAsync($"Join", content);
-        Console.WriteLine("Player " + playerNum);
+        var playerNum = await Http.GetAsync($"Join?gameId={gameId}");
     }
 }
