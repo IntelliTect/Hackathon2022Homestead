@@ -1,14 +1,23 @@
-﻿<div class="player-hand">
-   @* @foreach (var card in HandList)
-    {*@
-       <PlayerCard/>
-       <PlayerCard/>
-       <PlayerCard/>
-       <PlayerCard/>
-   @* }*@
+﻿@using Homestead.Shared;
+
+<div class="player-hand">
+    @foreach (var card in CardInfoList)
+    {
+       <PlayerCard Image="@card.ImageUrl"/>      
+    }
 
 </div>
 @code {
     [Parameter]
     public List<string> HandList { get; set; } = new();
+
+    public List<CardInfo> CardInfoList { get; set; } = new();
+
+    public void PopulateCardInfoList()
+    {
+        foreach (var card in HandList)
+        {
+            CardInfoList.Add(Cards.GetCardInfo(card));
+        }       
+    }
 }
