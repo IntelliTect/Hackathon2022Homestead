@@ -77,6 +77,7 @@
                     //  Does it result in victory?
                     game.Players[action.PlayerNumber].Board.Add(info.Card);
                 }
+                // If an action goes against everyone, then that's one action per person
             }
             else if(action.Type is Action.ActionType.EndTurn)
             {
