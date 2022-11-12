@@ -1,6 +1,7 @@
 ﻿using Homestead.Server.SignalR;
 using Homestead.Shared;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using static Homestead.Shared.Game;
 
 namespace Homestead.Server.Controllers;
@@ -9,10 +10,10 @@ namespace Homestead.Server.Controllers;
 [Route("[controller]")]
 public class LobbyController
 {
-	private readonly CommunicationHub hub;
+	private readonly IHubContext<CommunicationHub> hub;
 	private readonly IGameLookup lookup;
 
-	public LobbyController(CommunicationHub hub, IGameLookup lookup)
+	public LobbyController(IHubContext<CommunicationHub> hub, IGameLookup lookup)
 	{
 		this.hub = hub;
 		this.lookup = lookup;
@@ -37,7 +38,7 @@ public class LobbyController
 			playerNumber = player.PlayerNumber;
 		}
 
-		await hub.Groups.AddToGroupAsync(hub.Context.ConnectionId, gameId);
+		await hub.Groups.AddToGroupAsync(game.GameId, gameId);
 		return playerNumber;
 	}
 
@@ -48,7 +49,7 @@ public class LobbyController
 
 		// add game to lookup.
 		//lookup
-		await hub.Groups.AddToGroupAsync(hub.Context.ConnectionId, game.GameId);
+		await hub.Groups.AddToGroupAsync(game.GameId, game.GameId);
 		return 1;
 	}
 
