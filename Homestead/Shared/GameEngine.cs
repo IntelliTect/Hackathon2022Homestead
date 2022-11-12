@@ -38,7 +38,7 @@
         {
             game.LastActions.Add(action);
             string? playerCard = action.PlayerCard;
-            List<string> playerHand = game.Players[action.PlayerNumber].Hand;
+            List<string> playerHand = game.Players[action.PlayerNumber-1 ].Hand;
             // Probably change these to switch statements
             // Or investigate different ways to do this a bit cleaner.
             if (action.Type is PlayerAction.ActionType.DrawFromDeck)
@@ -195,7 +195,7 @@
         {
             game.AvailableActions.Clear();
 
-            Player player = game.Players[game.ActivePlayer];
+            Player player = game.Players[game.ActivePlayer - 1];
             List<string> hand = player.Hand;
 
             List<CardInfo> cards = new();
