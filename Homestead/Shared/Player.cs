@@ -20,7 +20,7 @@ namespace Homestead.Shared
             Female
         }
 
-        public int PlayerNumber { get;  }
+        public int PlayerNumber { get; set; }
         public bool IsBot { get; set; }
         public string Name { get; set; }
         public SkinTones SkinTone { get; set; }
@@ -28,7 +28,19 @@ namespace Homestead.Shared
         public List<string> Hand { get; } = new List<string>();
         public List<string> Board { get; } = new List<string>();
 
+        /// <summary>
+        /// This should only be called by the SignalR deserializer
+        /// </summary>
+        public Player()
+        {
+            PlayerNumber = 0;
+            Name = "";
+        }
 
+        /// <summary>
+        /// This is called by the Game when it gets created
+        /// </summary>
+        /// <param name="playerNumber"></param>
         public Player(int playerNumber)
         {
             PlayerNumber = playerNumber;
@@ -42,7 +54,8 @@ namespace Homestead.Shared
 
             values = Enum.GetValues(typeof(Genders));
             Gender = (Genders)(values.GetValue(random.Next(values.Length))!);
-
         }
+
+
     }
 }
