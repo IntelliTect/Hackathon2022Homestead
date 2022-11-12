@@ -17,7 +17,7 @@ public class LobbyController
 	[HttpPost]
 	public async Task JoinGame(string lobbyId, CancellationToken token)
 	{
-		hu
+		
 
 		await hub.Groups.AddToGroupAsync(hub.Context.ConnectionId, lobbyId, token);
 
