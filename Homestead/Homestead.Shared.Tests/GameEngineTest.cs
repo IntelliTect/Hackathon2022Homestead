@@ -95,11 +95,97 @@ namespace Homestead.Shared.Tests
             GameEngine engine = new();
             Game game = engine.Start();
 
+            game.Players[game.ActivePlayer].Hand.Add(Cards.Well);
             Action action = new(Action.ActionType.Play, game.ActivePlayer);
             action.PlayerCard = Cards.Well;
+
             game = engine.ProcessAction(game, action);
 
             Assert.AreEqual(Action.ActionType.Play, game.LastActions[0].Type);
+            Assert.AreEqual(Cards.Well, game.LastActions[0].PlayerCard);
+        }
+
+        [TestMethod]
+        public void PlayCardWithoutCardInHandThrowsKeyNotFound()
+        {
+            GameEngine engine = new();
+            Game game = engine.Start();
+
+            Action action = new(Action.ActionType.Play, game.ActivePlayer);
+            action.PlayerCard = Cards.Well;
+
+            Assert.ThrowsException<KeyNotFoundException>(() => engine.ProcessAction(game, action));
+        }
+
+        // Active Player reverts to 1 after 4
+
+
+        [TestMethod]
+        public void PlayCardGiveCard()
+        {
+            GameEngine engine = new();
+            Game game = engine.Start();
+            game.Players.Add(new Player());
+
+            game.Players[game.ActivePlayer].Hand.Add(Cards.Well);
+            game.Players[game.ActivePlayer].Hand.Add(Cards.GoodNeighbor);
+            Action action = new(Action.ActionType.Play, game.ActivePlayer);
+            action.TargetPlayer = 2;
+            action.PlayerCard = Cards.GoodNeighbor;
+            action.TargetCard = Cards.Well;
+            //action.PlayerCard = "Give";
+
+            Assert.AreEqual(2, game.Players[game.ActivePlayer].Hand.Count);
+            Assert.AreEqual(0, game.Players[2].Hand.Count);
+
+            game = engine.ProcessAction(game, action);
+
+            Assert.AreEqual(0, game.Players[game.ActivePlayer].Hand.Count);
+            Assert.AreEqual(1, game.Players[2].Hand.Count);
+        }
+
+        [TestMethod]
+        public void PlayCardGiveCardWithoutAdditionalCardInHand()
+        {
+            GameEngine engine = new();
+            Game game = engine.Start();
+            game.Players.Add(new Player());
+
+            game.Players[game.ActivePlayer].Hand.Add(Cards.GoodNeighbor);
+            Action action = new(Action.ActionType.Play, game.ActivePlayer);
+            action.PlayerCard = Cards.GoodNeighbor;
+
+            Assert.AreEqual(1, game.Players[game.ActivePlayer].Hand.Count);
+            Assert.AreEqual(0, game.Players[2].Hand.Count);
+
+            Assert.ThrowsException<NullReferenceException>(() => engine.ProcessAction(game, action));
+
+            Assert.AreEqual(0, game.Players[game.ActivePlayer].Hand.Count);
+            Assert.AreEqual(0, game.Players[2].Hand.Count);
+        }
+
+        [TestMethod]
+        public void PlayCardStealCard()
+        {
+            GameEngine engine = new();
+            Game game = engine.Start();
+            game.Players.Add(new Player());
+
+            game.Players[game.ActivePlayer].Hand.Add(Cards.BadNeighbor);
+            game.Players[2].Hand.Add(Cards.Well);
+            Action action = new(Action.ActionType.Play, game.ActivePlayer);
+            action.TargetPlayer = 2;
+            action.PlayerCard = Cards.BadNeighbor;
+            action.TargetCard = Cards.Well;
+            //action.PlayerCard = "Give";
+
+            Assert.AreEqual(1, game.Players[game.ActivePlayer].Hand.Count);
+            Assert.AreEqual(1, game.Players[2].Hand.Count);
+
+            game = engine.ProcessAction(game, action);
+
+            Assert.AreEqual(1, game.Players[game.ActivePlayer].Hand.Count);
+            Assert.AreEqual(0, game.Players[2].Hand.Count);
         }
     }
 }

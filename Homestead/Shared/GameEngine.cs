@@ -38,31 +38,44 @@
         {
             game.LastActions.Add(action);
             string? playerCard = action.PlayerCard;
-            List<string> hand = game.Players[action.PlayerNumber].Hand;
+            List<string> playerHand = game.Players[action.PlayerNumber].Hand;
+            // Probably change these to switch statements
             if (action.Type is Action.ActionType.DrawFromDeck)
             {
                 // Disallow if hand.count > 4, then they'll have to discard
-                hand.Add(Cards.GetCard());
+                // Whenever time allows, give a friendly message back to the players.
+                if (game.Players[action.PlayerNumber].Hand.Count > 4) throw new OverflowException("Too much want!");
+                playerHand.Add(Cards.GetCard());
             }
             else if (action.Type is Action.ActionType.DrawFromDiscard)
             {
-                // Disallow if hand.count > 4, then they'll have to discard
+                // Do not leave in!
+                // Whenever time allows, give a friendly message back to the players.
                 if (!game.DiscardPile.Any()) throw new InvalidOperationException("Sad day!");
+                // Disallow if hand.count > 4, then they'll have to discard
+                // Whenever time allows, give a friendly message back to the players.
+                if (game.Players[action.PlayerNumber].Hand.Count > 4) throw new OverflowException("Too much want!");
                 string card = game.DiscardPile.Last();
-                hand.Add(card);
+                playerHand.Add(card);
                 game.DiscardPile.RemoveAt(game.DiscardPile.Count - 1);
             }
             else if (action.Type is Action.ActionType.Discard)
             {
                 // Do not leave in!
+                // Whenever time allows, give a friendly message back to the players.
                 if (string.IsNullOrWhiteSpace(playerCard)) throw new NullReferenceException("Why did you do that?");
-                hand.Remove(playerCard);
+                // One day, we we may to check if there is more than one of this card type and to discard the chosen instance.
+                // Today is not that day.
+                playerHand.Remove(playerCard);
                 game.DiscardPile.Add(playerCard);
             }
+            // Do we throw if playerCard is null?
             else if (action.Type is Action.ActionType.Play && playerCard is not null)
             {
-                // Depending on the card we need to do different things.
-                hand.Remove(playerCard);
+                if (!playerHand.Contains(playerCard)) throw new KeyNotFoundException("False!");
+                // One day, we we may to check if there is more than one of this card type and to discard the chosen instance.
+                // Today is not that day.
+                playerHand.Remove(playerCard);
                 CardInfo info = Cards.GetCardInfo(playerCard);
                 if (info.Suit is CardInfo.CardSuit.LiveStock
                     || info.Suit is CardInfo.CardSuit.Garden
@@ -74,12 +87,45 @@
                     //  Does it result in victory?
                     game.Players[action.PlayerNumber].Board.Add(info.Card);
                 }
+                else if(info.Suit is CardInfo.CardSuit.Action)
+                {
+                    // What happens if they draw a Good Neighbor card on the first round?
+                    if(info.Name.ToUpperInvariant() is "GIVE")
+                    {
+                        if (string.IsNullOrWhiteSpace(action.TargetCard)) throw new NullReferenceException("Oh no!");
+                        if (action.TargetPlayer is null || action.TargetPlayer is 0) throw new ArgumentException("It hurts!");
+                        if (game.Players[(int)action.TargetPlayer].Hand.Count > 4) throw new ArgumentOutOfRangeException("Too much give!");
+
+                        playerHand.Remove(action.TargetCard);
+                        // Can we do this if the target player already has 5 cards?
+                        game.Players[(int)action.TargetPlayer].Hand.Add(action.TargetCard);
+                    }
+                    else
+                    {
+                        if (string.IsNullOrWhiteSpace(action.TargetCard)) throw new NullReferenceException("!on hO");
+                        if (action.TargetPlayer is null || action.TargetPlayer is 0) throw new ArgumentException("!struh tI");
+
+                        // One day, we we may to check if there is more than one of this card type and to discard the chosen instance.
+                        // Today is not that day.
+                        playerHand.Remove(playerCard);
+                        game.Players[(int)action.TargetPlayer].Hand.Remove(action.TargetCard);
+                        playerHand.Add(action.TargetCard);
+                        
+                    }
+                }
                 // If an action goes against everyone, then that's one action per person
             }
             else if (action.Type is Action.ActionType.EndTurn)
             {
-                // Need to revert to 1 on 4
-                game.ActivePlayer++;
+                if (game.ActivePlayer < 4)
+                {
+                    game.ActivePlayer++;
+                }
+                else
+                {
+                    game.ActivePlayer = 1;
+                }
+                // Gather list of valid actions based off of new active player.
             }
 
             return game;
