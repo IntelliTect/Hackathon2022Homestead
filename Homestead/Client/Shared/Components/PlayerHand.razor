@@ -1,5 +1,14 @@
-﻿<h3>PlayerHand</h3>
+﻿<div class="player-hand">
+   @* @foreach (var card in HandList)
+    {*@
+       <PlayerCard/>
+       <PlayerCard/>
+       <PlayerCard/>
+       <PlayerCard/>
+   @* }*@
 
+</div>
 @code {
-
+    [Parameter]
+    public List<string> HandList { get; set; } = new();
 }
