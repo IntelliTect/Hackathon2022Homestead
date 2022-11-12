@@ -29,7 +29,7 @@ namespace Homestead.Shared.Tests
             Game game = engine.Start();
 
             game = engine.ProcessAction(game, new PlayerAction(PlayerAction.ActionType.DrawFromDeck, game.ActivePlayer));
-            Assert.IsTrue(game.Players[game.ActivePlayer].Hand.Any());
+            Assert.IsTrue(game.Players[game.ActivePlayer-1].Hand.Any());
             Assert.IsFalse(game.AvailableActions.Any(a => a.Type is PlayerAction.ActionType.DrawFromDeck));
             Assert.IsFalse(game.AvailableActions.Any(a => a.Type is PlayerAction.ActionType.DrawFromDiscard));
             // Test to make sure available actions are exactly:
@@ -109,7 +109,7 @@ namespace Homestead.Shared.Tests
             GameEngine engine = new();
             Game game = engine.Start();
 
-            game.Players[game.ActivePlayer].Hand.Add(Cards.Well);
+            game.Players[game.ActivePlayer-1].Hand.Add(Cards.Well);
             PlayerAction action = new(PlayerAction.ActionType.Play, game.ActivePlayer, Cards.Well);
 
             game = engine.ProcessAction(game, action);
