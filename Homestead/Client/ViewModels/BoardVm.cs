@@ -19,7 +19,7 @@ namespace Homestead.Client.ViewModels
         public bool CanDrawFromDiscard { get; internal set; } = false;
         public bool CanDiscard { get; internal set; } = false;
         public bool CanEndTurn { get; internal set; } = false;
-        public CardInfo? TopDiscardCard { get; internal set; } = null;
+        public CardVm? TopDiscardCard { get; internal set; } = null;
         public int DiscardCardCount { get; internal set; } = 0;
 
         public class ActionEventArgs : EventArgs
@@ -40,12 +40,31 @@ namespace Homestead.Client.ViewModels
             handler(this, args);
         }
 
-        public void Click(CardVm card)
+        public void Play(PlayerCardVm card)
         {
             PlayerAction action = new(PlayerAction.ActionType.Play, LocalPlayerNumber, card.Card);
-
             OnPerformAction(action);
         }
+
+        public void DrawFromDeck()
+        {
+            PlayerAction action = new(PlayerAction.ActionType.DrawFromDeck, LocalPlayerNumber);
+            OnPerformAction(action);
+        }
+
+        public void DrawFromDiscard()
+        {
+            PlayerAction action = new(PlayerAction.ActionType.DrawFromDiscard, LocalPlayerNumber);
+            OnPerformAction(action);
+        }
+
+        public void Discard(PlayerCardVm card)
+        {
+            PlayerAction action = new(PlayerAction.ActionType.Discard, LocalPlayerNumber, card.Card);
+            OnPerformAction(action);
+        }
+
+
 
 
         public BoardVm(Game game, int localPlayerNumber)
@@ -67,6 +86,7 @@ namespace Homestead.Client.ViewModels
                     OtherPlayers.Add(new PlayerVm(player, otherPlayerCount));
                 }
             }
+            Update(game);
         }
 
         public void Update(Game game)
@@ -101,6 +121,16 @@ namespace Homestead.Client.ViewModels
             CanEndTurn = false;
             CanDiscard = false;
             LocalPlayer.ClearPlayableCards();
+
+            var topDiscard = game.DiscardPile.LastOrDefault();
+            if (topDiscard != null)
+            {
+                TopDiscardCard = new CardVm(topDiscard);
+            }
+            else
+            {
+                TopDiscardCard = null;
+            }
             // If it is the local player's turn then we need to update the playable cards and actions
             if (game.ActivePlayer == LocalPlayerNumber)
             {

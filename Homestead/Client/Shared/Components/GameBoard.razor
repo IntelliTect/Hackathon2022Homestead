@@ -21,17 +21,21 @@
         <PlayerHomestead Player="CurrentPlayer" />
     </div>
 
-    <div class="row">
+    <div class="row justify-content-md-center">
         @if (IsOwnerOfGame && Board.State == Game.GameState.Joining)
         {
-            <button type="button" class="btn btn-success btn-lg" @onclick="StartGame">Start</button>
+            <button type="button" class="btn btn-success btn-lg col-sm" @onclick="StartGame">Start</button>
         }
         else
         {
-            <button type="button" class="btn btn-danger btn-lg" @onclick="DrawFromDeck">Draw from Deck</button>
+            <DeckPile></DeckPile>
+            if (Board.TopDiscardCard != null)
+            {
+                <DiscardPile Card="@Board.TopDiscardCard"></DiscardPile>
+            }
         }
     </div>
-    
+
 
 </div>
 
@@ -65,7 +69,7 @@
         await SendAction(args.Action);
     }
 
-    public async Task SendAction (PlayerAction action)
+    public async Task SendAction(PlayerAction action)
     {
         await hubConnection.InvokeAsync("ExecuteAction", Board.GameId, action);
     }

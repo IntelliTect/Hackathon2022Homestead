@@ -13,13 +13,13 @@ namespace Homestead.Client.ViewModels
         public int PlayerIndex { get; }
 
 
-        public List<CardVm> Hand
+        public List<PlayerCardVm> Hand
         { get; } = new();
-        public List<CardVm> Board { get; } = new();
+        public List<PlayerCardVm> Board { get; } = new();
 
-        public IEnumerable<CardVm> BoardLivestock => Board.Where(f => f.CardInfo.Suit == CardInfo.CardSuit.LiveStock);
-        public IEnumerable<CardVm> BoardGarden => Board.Where(f => f.CardInfo.Suit == CardInfo.CardSuit.Garden);
-        public IEnumerable<CardVm> BoardHouse => Board.Where(f => f.CardInfo.Suit == CardInfo.CardSuit.House);
+        public IEnumerable<PlayerCardVm> BoardLivestock => Board.Where(f => f.CardInfo.Suit == CardInfo.CardSuit.LiveStock);
+        public IEnumerable<PlayerCardVm> BoardGarden => Board.Where(f => f.CardInfo.Suit == CardInfo.CardSuit.Garden);
+        public IEnumerable<PlayerCardVm> BoardHouse => Board.Where(f => f.CardInfo.Suit == CardInfo.CardSuit.House);
 
 
         public PlayerVm(Player player, int playerIndex)
@@ -47,7 +47,7 @@ namespace Homestead.Client.ViewModels
                 if (cardVm == null)
                 {
                     // Add the card
-                    Hand.Add(new CardVm(card, this));
+                    Hand.Add(new PlayerCardVm(card, this));
                 }
                 else
                 {
@@ -70,7 +70,7 @@ namespace Homestead.Client.ViewModels
                 if (cardVm == null)
                 {
                     // Add the card
-                    Board.Add(new CardVm(card, this));
+                    Board.Add(new PlayerCardVm(card, this));
                 }
                 else
                 {
@@ -97,6 +97,12 @@ namespace Homestead.Client.ViewModels
                     {
                         cardVm.IsPlayable = true;
                     }
+                }else if (action.Type == ActionType.Discard)
+                {
+                    foreach (var card in Hand)
+                    {
+                        card.IsDiscardable = true;
+                    }
                 }
             }
         }
@@ -106,6 +112,7 @@ namespace Homestead.Client.ViewModels
             foreach (var cardVm in Hand)
             {
                 cardVm.IsPlayable = false;
+                cardVm.IsDiscardable = false;
             }
         }
 

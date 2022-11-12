@@ -3,7 +3,7 @@
 @inject LobbyVm Lobby;
 
 
-<div class="hand-card  @(Card.IsPlayable || Card.IsDiscardable ? "selected" : "")" @onclick="click">
+<div class="hand-card  @(Lobby.Board.CanDrawFromDeck ? "selected" : "")" @onclick="click">
    <div class="card-image" style="background-image: url(@Card.ImageUrl)">
    </div>
    <div class="card-text">
@@ -12,11 +12,10 @@
 </div>
 @code {
     [Parameter]
-    public PlayerCardVm Card { get; set; } = null!;
+    public CardVm Card { get; set; } = null!;
 
     private void click()
     {
-        if (Card.IsPlayable) Lobby.Board.Play(Card);
-        if (Card.IsDiscardable) Lobby.Board.Discard(Card);
+        Lobby.Board.DrawFromDiscard();
     }
 }
