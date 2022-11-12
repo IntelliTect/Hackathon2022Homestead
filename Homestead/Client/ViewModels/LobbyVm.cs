@@ -5,7 +5,7 @@ namespace Homestead.Client.ViewModels
 {
     public class LobbyVm : ILobbyVm
     {
-        public BoardVm? Board { get; internal set; }
+        public BoardVm? Board { get; set; }
         public int PlayerNumber => _PlayerNumber;
         private int _PlayerNumber;
         public bool InGame { get; set; }

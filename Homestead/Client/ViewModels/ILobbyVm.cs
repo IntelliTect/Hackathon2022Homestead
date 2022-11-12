@@ -7,5 +7,6 @@ namespace Homestead.Client.ViewModels
         Task<bool> JoinGame(string gameId, HttpClient http);
         Task<bool> CreateGame(HttpClient http);
         void UpdateBoard(Game game);
+        BoardVm? Board { get; set; }
     }
 }
