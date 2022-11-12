@@ -1,3 +1,5 @@
+using Homestead.Server.SignalR;
+using Homestead.Shared;
 using Microsoft.AspNetCore.ResponseCompression;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +8,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Services.AddSignalR();
+builder.Services.AddSingleton<IGameEngine, GameEngine>();
+builder.Services.AddSingleton<IGameLookup, GameLookup>();
+
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
@@ -21,6 +28,9 @@ else
     app.UseHsts();
 }
 
+app.UseSwagger();
+app.UseSwaggerUI();
+
 app.UseHttpsRedirection();
 
 app.UseBlazorFrameworkFiles();
@@ -28,7 +38,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-
+app.MapHub<CommunicationHub>("/comms");
 app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("index.html");

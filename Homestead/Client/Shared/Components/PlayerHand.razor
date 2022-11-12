@@ -1,0 +1,15 @@
+﻿@using Homestead.Shared;
+
+<div class="player-hand">
+    @foreach (var card in CardInfoList)
+    {
+       <PlayerCard Card="@card"/>      
+    }
+
+</div>
+@code {
+    [Parameter]
+    public List<string> HandList { get; set; } = new();
+
+    public List<CardInfo> CardInfoList { get => HandList.Select(x => Cards.GetCardInfo(x)).ToList(); } 
+}

@@ -1,0 +1,71 @@
+﻿@using Homestead.Shared;
+
+<div>
+    <!-- Visuals -->
+    <div class="container">
+        <div class="row">
+            <!-- House -->
+            <div class="home col-1">
+                <img height="200" src="/Assets/Images/house/house@(BoardHouse.Count).png" />
+            </div>
+            <!-- Player -->
+            <div class="player col-1">
+                <img style="margin-top: 150px" height="70" src="@Player.GetPlayerImageUrl()" />
+            </div>
+            <!-- Garden -->
+            <div class="garden col-12 col-md-1 mt-5">
+                <img height="200" src="/Assets/Images/garden/garden@(BoardGarden.Count).png" />
+            </div>
+        </div>
+    </div>
+    <!-- Card Slots -->
+    <div class="container">
+        <div class="container">
+            <!-- House Cards -->
+            <div class="row gx-1 mb-1">
+                @foreach (var card in BoardHouse)
+                {
+                    <div class="col-1 board-card">
+                        <PlayerCard Card="@card"/>
+                    </div>
+                }
+            </div>
+
+            <!-- Farm Cards -->
+            <div class="row gx-1">
+                @foreach (var card in BoardGarden)
+                {
+                    <div class="col-1 board-card">
+                        <PlayerCard Image="@card"/>
+                    </div>
+                }
+                <!-- Livestock Cards -->
+                @foreach (var card in BoardLivestock)
+                {
+                    <div class="col-1 board-card">
+                        <PlayerCard Image="@card"/>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <style>
+
+    </style>
+</div>
+
+@code {
+    [Parameter]
+    public Player Player { get; set; } = new();
+
+    public List<CardInfo> BoardLivestock { get => Player.BoardBySuit(CardInfo.CardSuit.LiveStock).Select(card => Cards.GetCardInfo(card)).ToList(); }
+    public List<CardInfo> BoardGarden { get => Player.BoardBySuit(CardInfo.CardSuit.Garden).Select(card => Cards.GetCardInfo(card)).ToList(); } 
+    public List<CardInfo> BoardHouse { get => Player.BoardBySuit(CardInfo.CardSuit.House).Select(card => Cards.GetCardInfo(card)).ToList(); } 
+
+    protected override void OnInitialized()
+    {
+
+    }
+
+  
+}
