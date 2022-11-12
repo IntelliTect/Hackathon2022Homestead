@@ -1,3 +1,4 @@
+using Homestead.Server.SignalR;
 using Microsoft.AspNetCore.ResponseCompression;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -28,7 +30,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-
+app.MapHub<ChatHub>("/chathub");
 app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
