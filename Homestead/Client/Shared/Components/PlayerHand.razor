@@ -11,13 +11,5 @@
     [Parameter]
     public List<string> HandList { get; set; } = new();
 
-    public List<CardInfo> CardInfoList { get; set; } = new();
-
-    public void PopulateCardInfoList()
-    {
-        foreach (var card in HandList)
-        {
-            CardInfoList.Add(Cards.GetCardInfo(card));
-        }       
-    }
+    public List<CardInfo> CardInfoList { get => HandList.Select(x => Cards.GetCardInfo(x)).ToList(); } 
 }
