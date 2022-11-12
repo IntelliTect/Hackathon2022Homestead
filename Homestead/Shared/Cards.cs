@@ -41,8 +41,8 @@ namespace Homestead.Shared
         static Cards()
         {
             int lots = 5;
-            int some = 3;
-            int few = 1;
+            //int some = 3;
+            //int few = 1;
             //MasterDeck.Add(new CardInfo(EarthquakeSelf, "Quake: Me",CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Self, "earthquake.png", few, Cards.Well));
             //MasterDeck.Add(new CardInfo(EarthquakeOther, "Quake: You", CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Other, "earthquake.png", few, Cards.Well));
             //MasterDeck.Add(new CardInfo(EarthquakeAll, "Quake: All",CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.All, "earthquake.png", few, Cards.Well));

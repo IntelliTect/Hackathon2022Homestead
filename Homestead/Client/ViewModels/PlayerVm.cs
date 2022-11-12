@@ -1,4 +1,5 @@
 ﻿using Homestead.Shared;
+using System.Text;
 using static Homestead.Shared.PlayerAction;
 
 namespace Homestead.Client.ViewModels
@@ -97,7 +98,8 @@ namespace Homestead.Client.ViewModels
                     {
                         cardVm.IsPlayable = true;
                     }
-                }else if (action.Type == ActionType.Discard)
+                }
+                else if (action.Type == ActionType.Discard)
                 {
                     foreach (var card in Hand)
                     {
@@ -124,5 +126,20 @@ namespace Homestead.Client.ViewModels
             return $"/Assets/Images/player/{fileName}";
         }
 
+        public override string ToString()
+        {
+            var output = new StringBuilder();
+            output.Append($"{PlayerNumber}:\n Hand: ");
+            for (int i = 0; i < Hand.Count; i++)
+            {
+                output.Append($"{Hand[i].Card}, ");
+            }
+            output.Append("\n Board: ");
+            for (int i = 0; i < Board.Count; i++)
+            {
+                output.Append($"{Board[i].Card}, ");
+            }
+            return output.ToString();
+        }
     }
 }

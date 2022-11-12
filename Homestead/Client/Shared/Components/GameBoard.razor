@@ -71,11 +71,12 @@
                 Console.WriteLine($"Last Action: {action.Type}");
             }
             Board.Update(game);
+            Console.WriteLine(Board.LocalPlayer.ToString());
             foreach (var action in game.AvailableActions)
             {
                 Console.WriteLine($"Available Action: {action.Type}");
             }
-            Console.WriteLine($"Cards: Hand: {Board.LocalPlayer.Hand.Count}  Board: {Board.LocalPlayer.Hand.Count}");
+            Console.WriteLine($"Cards: Hand: {Board.LocalPlayer.Hand.Count}  Board: {Board.LocalPlayer.Board.Count}");
             StateHasChanged();
         });
         Board.PerformAction += SendActionEvent!;
