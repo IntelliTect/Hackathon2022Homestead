@@ -19,9 +19,9 @@ namespace Homestead.Shared
         public GameState State { get; set; }
         public int? Winner { get; set; }
         public List<Player> Players { get; } = new();
-        public List<string> DiscardPile { get; } = new List<string>();
+        public List<string> DiscardPile { get; } = new ();
         public int ActivePlayer { get; set; } = 1;
-        public List<Action> Actions { get; } = new List<Action>();
-        public Action? LastAction { get; set; } = null;
+        public List<Action> AvailableActions { get; } = new ();
+        public List<Action> LastActions { get; } = new();
     }
 }

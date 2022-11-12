@@ -25,7 +25,7 @@
                 game.Players.Add(player);
             }
             game.ActivePlayer = firstPlayer;
-            game.Actions.Add(new Action(Action.ActionType.DrawFromDeck, firstPlayer));
+            game.AvailableActions.Add(new Action(Action.ActionType.DrawFromDeck, firstPlayer));
             return game;
         }
 
@@ -39,7 +39,7 @@
         /// <exception cref="NullReferenceException"></exception>
         public Game ProcessAction(Game game, Action action)
         {
-            game.LastAction = action;
+            game.LastActions.Add(action);
             string? playerCard = action.PlayerCard;
             List<string> hand = game.Players[action.PlayerNumber].Hand;
             if (action.Type is Action.ActionType.DrawFromDeck)
@@ -62,7 +62,7 @@
                 hand.Remove(playerCard);
                 game.DiscardPile.Add(playerCard);
             }
-            else if (action.Type is Action.ActionType.Play)
+            else if (action.Type is Action.ActionType.Play && playerCard is not null)
             {
                 // Depending on the card we need to do different things.
                 hand.Remove(playerCard);
@@ -77,8 +77,9 @@
                     //  Does it result in victory?
                     game.Players[action.PlayerNumber].Board.Add(info.Card);
                 }
+                // If an action goes against everyone, then that's one action per person
             }
-            else if(action.Type is Action.ActionType.EndTurn)
+            else if (action.Type is Action.ActionType.EndTurn)
             {
                 // Need to revert to 1 on 4
                 game.ActivePlayer++;
@@ -94,12 +95,12 @@
 
         private void EvaluateActions(Game game)
         {
-            
+
         }
 
         private void UpdateHomestead()
         {
-            
+
         }
 
         private bool HasShelter()

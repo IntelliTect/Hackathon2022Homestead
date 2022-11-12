@@ -15,10 +15,10 @@ namespace Homestead.Shared.Tests
             Assert.IsNotNull(game);
             Assert.IsFalse(string.IsNullOrEmpty(game.GameId));
             Assert.AreEqual(1, game.ActivePlayer);
-            Assert.IsTrue(game.Actions.Any());
+            Assert.IsTrue(game.AvailableActions.Any());
             //CollectionAssert.Contains(game.Actions, Action.ActionType.DrawFromDeck);
-            Assert.AreEqual(Action.ActionType.DrawFromDeck, game.Actions[0].Type);
-            Assert.AreEqual(1, game.Actions[0].PlayerNumber);
+            Assert.AreEqual(Action.ActionType.DrawFromDeck, game.AvailableActions[0].Type);
+            Assert.AreEqual(1, game.AvailableActions[0].PlayerNumber);
         }
 
 
@@ -96,10 +96,10 @@ namespace Homestead.Shared.Tests
             Game game = engine.Start();
 
             Action action = new(Action.ActionType.Play, game.ActivePlayer);
-
+            action.PlayerCard = Cards.Well;
             game = engine.ProcessAction(game, action);
 
-            Assert.AreEqual(Action.ActionType.Play, game.LastAction.Type);
+            Assert.AreEqual(Action.ActionType.Play, game.LastActions[0].Type);
         }
     }
 }

@@ -3,20 +3,20 @@
 
 <div class="map">
     <div class="row gx-1 mb-1">
-        @foreach(var opponent in Opponents)
+        @foreach (var opponent in Opponents)
         {
             <div class="col">
-                <PlayerHomestead Player="@opponent"/>
-        </div>
-        }       
+                <PlayerHomestead Player="@opponent" />
+            </div>
+        }
     </div>
 
     <div class="col">
-        <PlayerHomestead Player="CurrentPlayer"/>
+        <PlayerHomestead Player="CurrentPlayer" />
     </div>
 </div>
 
-<PlayerHand HandList="@CurrentPlayer.Hand"/>
+<PlayerHand HandList="@CurrentPlayer.Hand" />
 
 
 @code {
@@ -34,6 +34,60 @@
 
     protected override async Task OnInitializedAsync()
     {
+        // This is all test data
+        GameState = new Game()
+            {
+                GameId = "TestGame",
+                State = Game.GameState.Playing,
+                Winner = null
+            };
+
+        var player = new Player()
+            {
+                PlayerNumber = 1,
+                IsBot = false,
+                Name = "Player 1 Test",
+                SkinTone = Player.SkinTones.Light,
+                Gender = Player.Genders.Female
+            };
+        player.Hand.Add(Cards.Shovel);
+        player.Hand.Add(Cards.Seeds);
+        player.Hand.Add(Cards.Livestock);
+        player.Hand.Add(Cards.Wood);
+        player.Hand.Add(Cards.Saw);
+        player.Hand.Add(Cards.Hammer);
+        GameState.Players.Add(player);
+
+        var player2 = new Player()
+            {
+                PlayerNumber = 2,
+                IsBot = true,
+                Name = "Player 2 Test",
+                SkinTone = Player.SkinTones.Dark,
+                Gender = Player.Genders.Female
+            };
+        player2.Hand.Add(Cards.Well);
+        player2.Hand.Add(Cards.Seeds);
+        GameState.Players.Add(player2);
+
+        GameState.Players.Add(new Player()
+            {
+                PlayerNumber = 3,
+                IsBot = true,
+                Name = "Player 3 Test",
+                SkinTone = Player.SkinTones.Light,
+                Gender = Player.Genders.Male
+            });
+
+        GameState.Players.Add(new Player()
+            {
+                PlayerNumber = 4,
+                IsBot = true,
+                Name = "Player 4 Test",
+                SkinTone = Player.SkinTones.Dark,
+                Gender = Player.Genders.Male
+            });
+
         //get current player hand information
         GetCurrentPlayerHand();
         await base.OnInitializedAsync();

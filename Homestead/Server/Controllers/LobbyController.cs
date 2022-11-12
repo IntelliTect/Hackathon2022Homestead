@@ -22,12 +22,6 @@ public class LobbyController
 	public async Task<int> JoinGame(string gameId)
 	{
 		var game = lookup.GetGame(gameId);
-
-		if (game is null)
-		{
-			return 0;
-		}
-
 		int playerNumber;
 
 		lock (game)
@@ -54,7 +48,6 @@ public class LobbyController
 
 		// add game to lookup.
 		//lookup
-
 		await hub.Groups.AddToGroupAsync(hub.Context.ConnectionId, game.GameId);
 		return 1;
 	}

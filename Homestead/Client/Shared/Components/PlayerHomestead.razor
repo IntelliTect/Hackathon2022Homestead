@@ -6,11 +6,11 @@
         <div class="row">
             <!-- House -->
             <div class="home col-1">
-                <img height="200" src="/Assets/Images/house/house@(BoardGarden.Count).png" />
+                <img height="200" src="/Assets/Images/house/house@(BoardHouse.Count).png" />
             </div>
             <!-- Player -->
             <div class="player col-1">
-                <img style="margin-top: 150px" height="70" src="/Assets/Images/player/p3-fw-single.png" />
+                <img style="margin-top: 150px" height="70" src="@Player.GetPlayerImageUrl()" />
             </div>
             <!-- Garden -->
             <div class="garden col-12 col-md-1 mt-5">
@@ -61,7 +61,7 @@
 
     protected override void OnInitialized()
     {
-       
+
     }
 
   
