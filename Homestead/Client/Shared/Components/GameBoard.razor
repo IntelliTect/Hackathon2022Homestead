@@ -54,7 +54,7 @@
     protected override async Task OnInitializedAsync()
     {
         Console.WriteLine($"Game Board Component with {Opponents.Count() + 1} Players");
-        hubConnection.On<Game>("ActionReceived", (state) =>
+        hubConnection.On<Game>("ExecuteAction", (state) =>
         {
             Console.WriteLine("Got Game Update");
             foreach(var action in ((Game)state).LastActions)

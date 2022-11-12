@@ -19,7 +19,7 @@ public class CommunicationHub : Hub
         var game = gameLookup.GetGame(gameId);
         if (game == null) throw new ArgumentNullException(nameof(game));
         var newState = engine.ProcessAction(game, action);  
-        await Clients.Group(newState.GameId).SendAsync("ActionRecieved", newState);
+        await Clients.Group(newState.GameId).SendAsync("ExecuteAction", newState);
     }
     
     public async Task RequestPushGameState(string gameId)
