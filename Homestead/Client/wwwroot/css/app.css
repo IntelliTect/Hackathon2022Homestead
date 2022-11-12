@@ -4,6 +4,19 @@ html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+.map {
+    background-image: url("/Assets/Images/map.png");
+    width: 100%;
+    height: 75vh;
+}
+
+img {
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+
 h1:focus {
     outline: none;
 }

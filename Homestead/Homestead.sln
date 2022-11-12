@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Homestead.Client", "Client\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Homestead.Shared", "Shared\Homestead.Shared.csproj", "{59AF68D7-281F-4101-8532-24B53EF2018B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Homestead.Shared.Tests", "Homestead.Shared.Tests\Homestead.Shared.Tests.csproj", "{A68F5D32-6179-4595-AF55-C7D6B8B535C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Homestead.Shared.Tests", "Homestead.Shared.Tests\Homestead.Shared.Tests.csproj", "{A68F5D32-6179-4595-AF55-C7D6B8B535C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
