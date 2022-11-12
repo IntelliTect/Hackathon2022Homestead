@@ -23,12 +23,12 @@ img {
     display: grid;
     grid-template-columns: .2fr .2fr .2fr .2fr .2fr;
     column-gap: 20px;
+    padding: 15px;
 }
 
 .hand-card {
-    margin: 15px;
     background-color: white;
-    height: 80%;       
+    height: 100%;       
 }
 
 .card-image {
