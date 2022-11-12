@@ -31,7 +31,7 @@ public class CommunicationHub : Hub
             {
                 return;
             }
-            await Task.Delay(100).ConfigureAwait(false);
+            await Task.Delay(500).ConfigureAwait(false);
             Random rand = new Random();
             int index = rand.Next(0, newState.AvailableActions.Count - 1);
             var newAction = newState.AvailableActions[index];
