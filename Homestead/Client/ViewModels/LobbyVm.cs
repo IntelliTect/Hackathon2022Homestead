@@ -3,16 +3,15 @@ using System.Net.Http.Json;
 
 namespace Homestead.Client.ViewModels
 {
-    // TODO: Change to an injectable with DI as a singleton.
-    public static class LobbyVm
+    public class LobbyVm : ILobbyVm
     {
-        public static BoardVm? Board { get; internal set; }
-        public static int PlayerNumber => _PlayerNumber;
-        public static int _PlayerNumber;
-        public static bool InGame { get; set; }
+        public BoardVm? Board { get; internal set; }
+        public int PlayerNumber => _PlayerNumber;
+        public int _PlayerNumber;
+        public bool InGame { get; set; }
 
 
-        public static async Task<bool> JoinGame(string gameId, HttpClient http)
+        public async Task<bool> JoinGame(string gameId, HttpClient http)
         {
             var result = await http.PostAsync($"Join/{gameId}", null);
             string playerNum = await result.Content.ReadAsStringAsync();
@@ -28,16 +27,20 @@ namespace Homestead.Client.ViewModels
             return false;
         }
         
-        public static async Task<bool> CreateGame(HttpClient http)
+        public async Task<bool> CreateGame(HttpClient http)
         {
-            var game = await http.GetFromJsonAsync<Game>("Create");
-            _PlayerNumber = 1;
-            InGame = true;
-            return true;
-
-            // TODO: return false if this fails.
+            try
+            {
+                var game = await http.GetFromJsonAsync<Game>("Create");
+                _PlayerNumber = 1;
+                InGame = true;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
         }
-
-
     }
 }
