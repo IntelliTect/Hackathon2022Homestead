@@ -28,4 +28,8 @@ public class CommunicationHub : Hub
         if (game == null) throw new ArgumentNullException(nameof(game));
         await Clients.Group(gameId).SendAsync("ActionRecieved", game);
     }
+    public async Task SubscribeToGame(string gameId)
+    {
+        
+    }
 }
