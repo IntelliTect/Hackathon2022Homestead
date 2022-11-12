@@ -51,7 +51,7 @@
     private async Task CreateGame()
     {
         await Lobby.CreateGame(Http);
-        hubConnection.InvokeAsync("SubscribeToGame", Lobby.Board.GameId);
+        await hubConnection.InvokeAsync("SubscribeToGame", Lobby.Board.GameId);
         NavManager.NavigateTo("/gameboardpage");
     }
 
@@ -63,7 +63,7 @@
     private async Task JoinGame(string gameId)
     {
         var result = await Lobby.JoinGame(gameId, Http);
-        hubConnection.InvokeAsync("SubscribeToGame", Lobby.Board.GameId);
+        await hubConnection.InvokeAsync("SubscribeToGame", Lobby.Board.GameId);
         if (result) NavManager.NavigateTo("/gameboardpage");
 
     }
