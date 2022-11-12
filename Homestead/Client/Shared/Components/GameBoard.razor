@@ -4,6 +4,7 @@
 @inject NavigationManager Navigation
 @inject HubConnection hubConnection
 @inject LobbyVm Lobby
+@implements IDisposable
 
 <div class="map">
     <div class=row gx-1 mb-1>
@@ -40,12 +41,16 @@
 
     protected override async Task OnInitializedAsync()
     {
-        hubConnection.On<Game>("ActionRecieved", (state) =>
+        hubConnection.On<Game>("ActionReceived", (state) =>
         {
-            @*GameState = state;*@
-            InvokeAsync(StateHasChanged);
+            GameState.Update(state);
+            StateHasChanged();
         });
 
         await base.OnInitializedAsync();
     }   
+        public void Dispose()
+    {
+        hubConnection.Remove("ActionReceived");
+    }
 }

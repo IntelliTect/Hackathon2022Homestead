@@ -14,7 +14,7 @@ public class CommunicationHub : Hub
         this.gameLookup = gameLookup;
     }
 
-    public async Task RecieveAction(string gameId, Shared.PlayerAction action)
+    public async Task ActionReceived(string gameId, Shared.PlayerAction action)
     {
         var game = gameLookup.GetGame(gameId);
         if (game == null) throw new ArgumentNullException(nameof(game));
