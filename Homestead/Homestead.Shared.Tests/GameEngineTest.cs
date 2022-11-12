@@ -87,6 +87,19 @@ namespace Homestead.Shared.Tests
             Assert.IsTrue(game.DiscardPile.Last() is Cards.Wood);
         }
 
-        // Draw from discard with no discard pile
+        // Draw from discard with no discard
+
+        [TestMethod]
+        public void PlayCard()
+        {
+            GameEngine engine = new();
+            Game game = engine.Start();
+
+            Action action = new(Action.ActionType.Play, game.ActivePlayer);
+
+            game = engine.ProcessAction(game, action);
+
+            Assert.AreEqual(Action.ActionType.Play, game.LastAction.Type);
+        }
     }
 }
