@@ -4,26 +4,35 @@
 @inject NavigationManager Navigation
 @inject HubConnection hubConnection
 @inject LobbyVm Lobby
+@implements IDisposable
+@inject HttpClient Http
 
 <div class="map">
-    <div class=row gx-1 mb-1>
-        @if(CurrentPlayerId == 1)
-        {
-        <button type="button">Start</button>
-        }
-    </div>
     <div class="row gx-1 mb-1">
         @foreach (var opponent in Opponents)
         {
             <div class="col">
-                <PlayerHomestead Player="@opponent.Player" />
+                <PlayerHomestead Player="@opponent" />
             </div>
         }
     </div>
 
     <div class="col">
-        <PlayerHomestead Player="CurrentPlayer.Player" />
+        <PlayerHomestead Player="CurrentPlayer" />
     </div>
+
+    <div class="row">
+        @if (IsOwnerOfGame && Board.State == Game.GameState.Joining)
+        {
+            <button type="button" class="btn btn-success btn-lg" @onclick="StartGame">Start</button>
+        }
+        else
+        {
+            <button type="button" class="btn btn-danger btn-lg" @onclick="DrawFromDeck">Draw from Deck</button>
+        }
+    </div>
+    
+
 </div>
 
 <PlayerHand HandList="@CurrentPlayer.Hand" />
@@ -31,21 +40,57 @@
 
 @code {
     //[CascadingParameter]
-    public int CurrentPlayerId { get; set; } = 1; // TODO: Fix this
+    public bool IsOwnerOfGame => CurrentPlayer.PlayerNumber == 1;
 
-    private BoardVm GameState => Lobby.Board!;
+    private BoardVm Board => Lobby.Board;
 
-    public List<PlayerVm> Opponents { get => GameState.OtherPlayers; }
-    public PlayerVm CurrentPlayer { get =>GameState.LocalPlayer; }
+    public List<PlayerVm> Opponents { get => Board.OtherPlayers; }
+    public PlayerVm CurrentPlayer { get => Board.LocalPlayer; }
 
     protected override async Task OnInitializedAsync()
     {
-        hubConnection.On<Game>("ActionRecieved", (state) =>
+        Console.WriteLine($"Game Board Component with {Opponents.Count() + 1} Players");
+        hubConnection.On<Game>("ActionReceived", (state) =>
         {
-            @*GameState = state;*@
-            InvokeAsync(StateHasChanged);
+            Board.Update(state);
+            StateHasChanged();
         });
+        Board.PerformAction += SendActionEvent!;
 
         await base.OnInitializedAsync();
-    }   
+    }
+
+    public async void SendActionEvent(object sender, BoardVm.ActionEventArgs args)
+    {
+        await SendAction(args.Action);
+    }
+
+    public async Task SendAction (PlayerAction action)
+    {
+        await hubConnection.InvokeAsync("ExecuteAction", Board.GameId, action);
+    }
+
+    public async Task StartGame()
+    {
+        Console.WriteLine("Starting the game");
+        var result = await Http.PostAsync($"start/{Board.GameId}", null);
+        var game = await result.Content.ReadFromJsonAsync<Game>();
+        if (game == null) throw new ArgumentException("Game could not start");
+        // TODO: Do something with this failure case
+
+        Board.Update(game);
+        Console.WriteLine("Game Started");
+    }
+
+    public async Task DrawFromDeck()
+    {
+        var action = new PlayerAction(PlayerAction.ActionType.DrawFromDeck, Board.LocalPlayerNumber);
+        await SendAction(action);
+    }
+
+
+    public void Dispose()
+    {
+        hubConnection.Remove("ActionReceived");
+    }
 }

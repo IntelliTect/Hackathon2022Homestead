@@ -7,6 +7,8 @@ namespace Homestead.Client.ViewModels
     /// </summary>
     public class BoardVm
     {
+        public string GameId { get; internal set; }
+        public Game.GameState State { get; internal set; }
         public PlayerVm LocalPlayer { get; } = null!;
         public List<PlayerVm> OtherPlayers { get; } = new();
         public int LocalPlayerNumber { get; }
@@ -20,9 +22,36 @@ namespace Homestead.Client.ViewModels
         public CardInfo? TopDiscardCard { get; internal set; } = null;
         public int DiscardCardCount { get; internal set; } = 0;
 
+        public class ActionEventArgs : EventArgs
+        {
+            public PlayerAction Action { get; }
+
+            public ActionEventArgs(PlayerAction action)
+            {
+                Action = action;
+            }
+        }
+        public event EventHandler<ActionEventArgs> PerformAction = null!;
+
+        protected virtual void OnPerformAction(PlayerAction action)
+        {
+            EventHandler<ActionEventArgs> handler = PerformAction;
+            var args = new ActionEventArgs(action);
+            handler(this, args);
+        }
+
+        public void Click(CardVm card)
+        {
+            PlayerAction action = new(PlayerAction.ActionType.Play, LocalPlayerNumber, card.Card);
+
+            OnPerformAction(action);
+        }
+
 
         public BoardVm(Game game, int localPlayerNumber)
         {
+            GameId = game.GameId;
+            State = game.State;
             LocalPlayerNumber = localPlayerNumber;
             // Map the players into the A, B, C, D slot
             int otherPlayerCount = 0;
@@ -42,6 +71,8 @@ namespace Homestead.Client.ViewModels
 
         public void Update(Game game)
         {
+            State = game.State;
+
             // Update the players in the A, B, C, D slots
             foreach (var player in game.Players)
             {

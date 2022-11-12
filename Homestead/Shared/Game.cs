@@ -18,10 +18,10 @@ namespace Homestead.Shared
         public string GameId { get; set; } = string.Empty;
         public GameState State { get; set; }
         public int? Winner { get; set; }
-        public List<Player> Players { get; } = new();
-        public List<string> DiscardPile { get; } = new ();
+        public List<Player> Players { get; set; } = new();
+        public List<string> DiscardPile { get; set; } = new ();
         public int ActivePlayer { get; set; } = 1;
-        public List<PlayerAction> AvailableActions { get; } = new ();
-        public List<PlayerAction> LastActions { get; } = new();
+        public List<PlayerAction> AvailableActions { get; set; } = new ();
+        public List<PlayerAction> LastActions { get; set; } = new();
     }
 }

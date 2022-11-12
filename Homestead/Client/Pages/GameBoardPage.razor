@@ -1,14 +1,14 @@
 ﻿@page "/gameboardpage"
 @using Homestead.Client.Shared.Components
-@inject HttpClient Http
-@inject NavigationManager NavManager
-<GameBoard></GameBoard>
+<GameBoard ></GameBoard>
 
-
+<audio autoplay>
+    <source src="/Assets/Music/Myth.wav" />
+</audio>
 
 @code {
     protected override void OnInitialized()
     {
-        Console.WriteLine("Got to the Game Board");
+        Console.WriteLine("Got to the Game Board Page");
     }
 }

@@ -133,7 +133,6 @@ namespace Homestead.Shared
         public bool RequiredToWin { get; }
         public CardImpact Impact { get; }
         public string ImageFilename { get; }
-        public string ImageUrl => $"/Assets/Images/cards/{ImageFilename}";
         public string? ImpactedCard { get; }
         public string? PreventionCard { get; }
         public string Name { get; }

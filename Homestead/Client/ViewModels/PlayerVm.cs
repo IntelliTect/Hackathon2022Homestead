@@ -17,6 +17,10 @@ namespace Homestead.Client.ViewModels
         { get; } = new();
         public List<CardVm> Board { get; } = new();
 
+        public IEnumerable<CardVm> BoardLivestock => Board.Where(f => f.CardInfo.Suit == CardInfo.CardSuit.LiveStock);
+        public IEnumerable<CardVm> BoardGarden => Board.Where(f => f.CardInfo.Suit == CardInfo.CardSuit.Garden);
+        public IEnumerable<CardVm> BoardHouse => Board.Where(f => f.CardInfo.Suit == CardInfo.CardSuit.House);
+
 
         public PlayerVm(Player player, int playerIndex)
         {
@@ -43,7 +47,7 @@ namespace Homestead.Client.ViewModels
                 if (cardVm == null)
                 {
                     // Add the card
-                    Hand.Add(new CardVm(card));
+                    Hand.Add(new CardVm(card, this));
                 }
                 else
                 {
@@ -66,7 +70,7 @@ namespace Homestead.Client.ViewModels
                 if (cardVm == null)
                 {
                     // Add the card
-                    Board.Add(new CardVm(card));
+                    Board.Add(new CardVm(card, this));
                 }
                 else
                 {
@@ -103,6 +107,14 @@ namespace Homestead.Client.ViewModels
             {
                 cardVm.IsPlayable = false;
             }
+        }
+
+        public string GetImageUrl()
+        {
+            string genderCode = Player.Gender == Player.Genders.Male ? "m" : "f";
+            string skinToneCode = Player.SkinTone == Player.SkinTones.Light ? "w" : "b";
+            string fileName = $"p{PlayerNumber}-{genderCode}{skinToneCode}-single.png";
+            return $"/Assets/Images/player/{fileName}";
         }
 
     }

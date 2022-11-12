@@ -5,7 +5,7 @@
 @inject HttpClient Http
 @inject NavigationManager NavManager
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
-@inject ILobbyVm lobbyVm;
+@inject LobbyVm Lobby;
 
 <PageTitle>Index</PageTitle>
 
@@ -37,18 +37,18 @@ else
 
     protected override async Task OnInitializedAsync() {
         games = await Http.GetFromJsonAsync<Game[]>("Lobby");
-        Console.WriteLine(games.Count());
+        Console.WriteLine(games!.Count());
     }
 
     private async Task CreateGame()
     {
-        await lobbyVm.CreateGame(Http);
+        await Lobby.CreateGame(Http);
         NavManager.NavigateTo("/gameboardpage");
     }
 
     private async Task JoinGame(string gameId)
     {
-        var result = await lobbyVm.JoinGame(gameId, Http);
+        var result = await Lobby.JoinGame(gameId, Http);
         if (result) NavManager.NavigateTo("/gameboardpage");
         
     }
