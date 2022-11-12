@@ -33,12 +33,24 @@
                 // Disallow if hand.count > 4, then they'll have to discard
                 game.Players[action.PlayerNumber].Hand.Add(Cards.GetCard());
             }
+            else if (action.Type is Action.ActionType.DrawFromDiscard)
+            {
+                // Disallow if hand.count > 4, then they'll have to discard
+                if (!game.DiscardPile.Any()) throw new InvalidOperationException("Sad day!");
+                string card = game.DiscardPile.Last();
+                game.Players[action.PlayerNumber].Hand.Add(card);
+                game.DiscardPile.RemoveAt(game.DiscardPile.Count - 1);
+            }
             else if(action.Type is Action.ActionType.Discard)
             {
                 // Do not leave in!
-                if (string.IsNullOrWhiteSpace(action.PlayerCard)) throw new NullReferenceException();
+                if (string.IsNullOrWhiteSpace(action.PlayerCard)) throw new NullReferenceException("Why did you do that?");
                 game.Players[action.PlayerNumber].Hand.Remove(action.PlayerCard);
                 game.DiscardPile.Add(action.PlayerCard);
+            }
+            else if (action.Type is Action.ActionType.Play)
+            {
+
             }
             else if(action.Type is Action.ActionType.EndTurn)
             {
