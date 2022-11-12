@@ -22,8 +22,6 @@ public class CommunicationHub : Hub
         {
             return;
         }
-
-        game.Players[0].IsBot = true;
         
         var newState = engine.ProcessAction(game, action);
         await Clients.Group(newState.GameId).SendAsync("ExecuteAction", newState);
@@ -33,7 +31,7 @@ public class CommunicationHub : Hub
             {
                 return;
             }
-            await Task.Delay(20).ConfigureAwait(false);
+            await Task.Delay(100).ConfigureAwait(false);
             Random rand = new Random();
             int index = rand.Next(0, newState.AvailableActions.Count - 1);
             var newAction = newState.AvailableActions[index];
