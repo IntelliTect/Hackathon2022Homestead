@@ -13,11 +13,15 @@ namespace Homestead.Client.ViewModels
         
         public bool IsPlayable { get; set; }
 
-        public CardVm(string card)
+        public string ImageUrl => $"/Assets/Images/cards/{CardInfo.ImageFilename}";
+        public PlayerVm Player { get; set; }
+
+        public CardVm(string card, PlayerVm player)
         {
             Card = card;
             Updated = true;  // Set this right away so we don't use it again
             CardInfo = Cards.GetCardInfo(card);
+            Player = player;
         }
         
     }

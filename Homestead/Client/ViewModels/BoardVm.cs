@@ -21,6 +21,12 @@ namespace Homestead.Client.ViewModels
         public int DiscardCardCount { get; internal set; } = 0;
 
 
+        public void Click(CardVm card)
+        {
+
+        }
+
+
         public BoardVm(Game game, int localPlayerNumber)
         {
             LocalPlayerNumber = localPlayerNumber;

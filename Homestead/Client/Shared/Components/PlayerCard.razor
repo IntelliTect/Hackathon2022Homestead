@@ -1,19 +1,21 @@
-﻿@using Homestead.Shared
-<div class="hand-card  @(Selected ? "selected" : "")" @onclick="click">
+﻿@using Homestead.Client.ViewModels
+@using Homestead.Shared
+@inject LobbyVm Lobby;
+
+
+<div class="hand-card  @(Card.IsPlayable ? "selected" : "")" @onclick="click">
    <div class="card-image" style="background-image: url(@Card.ImageUrl)">
    </div>
    <div class="card-text">
-       @(Card.Name)
+       @(Card.CardInfo.Name)
    </div>
 </div>
 @code {
     [Parameter]
-    public CardInfo Card { get; set; } = null!;
-
-    private bool Selected = false;
+    public CardVm Card { get; set; } = null!;
 
     private void click()
     {
-        Selected = !Selected;
+        Lobby.Board.Click(Card);
     }
 }
