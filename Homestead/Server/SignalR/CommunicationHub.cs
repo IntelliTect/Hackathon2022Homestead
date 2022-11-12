@@ -25,7 +25,14 @@ public class CommunicationHub : Hub
             await Task.Delay(100).ConfigureAwait(false);
             Random rand = new Random();
             int index = rand.Next(0, newState.AvailableActions.Count - 1);
-            newState = engine.ProcessAction(newState, newState.AvailableActions[index]);
+            var newAction = newState.AvailableActions[index];
+            if (newAction.Type is PlayerAction.ActionType.Discard
+                && string.IsNullOrWhiteSpace(newAction.PlayerCard))
+            {
+                newAction.PlayerCard = newState.Players[newState.ActivePlayer - 1].Hand.First();
+            }
+
+            newState = engine.ProcessAction(newState, newAction);
             await Clients.Group(newState.GameId).SendAsync("ExecuteAction", newState);
         }
     }
