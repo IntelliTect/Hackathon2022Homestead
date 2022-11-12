@@ -4,7 +4,7 @@
         <div class="row">
             <!-- House -->
             <div class="home col-1">
-                <img height="200" src="/Assets/Images/house/house3.png" />
+                <img height="200" src="/Assets/Images/house/house@(BoardFarm.Count).png" />
             </div>
             <!-- Player -->
             <div class="player col-1">
@@ -12,7 +12,7 @@
             </div>
             <!-- Garden -->
             <div class="garden col-12 col-md-1">
-                <img height="200" src="/Assets/Images/garden/garden3.png" />
+                <img height="200" src="/Assets/Images/garden/garden@(BoardFarm.Count).png" />
             </div>
         </div>
     </div>
@@ -35,5 +35,13 @@
 </div>
 
 @code {
+    public List<string> BoardLivestock { get; } = new List<string>();
+    public List<string> BoardFarm { get; } = new List<string>();
+    public List<string> BoardHouse { get; } = new List<string>();
 
+    protected override void OnInitialized()
+    {
+        BoardHouse.Add("1");
+        BoardFarm.Add("1");
+    }
 }
