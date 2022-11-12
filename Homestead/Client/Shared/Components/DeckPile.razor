@@ -15,6 +15,9 @@
 
     private void click()
     {
-        Lobby.Board.DrawFromDeck();
+        if (Lobby.Board.CanDrawFromDeck)
+        {
+            Lobby.Board.DrawFromDeck();
+        }
     }
 }
