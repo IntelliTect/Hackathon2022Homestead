@@ -20,7 +20,7 @@
     <button class="btn btn-success" @onclick="DisplayInstructions" type="button">Instructions</button>
     <button class="btn btn-success" @onclick="CreateGame" type="button">New Game</button>
 </div>
-<hr />
+<hr style=".5px" />
 
 <div>
     @if (games is null || !games.Any())
@@ -29,13 +29,22 @@
     }
     else
     {
-        <ul>
-            @foreach (var item in games)
-            {
-                <li>@item.GameId</li>
-                <li><button class="btn btn-success" type="button" @onclick="()=>JoinGame(item.GameId)">Join</button></li>
+        <table> 
+          <tr>
+            <th style="padding-right:20px">Game Number</th>
+            <th style="padding-right:20px">Active Players</th>
+            <th style="padding-right:20px">Actions</th>
+          </tr>
+          @foreach (var item in games)
+           {
+                <tr>
+                    <td style="padding-right:20px">@(Array.IndexOf(games, item) + 1)</td>
+                    <td style="padding-right:20px">@item.ActivePlayer</td>
+                    <td style="padding-right:20px"><button class="btn btn-success" type="button" @onclick="()=>JoinGame(item.GameId)">Join</button></td>
+                </tr>
             }
-        </ul>
+
+         </table>
     }
 </div>
 
