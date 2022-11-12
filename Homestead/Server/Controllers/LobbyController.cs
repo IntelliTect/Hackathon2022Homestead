@@ -23,7 +23,7 @@ public class LobbyController
 	}
 
 	[HttpGet("/Create")]
-	public async Task<StartGameDto> CreateGame([FromServices] IGameEngine engine)
+	public StartGameDto CreateGame([FromServices] IGameEngine engine)
 	{
 		var game = engine.Start();
 
@@ -32,7 +32,7 @@ public class LobbyController
 	}
 
 	[HttpPost("/Join/{gameId}")]
-	public async Task<StartGameDto> Join(string gameId)
+	public StartGameDto Join(string gameId)
 	{
         var game = lookup.GetGame(gameId);
         if (game == null) throw new ArgumentException("Game not found");
