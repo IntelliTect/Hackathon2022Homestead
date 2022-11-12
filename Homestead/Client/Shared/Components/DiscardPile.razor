@@ -3,7 +3,7 @@
 @inject LobbyVm Lobby;
 
 
-<div class="hand-card  @(Lobby.Board.CanDrawFromDiscard ? "selected" : "")" @onclick="click">
+<div class="hand-card  @(CanDraw ? "selected" : "")" @onclick="click">
     @if (Card == null)
     {
         <div class="card-image" style="background-color: cadetblue;">
@@ -24,6 +24,8 @@
 @code {
     [Parameter]
     public CardVm Card { get; set; } = null!;
+    [Parameter]
+    public bool CanDraw { get; set; }
 
     private void click()
     {

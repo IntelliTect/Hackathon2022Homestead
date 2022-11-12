@@ -131,9 +131,10 @@ namespace Homestead.Client.ViewModels
             var output = new StringBuilder();
             output.Append($"{PlayerNumber}:");
             output.Append(IsCurrentPlayer ? "Active" : "Waiting");
-            output.AppendLine();
-            output.AppendLine($"Hand: {string.Join(", ", Hand.Select(f=>f.Card))}");
-            output.AppendLine($"Board: {string.Join(", ", Board.Select(f => f.Card))}");
+            output.Append("  ");
+            output.Append($"Hand: {string.Join(", ", Hand.Select(f=>f.Card))}");
+            output.Append("  ");
+            output.Append($"Board: {string.Join(", ", Board.Select(f => f.Card))}");
             return output.ToString();
         }
     }
