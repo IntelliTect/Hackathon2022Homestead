@@ -2,15 +2,17 @@
 @using System.Net.Http
 @using Homestead.Client.ViewModels
 @using Homestead.Shared;
+@using Microsoft.AspNetCore.SignalR.Client
 @inject HttpClient Http
 @inject NavigationManager NavManager
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
 @inject LobbyVm Lobby;
+@inject HubConnection hubConnection
 
 <PageTitle>Index</PageTitle>
 
 <h1>Homestead</h1>
-<hr/>
+<hr />
 <h3>
     Games
 </h3>
@@ -21,26 +23,27 @@
 <hr />
 
 <div>
-@if (games is null || !games.Any())
-{
-    <p>No games found.</p>
-}
-else
-{
-    <ul>
-    @foreach (var item in games)
+    @if (games is null || !games.Any())
     {
-        <li>@item.GameId</li>
-        <li><button class="btn btn-success" type="button" @onclick="()=>JoinGame(item.GameId)">Join</button></li>
+        <p>No games found.</p>
     }
-    </ul>
-}
+    else
+    {
+        <ul>
+            @foreach (var item in games)
+            {
+                <li>@item.GameId</li>
+                <li><button class="btn btn-success" type="button" @onclick="()=>JoinGame(item.GameId)">Join</button></li>
+            }
+        </ul>
+    }
 </div>
 
 @code {
     private Game[]? games;
 
-    protected override async Task OnInitializedAsync() {
+    protected override async Task OnInitializedAsync()
+    {
         games = await Http.GetFromJsonAsync<Game[]>("Lobby");
         Console.WriteLine(games!.Count());
     }
@@ -48,7 +51,7 @@ else
     private async Task CreateGame()
     {
         await Lobby.CreateGame(Http);
-        
+        hubConnection.InvokeAsync("SubscribeToGame", Lobby.Board.GameId);
         NavManager.NavigateTo("/gameboardpage");
     }
 
@@ -60,7 +63,8 @@ else
     private async Task JoinGame(string gameId)
     {
         var result = await Lobby.JoinGame(gameId, Http);
+        hubConnection.InvokeAsync("SubscribeToGame", Lobby.Board.GameId);
         if (result) NavManager.NavigateTo("/gameboardpage");
-        
+
     }
 }

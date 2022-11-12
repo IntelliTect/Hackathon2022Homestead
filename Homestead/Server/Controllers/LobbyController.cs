@@ -28,8 +28,6 @@ public class LobbyController
 		var game = engine.Start();
 
 		lookup.AddGame(game);
-
-        await hub.Groups.AddToGroupAsync(game.GameId, game.GameId);
 		return new StartGameDto { Game = game, PlayerId = 1 };
 	}
 
@@ -52,8 +50,6 @@ public class LobbyController
             player.IsBot = false;
             playerNumber = player.PlayerNumber;
         }
-
-        await hub.Groups.AddToGroupAsync(game.GameId, gameId);
 		return new StartGameDto { Game = game, PlayerId = playerNumber };
 	}
 
