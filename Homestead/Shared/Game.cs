@@ -33,7 +33,9 @@ namespace Homestead.Shared
             // Create 4 players
             for (int i = 1; i <=4 ; i++)
             {
-                Players.Add(new Player(i));
+                var player = new Player(i);
+                if (i != 1) player.IsBot = true;
+                Players.Add(player);
             }
         }
     }

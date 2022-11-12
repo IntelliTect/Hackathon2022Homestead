@@ -21,6 +21,7 @@ namespace Homestead.Shared
         }
 
         public int PlayerNumber { get;  }
+        public bool IsBot { get; set; }
         public string Name { get; set; }
         public SkinTones SkinTone { get; set; }
         public Genders Gender { get; set; }
