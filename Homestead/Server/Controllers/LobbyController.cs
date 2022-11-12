@@ -1,5 +1,8 @@
 ﻿using Homestead.Server.SignalR;
+using Homestead.Shared;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using System.Linq;
 
 namespace Homestead.Server.Controllers;
 
@@ -8,6 +11,7 @@ namespace Homestead.Server.Controllers;
 public class LobbyController
 {
 	private readonly CommunicationHub hub;
+	private readonly IGameLookup lookup;
 
 	public LobbyController(CommunicationHub hub, IGameLookup lookup)
 	{
@@ -16,12 +20,15 @@ public class LobbyController
 	}
 
 	[HttpPost]
-	public async Task JoinGame(string lobbyId, CancellationToken token)
+	public async Task<IActionResult> JoinGame(string lobbyId, CancellationToken token)
 	{
-		
+        var game = lookup.GetGame(lobbyId);
+
+		if (game.Players.Count > 4)
+			return new BadRequestResult();
 
 		await hub.Groups.AddToGroupAsync(hub.Context.ConnectionId, lobbyId, token);
 
+		return new OkResult();
     }
-
 }

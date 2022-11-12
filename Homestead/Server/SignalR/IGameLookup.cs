@@ -2,8 +2,8 @@
 
 namespace Homestead.Server.SignalR
 {
-    public abstract class IGameLookup
+    public interface IGameLookup
     {
-        public abstract Game GetGame(string gameId);
+        Game GetGame(string gameId);
     }
 }
