@@ -1,8 +1,19 @@
-﻿namespace Homestead.Server.SignalR
+﻿using Homestead.Shared;
+using System.Collections.Concurrent;
+
+namespace Homestead.Server.SignalR
 {
-    public class GameLookup
+    public class GameLookup : IGameLookup
     {
-        //Async dictionary of game objects by id
+        ConcurrentDictionary<string, Game> _gameLookup = new();
+        public List<string> ListGames { get => _gameLookup.Keys.ToList(); }
+
+        public Game? GetGame(string gameId)
+        {
+            _gameLookup.TryGetValue(gameId, out var game);
+            return game;
+        } 
+
 
     }
 }
