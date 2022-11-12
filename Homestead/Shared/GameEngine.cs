@@ -9,8 +9,17 @@
     {
         //private Game CurrentState { get; set;  }
 
-        public Game Start(Game game)
+        public Game Start()
         {
+            Game game = new();
+            game.GameId = Guid.NewGuid().ToString();
+            // Create 4 players
+            for (int i = 1; i <= 4; i++)
+            {
+                var player = new Player(i);
+                if (i != 1) player.IsBot = true;
+                game.Players.Add(player);
+            }
             game.ActivePlayer = 0;
             game.Actions.Add(new Action(Action.ActionType.DrawFromDeck, 0));
             return game;
