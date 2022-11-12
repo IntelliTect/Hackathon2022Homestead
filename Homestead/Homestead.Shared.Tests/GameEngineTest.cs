@@ -238,5 +238,26 @@ namespace Homestead.Shared.Tests
             Assert.AreEqual(4, game.AvailableActions.Count);
             Assert.IsTrue(game.AvailableActions.All(a => a.Type is PlayerAction.ActionType.Discard));
         }
+
+        [TestMethod]
+        public void GameTest()
+        {
+            GameEngine engine = new();
+            Game game = engine.Start();
+
+            game = engine.ProcessAction(game, game.AvailableActions.First());
+            game = engine.ProcessAction(game, game.AvailableActions.First());
+            game = engine.ProcessAction(game, game.AvailableActions.First());
+            game = engine.ProcessAction(game, game.AvailableActions.First());
+            game = engine.ProcessAction(game, game.AvailableActions.First());
+            game = engine.ProcessAction(game, game.AvailableActions.First());
+            Assert.IsTrue(game.Players[game.ActivePlayer - 1].Hand.Any());
+            Assert.IsFalse(game.AvailableActions.Any(a => a.Type is PlayerAction.ActionType.DrawFromDeck));
+            Assert.IsFalse(game.AvailableActions.Any(a => a.Type is PlayerAction.ActionType.DrawFromDiscard));
+            // Test to make sure available actions are exactly:
+            //  Play
+            //  End Turn
+            //  Discard
+        }
     }
 }

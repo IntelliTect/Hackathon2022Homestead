@@ -39,7 +39,8 @@
             game.LastActions.Clear();
             game.LastActions.Add(action);
             string? playerCard = action.PlayerCard;
-            List<string> playerHand = game.Players[action.PlayerNumber-1].Hand;
+            Player player = game.Players[action.PlayerNumber - 1];
+            List<string> playerHand = player.Hand;
             // Probably change these to switch statements
             // Or investigate different ways to do this a bit cleaner.
             if (action.Type is PlayerAction.ActionType.DrawFromDeck)
@@ -49,7 +50,7 @@
                 var drawnCard = Cards.GetCard();
                 playerHand.Add(drawnCard);
 
-                game = EvaluateActions(game);
+                game = EvaluateNextActions(game);
 
                 //if (Cards.GetCardInfo(drawnCard).Suit is CardInfo.CardSuit.Disaster)
                 //{
@@ -87,7 +88,7 @@
                 playerHand.Add(card);
                 game.DiscardPile.RemoveAt(game.DiscardPile.Count - 1);
 
-                game = EvaluateActions(game);
+                game = EvaluateNextActions(game);
                 //game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.Play, game.ActivePlayer));
                 //game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.EndTurn, game.ActivePlayer));
                 //game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.Discard, game.ActivePlayer));
@@ -102,7 +103,7 @@
                 playerHand.Remove(playerCard);
                 game.DiscardPile.Add(playerCard);
 
-                game = EvaluateActions(game);
+                game = EvaluateNextActions(game);
             }
             // Do we throw if playerCard is null?
             else if (action.Type is PlayerAction.ActionType.Play && playerCard is not null)
@@ -111,8 +112,13 @@
                 // One day, we we may to check if there is more than one of this card type and to discard the chosen instance.
                 // Today is not that day.
 
-                game = EvaluateActions(game);
-                playerHand.Remove(playerCard);
+                if (!player.Board.Contains(playerCard))
+                {
+                    playerHand.Remove(playerCard);
+                    player.Board.Add(playerCard);
+                }
+
+                game = EvaluateNextActions(game);
 
                 //CardInfo info = Cards.GetCardInfo(playerCard);
                 //if (info.Suit is CardInfo.CardSuit.LiveStock
@@ -195,7 +201,7 @@
             return new List<PlayerAction>();
         }
 
-        private Game EvaluateActions(Game game)
+        private Game EvaluateNextActions(Game game)
         {
             game.AvailableActions.Clear();
 
@@ -231,21 +237,36 @@
                 game.State = Game.GameState.Complete;
                 game.Winner = game.ActivePlayer;
             }
-            else 
+            else
             {
-                var playableCards = hand.Except(player.Board);
-                if (playableCards.Any())
+                if (!hand.Any())
                 {
-                    foreach (string card in playableCards)
+                    game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.EndTurn, game.ActivePlayer));
+                }
+                else
+                {
+                    var playableCards = hand.Except(player.Board);
+                    if (playableCards.Any())
                     {
-                        game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.Play, game.ActivePlayer, card));
+                        foreach (string card in playableCards)
+                        {
+                            game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.Play, game.ActivePlayer, card));
+                        }
+                    }
+                    else
+                    {
+                        if (hand.Count < 5)
+                        {
+                            game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.EndTurn, game.ActivePlayer));
+                        }
+                        game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.Discard, game.ActivePlayer));
                     }
                 }
             }
 
-            
 
-            
+
+
 
             return game;
 
