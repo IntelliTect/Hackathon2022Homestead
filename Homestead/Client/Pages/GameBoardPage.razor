@@ -1,4 +1,4 @@
-﻿@page "/gameboardpage/{id}"
+﻿@page "/gameboardpage"
 @using Homestead.Client.Shared.Components
 @inject HttpClient Http
 @inject NavigationManager NavManager
@@ -7,18 +7,9 @@
 
 
 @code {
-    [Parameter]
-    public string id { get; set; } = "";
-    public int CurrentPlayerId { get; set; }
-
     protected override void OnInitialized()
     {
-        CurrentPlayerId = int.Parse(id);
-        CurrentPlayerId = CurrentPlayerId;
-        if(CurrentPlayerId > 4 || CurrentPlayerId < 1)
-        {
-              NavManager.NavigateTo("/");
-        }
+        Console.WriteLine("Got to the Game Board");
     }
 
 

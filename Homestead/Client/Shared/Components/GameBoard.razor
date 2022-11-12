@@ -28,8 +28,8 @@
 
 
 @code {
-    [CascadingParameter]
-    public int CurrentPlayerId { get; set; }
+    //[CascadingParameter]
+    public int CurrentPlayerId { get; set; } = 1; // TODO: Fix this
 
     private HubConnection? hubConnection;
 
