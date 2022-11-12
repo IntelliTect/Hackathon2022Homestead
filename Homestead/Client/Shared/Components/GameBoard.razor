@@ -2,6 +2,7 @@
 @using Homestead.Shared
 @using Microsoft.AspNetCore.SignalR.Client
 @inject NavigationManager Navigation
+@inject HubConnection hubConnection
 @inject LobbyVm Lobby
 
 <div class="map">
@@ -32,8 +33,6 @@
     //[CascadingParameter]
     public int CurrentPlayerId { get; set; } = 1; // TODO: Fix this
 
-    private HubConnection? hubConnection;
-
     private BoardVm GameState => Lobby.Board!;
 
     public List<PlayerVm> Opponents { get => GameState.OtherPlayers; }
@@ -41,24 +40,12 @@
 
     protected override async Task OnInitializedAsync()
     {
-        //get current player hand information
-        hubConnection = new HubConnectionBuilder()
-            .WithUrl(Navigation.ToAbsoluteUri("/comms"))
-            .Build();
-
         hubConnection.On<Game>("ActionRecieved", (state) =>
         {
-            GameState = state;
+            @*GameState = state;*@
             InvokeAsync(StateHasChanged);
         });
 
-        await hubConnection.StartAsync();
-        GetCurrentPlayerHand();
         await base.OnInitializedAsync();
     }   
-
-    public void GetCurrentPlayerHand()
-    {
-        CurrentPlayer = GameState.Players.First(x => x.PlayerNumber == CurrentPlayerId);
-    }
 }
