@@ -1,10 +1,5 @@
 ﻿namespace Homestead.Shared
 {
-    public interface IGameEngine
-    {
-        Game ProcessAction(Game game, Action action);
-    }
-
     public class GameEngine : IGameEngine
     {
         /// <summary>
