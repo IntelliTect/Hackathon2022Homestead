@@ -129,16 +129,11 @@ namespace Homestead.Client.ViewModels
         public override string ToString()
         {
             var output = new StringBuilder();
-            output.Append($"{PlayerNumber}:\n Hand: ");
-            for (int i = 0; i < Hand.Count; i++)
-            {
-                output.Append($"{Hand[i].Card}, ");
-            }
-            output.Append("\n Board: ");
-            for (int i = 0; i < Board.Count; i++)
-            {
-                output.Append($"{Board[i].Card}, ");
-            }
+            output.Append($"{PlayerNumber}:");
+            output.Append(IsCurrentPlayer ? "Active" : "Waiting");
+            output.AppendLine();
+            output.AppendLine($"Hand: {string.Join(", ", Hand.Select(f=>f.Card))}");
+            output.AppendLine($"Board: {string.Join(", ", Board.Select(f => f.Card))}");
             return output.ToString();
         }
     }

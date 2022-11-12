@@ -72,6 +72,9 @@
             }
             Board.Update(game);
             Console.WriteLine(Board.LocalPlayer.ToString());
+            if (Board.CanDrawFromDeck) Console.WriteLine("Can Draw from Deck");
+            if (Board.CanDrawFromDiscard) Console.WriteLine("Can Draw from Discard");
+          
             foreach (var action in game.AvailableActions)
             {
                 Console.WriteLine($"Available Action: {action.Type}");
