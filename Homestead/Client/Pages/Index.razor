@@ -8,7 +8,7 @@
 <h1>Homestead</h1>
 <hr/>
 <h3>Games</h3>
-<button type="button">New</button>
+<button type="button" @onclick="CreateGame">New</button>
 @if (games == null)
 {
     <p>No games found.</p>
@@ -19,6 +19,8 @@ else
     @foreach (var item in games)
     {
         <li>@item.GameId</li>
+        <li><button type="button" @onclick="()=>JoinGame(item.GameId)">Join</button></li>
+        <li></li>
     }
     </ul>
 }
@@ -26,6 +28,27 @@ else
 @code {
     private Game[]? games;
 
-    protected override async Task OnInitializedAsync() =>
+    protected override async Task OnInitializedAsync() {
         games = await Http.GetFromJsonAsync<Game[]>("Lobby");
+        Console.WriteLine(games.Count());
+    }
+
+    private async void CreateGame()
+    {
+        var playerNum = await Http.GetFromJsonAsync<int>("Create");
+        Console.WriteLine("Player " + playerNum);
+    }
+
+    private async void JoinGame(string gameId)
+    {
+        var payload = new
+        {
+            gameId = gameId
+        };
+        var jsonPayload = System.Text.Json.JsonSerializer.Serialize(payload);
+        HttpContent content = new StringContent(gameId);
+
+        var playerNum = await Http.PostAsync($"Join", content);
+        Console.WriteLine("Player " + playerNum);
+    }
 }
