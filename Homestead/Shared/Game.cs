@@ -21,8 +21,8 @@ namespace Homestead.Shared
         public List<Player> Players { get; }
         public List<string> DiscardPile { get; } = new List<string>();
         public int ActivePlayer { get; set; } = 1;
-        public List<string> Actions { get; } = new List<string>();
-        public string LastAction { get; set; } = "Game Created";
+        public List<Action> Actions { get; } = new List<Action>();
+        public Action? LastAction { get; set; } = null;
 
 
 
