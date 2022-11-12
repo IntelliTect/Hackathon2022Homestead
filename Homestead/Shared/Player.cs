@@ -37,10 +37,10 @@ namespace Homestead.Shared
             // Pick random enums
             Random random = new Random();
             Array values = Enum.GetValues(typeof(SkinTones));
-            SkinTone = (SkinTones)(values.GetValue(random.Next(values.Length)));
+            SkinTone = (SkinTones)(values.GetValue(random.Next(values.Length))!);
 
             values = Enum.GetValues(typeof(Genders));
-            Gender = (Genders)(values.GetValue(random.Next(values.Length)));
+            Gender = (Genders)(values.GetValue(random.Next(values.Length))!);
 
         }
     }
