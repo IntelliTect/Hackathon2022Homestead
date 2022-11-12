@@ -15,7 +15,7 @@ namespace Homestead.Shared
             Complete,
         }
 
-        public string GameId { get; set; }
+        public string GameId { get; set; } = string.Empty;
         public GameState State { get; set; }
         public int? Winner { get; set; }
         public List<Player> Players { get; } = new();
