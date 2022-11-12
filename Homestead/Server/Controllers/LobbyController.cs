@@ -9,9 +9,10 @@ public class LobbyController
 {
 	private readonly CommunicationHub hub;
 
-	public LobbyController(CommunicationHub hub)
+	public LobbyController(CommunicationHub hub, IGameLookup lookup)
 	{
 		this.hub = hub;
+		this.lookup = lookup;
 	}
 
 	[HttpPost]
