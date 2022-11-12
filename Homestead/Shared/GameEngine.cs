@@ -260,7 +260,14 @@
                         //{
                         //    game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.EndTurn, game.ActivePlayer));
                         //}
-                        game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.Discard, game.ActivePlayer));
+                        if(hand.Count > 4)
+                        {
+                            game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.Discard, game.ActivePlayer));
+                        }
+                        else
+                        {
+                            game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.EndTurn, game.ActivePlayer));
+                        }
                     }
                 }
             }
