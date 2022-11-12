@@ -1,5 +1,5 @@
 ﻿@using Homestead.Shared
-<div class="hand-card">
+<div class="hand-card  @(Selected ? "selected" : "")" @onclick="click">
    <div class="card-image" style="background-image: url(@Card.ImageUrl)">
    </div>
    <div class="card-text">
@@ -10,6 +10,10 @@
     [Parameter]
     public CardInfo Card { get; set; } = null!;
 
-    //[Parameter]
-    //public string CardText { get; set; } = string.Empty;
+    private bool Selected = false;
+
+    private void click()
+    {
+        Selected = !Selected;
+    }
 }

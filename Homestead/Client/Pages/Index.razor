@@ -7,9 +7,12 @@
 
 <h1>Homestead</h1>
 <hr/>
-<h3>Games</h3>
-<button type="button" @onclick="CreateGame">New</button>
-@if (games == null)
+<h3>
+    Games
+    <button @onclick="CreateGame" style="float:right" type="button">New</button>
+</h3>
+
+@if (games is null || !games.Any())
 {
     <p>No games found.</p>
 }
