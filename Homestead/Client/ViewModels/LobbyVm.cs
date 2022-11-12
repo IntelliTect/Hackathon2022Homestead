@@ -14,14 +14,15 @@ namespace Homestead.Client.ViewModels
         public async Task<bool> JoinGame(string gameId, HttpClient http)
         {
             var result = await http.PostAsync($"Join/{gameId}", null);
-            string playerNum = await result.Content.ReadAsStringAsync();
-            if (int.TryParse(playerNum, out _PlayerNumber))
+            var startGameResult = await result.Content.ReadFromJsonAsync<StartGameDto>();
+            if (startGameResult == null) throw new ArgumentException("Game not found");
+            
+            _PlayerNumber = startGameResult?.PlayerId ?? 0;
+            if (_PlayerNumber > 0)
             {
-                if (PlayerNumber > 0)
-                {
-                    InGame = true;
-                    return true;
-                }
+                InGame = true;
+                UpdateBoard(startGameResult!.Game);
+                return true;
             }
             InGame = false;
             return false;
@@ -31,8 +32,10 @@ namespace Homestead.Client.ViewModels
         {
             try
             {
-                var game = await http.GetFromJsonAsync<Game>("Create");
-                _PlayerNumber = 1;
+                var result = await http.GetFromJsonAsync<StartGameDto>("Create");
+                if (result == null) throw new ArgumentException("Game not found");
+                _PlayerNumber = result.PlayerId;
+                UpdateBoard(result.Game);
                 InGame = true;
                 return true;
             }
@@ -40,6 +43,18 @@ namespace Homestead.Client.ViewModels
             {
                 Console.WriteLine(ex.Message);
                 return false;
+            }
+        }
+
+        public void UpdateBoard(Game game)
+        {
+            if (Board == null)
+            {
+                Board = new BoardVm(game, PlayerNumber);
+            }
+            else
+            {
+                Board.Update(game);
             }
         }
     }

@@ -1,7 +1,8 @@
-﻿@using Homestead.Shared
+﻿@using Homestead.Client.ViewModels
+@using Homestead.Shared
 @using Microsoft.AspNetCore.SignalR.Client
 @inject NavigationManager Navigation
-@inject Blazored.LocalStorage.ILocalStorageService localStorage
+@inject LobbyVm Lobby
 
 <div class="map">
     <div class=row gx-1 mb-1>
@@ -14,13 +15,13 @@
         @foreach (var opponent in Opponents)
         {
             <div class="col">
-                <PlayerHomestead Player="@opponent" />
+                <PlayerHomestead Player="@opponent.Player" />
             </div>
         }
     </div>
 
     <div class="col">
-        <PlayerHomestead Player="CurrentPlayer" />
+        <PlayerHomestead Player="CurrentPlayer.Player" />
     </div>
 </div>
 
@@ -33,14 +34,13 @@
 
     private HubConnection? hubConnection;
 
-    private Game GameState { get; set; }
+    private BoardVm GameState => Lobby.Board!;
 
-    public List<Player> Opponents { get => GameState.Players.Where(x => x.PlayerNumber != CurrentPlayerId).ToList(); }
-    public Player CurrentPlayer { get; set; } = new();
+    public List<PlayerVm> Opponents { get => GameState.OtherPlayers; }
+    public PlayerVm CurrentPlayer { get =>GameState.LocalPlayer; }
 
     protected override async Task OnInitializedAsync()
     {
-        GameState = await localStorage.GetItemAsync<Game>("game");
         //get current player hand information
         hubConnection = new HubConnectionBuilder()
             .WithUrl(Navigation.ToAbsoluteUri("/comms"))

@@ -21,18 +21,18 @@ public class LobbyController
 	}
 
 	[HttpGet("/Create")]
-	public async Task<Game> CreateGame([FromServices] IGameEngine engine)
+	public async Task<StartGameDto> CreateGame([FromServices] IGameEngine engine)
 	{
 		var game = engine.Start();
 
 		lookup.AddGame(game);
 
         await hub.Groups.AddToGroupAsync(game.GameId, game.GameId);
-		return game;
+		return new StartGameDto { Game = game, PlayerId = 1 };
 	}
 
 	[HttpPost("/Join/{gameId}")]
-	public async Task<int> Join(string gameId)
+	public async Task<StartGameDto> Join(string gameId)
 	{
         var game = lookup.GetGame(gameId);
         if (game == null) throw new ArgumentException("Game not found");
@@ -44,7 +44,7 @@ public class LobbyController
 
             if (player is null)
             {
-                return 0;
+                throw new ArgumentException("This game is full.");
             }
 
             player.IsBot = false;
@@ -52,8 +52,8 @@ public class LobbyController
         }
 
         await hub.Groups.AddToGroupAsync(game.GameId, gameId);
-        return playerNumber;
-    }
+		return new StartGameDto { Game = game, PlayerId = playerNumber };
+	}
 
     [HttpGet]
 	public IEnumerable<Game> GetOpenGames() 
