@@ -21,7 +21,7 @@ namespace Homestead.Shared
 
         public ActionType Type { get; set; }
 
-        public string? Card { get; set; }
+        public string? PlayerCard { get; set; }
         public int? TargetPlayer { get; set; }
         public string? TargetCard { get; set; }
 

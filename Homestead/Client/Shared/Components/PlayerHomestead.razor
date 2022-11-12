@@ -11,24 +11,39 @@
                 <img style="margin-top: 150px" height="70" src="/Assets/Images/player/p3-fw-single.png" />
             </div>
             <!-- Garden -->
-            <div class="garden col-12 col-md-1">
+            <div class="garden col-12 col-md-1 mt-5">
                 <img height="200" src="/Assets/Images/garden/garden@(BoardFarm.Count).png" />
             </div>
         </div>
     </div>
     <!-- Card Slots -->
-    <div>
+    <div class="container">
         <div class="container">
-            <div class="row">
-                <div class="col-sm">
-                    One of three columns
-                </div>
-                <div class="col-sm">
-                    One of three columns
-                </div>
-                <div class="col-sm">
-                    One of three columns
-                </div>
+            <!-- House Cards -->
+            <div class="row gx-1 mb-1">
+                @foreach (var card in BoardHouse)
+                {
+                    <div class="col-1" style="height: 100px">
+                        <PlayerCard />
+                    </div>
+                }
+            </div>
+
+            <!-- Farm Cards -->
+            <div class="row gx-1">
+                @foreach (var card in BoardFarm)
+                {
+                    <div class="col-1" style="height: 100px">
+                        <PlayerCard />
+                    </div>
+                }
+                <!-- Livestock Cards -->
+                @foreach (var card in BoardLivestock)
+                {
+                    <div class="col-1" style="height: 100px">
+                        <PlayerCard />
+                    </div>
+                }
             </div>
         </div>
     </div>
@@ -43,5 +58,6 @@
     {
         BoardHouse.Add("1");
         BoardFarm.Add("1");
+        BoardLivestock.Add("1");
     }
 }
