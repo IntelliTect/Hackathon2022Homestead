@@ -30,6 +30,12 @@ namespace Homestead.Shared.Tests
 
             game = engine.ProcessAction(game, new PlayerAction(PlayerAction.ActionType.DrawFromDeck, game.ActivePlayer));
             Assert.IsTrue(game.Players[game.ActivePlayer].Hand.Any());
+            Assert.IsFalse(game.AvailableActions.Any(a => a.Type is PlayerAction.ActionType.DrawFromDeck));
+            Assert.IsFalse(game.AvailableActions.Any(a => a.Type is PlayerAction.ActionType.DrawFromDiscard));
+            // Test to make sure available actions are exactly:
+            //  Play
+            //  End Turn
+            //  Discard
         }
 
         [TestMethod]
@@ -64,7 +70,16 @@ namespace Homestead.Shared.Tests
             Assert.IsFalse(game.DiscardPile.Any());
             Assert.IsTrue(game.Players[game.ActivePlayer].Hand.Any());
             Assert.IsTrue(game.Players[game.ActivePlayer].Hand[0] is Cards.Well);
+
+            Assert.IsFalse(game.AvailableActions.Any(a => a.Type is PlayerAction.ActionType.DrawFromDeck));
+            Assert.IsFalse(game.AvailableActions.Any(a => a.Type is PlayerAction.ActionType.DrawFromDiscard));
+            // Test to make sure available actions are exactly:
+            //  Play
+            //  End Turn
+            //  Discard
         }
+
+        // Attempt to draw from discard when no card exists in discard pile
 
         [TestMethod]
         public void DrawFromDiscardWhenMultipleOfSameTypeExist()
@@ -186,6 +201,29 @@ namespace Homestead.Shared.Tests
 
             Assert.AreEqual(1, game.Players[game.ActivePlayer].Hand.Count);
             Assert.AreEqual(0, game.Players[2].Hand.Count);
+        }
+
+        // Player cannot draw two cards from deck
+        // Player cannot draw two cards from discard pile
+        // Player cannot draw two cards, one from deck then one from discard
+        // Player cannot draw from discard if it's a disaster
+        // After end turn, next player must draw from deck only if nothing exists in discard
+
+        [TestMethod]
+        public void CannotEndTurn1()
+        {
+            GameEngine engine = new();
+            Game game = engine.Start();
+
+            game.Players[game.ActivePlayer].Hand.Add(Cards.Well);
+            game.Players[game.ActivePlayer].Hand.Add(Cards.Well);
+            game.Players[game.ActivePlayer].Hand.Add(Cards.Well);
+
+            PlayerAction action = new(PlayerAction.ActionType.Discard, game.ActivePlayer);
+            action.PlayerCard = Cards.Well;
+
+            game = engine.ProcessAction(game, action);
+            Assert.IsFalse(game.AvailableActions.Any(a => a.Type is PlayerAction.ActionType.EndTurn));
         }
     }
 }
