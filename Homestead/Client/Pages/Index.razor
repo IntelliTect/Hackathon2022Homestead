@@ -1,6 +1,30 @@
 ﻿@page "/"
+@using System.Net.Http
+@using Homestead.Shared;
+@inject HttpClient Http
 
 <PageTitle>Index</PageTitle>
 
 <h1>Homestead</h1>
+<hr/>
+<h3>Games</h3>
+@if (games == null)
+{
+    <p>No games found.</p>
+}
+else
+{
+    <ul>
+    @foreach (var item in games)
+    {
+        <li>@item.GameId</li>
+    }
+    </ul>
+}
 
+@code {
+    private Game[]? games;
+
+    protected override async Task OnInitializedAsync() =>
+        games = await Http.GetFromJsonAsync<Game[]>("Lobby");
+}
