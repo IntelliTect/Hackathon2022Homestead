@@ -2,6 +2,7 @@
 using Homestead.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using System.Linq;
 using static Homestead.Shared.Game;
 
 namespace Homestead.Server.Controllers;
@@ -47,9 +48,9 @@ public class LobbyController
 	{
 		var game = engine.Start();
 
-		// add game to lookup.
-		//lookup
-		await hub.Groups.AddToGroupAsync(game.GameId, game.GameId);
+		lookup.AddGame(game);
+
+        await hub.Groups.AddToGroupAsync(game.GameId, game.GameId);
 		return 1;
 	}
 
