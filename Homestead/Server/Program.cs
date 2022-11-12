@@ -1,4 +1,5 @@
 using Homestead.Server.SignalR;
+using Homestead.Shared;
 using Microsoft.AspNetCore.ResponseCompression;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddSignalR();
+builder.Services.AddSingleton<IGameEngine, GameEngine>();
 builder.Services.AddSingleton<IGameLookup, GameLookup>();
 
 var app = builder.Build();
