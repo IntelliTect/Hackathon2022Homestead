@@ -42,7 +42,7 @@ public class LobbyController
 	}
 
 	[HttpGet("/Create")]
-	public async Task<int> CreateGame([FromServices] GameEngine engine)
+	public async Task<int> CreateGame([FromServices] IGameEngine engine)
 	{
 		var game = engine.Start();
 
@@ -52,6 +52,7 @@ public class LobbyController
 		return 1;
 	}
 
+	[HttpGet]
 	public IEnumerable<Game> GetOpenGames() 
 	{
 		return lookup.ListGames.Where(x => x.State == GameState.Joining);
