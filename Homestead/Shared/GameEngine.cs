@@ -39,7 +39,7 @@
         /// <exception cref="NullReferenceException"></exception>
         public Game ProcessAction(Game game, Action action)
         {
-            game.LastAction = action;
+            game.LastActions.Add(action);
             string? playerCard = action.PlayerCard;
             List<string> hand = game.Players[action.PlayerNumber].Hand;
             if (action.Type is Action.ActionType.DrawFromDeck)
@@ -62,7 +62,7 @@
                 hand.Remove(playerCard);
                 game.DiscardPile.Add(playerCard);
             }
-            else if (action.Type is Action.ActionType.Play)
+            else if (action.Type is Action.ActionType.Play && playerCard is not null)
             {
                 // Depending on the card we need to do different things.
                 hand.Remove(playerCard);

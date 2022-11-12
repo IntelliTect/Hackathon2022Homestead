@@ -99,7 +99,7 @@ namespace Homestead.Shared.Tests
 
             game = engine.ProcessAction(game, action);
 
-            Assert.AreEqual(Action.ActionType.Play, game.LastAction.Type);
+            Assert.AreEqual(Action.ActionType.Play, game.LastActions[0].Type);
         }
     }
 }
