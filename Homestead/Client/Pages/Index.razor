@@ -7,9 +7,12 @@
 
 <h1>Homestead</h1>
 <hr/>
-<h3>Games</h3>
-<button type="button">New</button>
-@if (games == null)
+<h3>
+    Games
+    <button @onclick="CreateGame" style="float:right" type="button">New</button>
+</h3>
+
+@if (games is null || !games.Any())
 {
     <p>No games found.</p>
 }
@@ -26,6 +29,15 @@ else
 @code {
     private Game[]? games;
 
+    private string playerNumber = string.Empty;
+
     protected override async Task OnInitializedAsync() =>
         games = await Http.GetFromJsonAsync<Game[]>("Lobby");
+
+    private async Task CreateGame()
+    {
+        playerNumber = await Http.GetStringAsync("/Lobby/Create");
+        // TODO: remove this
+        Console.WriteLine($"playerNumber: {playerNumber}");
+    }
 }
