@@ -96,7 +96,7 @@ namespace Homestead.Shared.Tests
             Game game = engine.Start();
 
             Action action = new(Action.ActionType.Play, game.ActivePlayer);
-
+            action.PlayerCard = Cards.Well;
             game = engine.ProcessAction(game, action);
 
             Assert.AreEqual(Action.ActionType.Play, game.LastActions[0].Type);
