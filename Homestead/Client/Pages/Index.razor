@@ -26,7 +26,7 @@ else
     @foreach (var item in games)
     {
         <li>@item.GameId</li>
-        <li><button type="button" @onclick="()=>JoinGame(item.GameId)">Join</button></li>
+        <li><button class="btn btn-success" type="button" @onclick="()=>JoinGame(item.GameId)">Join</button></li>
         <li></li>
     }
     </ul>
