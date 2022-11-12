@@ -5,8 +5,8 @@ namespace Homestead.Server.SignalR;
 
 public class CommunicationHub : Hub
 {
-    private IGameEngine engine;
-    private IGameLookup gameLookup;
+    private readonly IGameEngine engine;
+    private readonly IGameLookup gameLookup;
 
     public CommunicationHub(IGameEngine engine, IGameLookup gameLookup)
     {

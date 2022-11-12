@@ -1,8 +1,7 @@
 ﻿using Homestead.Server.SignalR;
 using Homestead.Shared;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using System.Linq;
+using static Homestead.Shared.Game;
 
 namespace Homestead.Server.Controllers;
 
@@ -19,16 +18,46 @@ public class LobbyController
 		this.lookup = lookup;
 	}
 
-	[HttpPost]
-	public async Task<IActionResult> JoinGame(string lobbyId, CancellationToken token)
+	[HttpPost("/Join")]
+	public async Task<int> JoinGame(string gameId)
 	{
-        var game = lookup.GetGame(lobbyId);
+		var game = lookup.GetGame(gameId);
+		int playerNumber;
+
+		lock (game)
+		{
+			var player = game.Players.FirstOrDefault(x => x.IsBot);
+
+			if (player is null)
+			{
+				return 0;
+			}
+
+			player.IsBot = false;
+			playerNumber = player.PlayerNumber;
+		}
+
+		await hub.Groups.AddToGroupAsync(hub.Context.ConnectionId, gameId);
+		return playerNumber;
+	}
+
+	[HttpGet("/Create")]
+	public async Task<int> CreateGame([FromServices] GameEngine engine)
+	{
+		var game = engine.Start();
+
+		// add game to lookup.
+		//lookup
 
 		if (game is null || game.Players.Count > 4)
 			return new BadRequestResult();
+		await hub.Groups.AddToGroupAsync(hub.Context.ConnectionId, game.GameId);
+		return 1;
+	}
 
-		await hub.Groups.AddToGroupAsync(hub.Context.ConnectionId, lobbyId, token);
+	public IEnumerable<Game> GetOpenGames() 
+	{
+		return lookup.ListGames.Where(x => x.State == GameState.Joining);
 
-		return new OkResult();
     }
 }
