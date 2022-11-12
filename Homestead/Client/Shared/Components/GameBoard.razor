@@ -1,4 +1,4 @@
-﻿
+﻿@using Homestead.Shared
 <div class="map">
     <div class="row gx-1 mb-1">
         <!-- Player 2 -->
@@ -21,10 +21,23 @@
     </div>
 </div>
 
-<PlayerHand/>
+<PlayerHand HandList="CurrentPlayerHand"/>
 
 
 @code {
-    //protected override async Task OnInitializedAsync()
-    //{ }
+    public Game GameState { get; set; } = new Game();
+
+    public List<string> CurrentPlayerHand { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        //get current player hand information
+        GetCurrentPlayerHand();
+        await base.OnInitializedAsync();
+    }
+
+    public void GetCurrentPlayerHand()
+    {
+        
+    }
 }
