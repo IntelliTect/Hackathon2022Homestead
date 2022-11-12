@@ -1,6 +1,7 @@
 ﻿@using Homestead.Shared
 @using Microsoft.AspNetCore.SignalR.Client
 @inject NavigationManager Navigation
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <div class="map">
     <div class=row gx-1 mb-1>
@@ -39,6 +40,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        GameState = await localStorage.GetItemAsync<Game>("game");
         //get current player hand information
         hubConnection = new HubConnectionBuilder()
             .WithUrl(Navigation.ToAbsoluteUri("/comms"))
