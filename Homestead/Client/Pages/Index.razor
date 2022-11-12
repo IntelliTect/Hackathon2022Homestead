@@ -53,10 +53,12 @@ else
 
         var playerNum = await Http.PostAsync($"Join", content);
 
+        
+        //var playerNum = await Http.GetAsync($"Join?gameId={gameId}");
         playerNum = await Http.PostAsync($"JoinWithUrl/{gameId}", null);
+
 
         
         Console.WriteLine("Player " + await playerNum.Content.ReadAsStringAsync());
-        var playerNum = await Http.GetAsync($"Join?gameId={gameId}");
     }
 }
