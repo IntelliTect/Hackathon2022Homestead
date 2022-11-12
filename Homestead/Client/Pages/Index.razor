@@ -37,7 +37,7 @@ else
 
     protected override async Task OnInitializedAsync() {
         games = await Http.GetFromJsonAsync<Game[]>("Lobby");
-        Console.WriteLine(games.Count());
+        Console.WriteLine(games!.Count());
     }
 
     private async Task CreateGame()
