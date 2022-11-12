@@ -7,6 +7,10 @@
 
     public class GameEngine : IGameEngine
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public Game Start()
         {
             Game game = new();
@@ -25,20 +29,54 @@
             return game;
         }
 
+        /// <summary>
+        /// Takes an action and updates the game state of the game passed in
+        /// </summary>
+        /// <param name="game"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        /// <exception cref="NullReferenceException"></exception>
         public Game ProcessAction(Game game, Action action)
         {
             game.LastAction = action;
+            string? playerCard = action.PlayerCard;
+            List<string> hand = game.Players[action.PlayerNumber].Hand;
             if (action.Type is Action.ActionType.DrawFromDeck)
             {
                 // Disallow if hand.count > 4, then they'll have to discard
-                game.Players[action.PlayerNumber].Hand.Add(Cards.GetCard());
+                hand.Add(Cards.GetCard());
             }
-            else if(action.Type is Action.ActionType.Discard)
+            else if (action.Type is Action.ActionType.DrawFromDiscard)
+            {
+                // Disallow if hand.count > 4, then they'll have to discard
+                if (!game.DiscardPile.Any()) throw new InvalidOperationException("Sad day!");
+                string card = game.DiscardPile.Last();
+                hand.Add(card);
+                game.DiscardPile.RemoveAt(game.DiscardPile.Count - 1);
+            }
+            else if (action.Type is Action.ActionType.Discard)
             {
                 // Do not leave in!
-                if (string.IsNullOrWhiteSpace(action.PlayerCard)) throw new NullReferenceException();
-                game.Players[action.PlayerNumber].Hand.Remove(action.PlayerCard);
-                game.DiscardPile.Add(action.PlayerCard);
+                if (string.IsNullOrWhiteSpace(playerCard)) throw new NullReferenceException("Why did you do that?");
+                hand.Remove(playerCard);
+                game.DiscardPile.Add(playerCard);
+            }
+            else if (action.Type is Action.ActionType.Play)
+            {
+                // Depending on the card we need to do different things.
+                hand.Remove(playerCard);
+                CardInfo info = Cards.GetCardInfo(playerCard);
+                if (info.Suit is CardInfo.CardSuit.LiveStock
+                    || info.Suit is CardInfo.CardSuit.Garden
+                    || info.Suit is CardInfo.CardSuit.House)
+                {
+                    // Need to add all sorts of logic around:
+                    //  Does the card already exist?
+                    //  Does it form a group?
+                    //  Does it result in victory?
+                    game.Players[action.PlayerNumber].Board.Add(info.Card);
+                }
             }
             else if(action.Type is Action.ActionType.EndTurn)
             {

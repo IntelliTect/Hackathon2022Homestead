@@ -43,18 +43,18 @@ namespace Homestead.Shared
             int lots = 5;
             int some = 3;
             int few = 1;
-            MasterDeck.Add(new CardInfo(EarthquakeSelf, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Self, "earthquake.png", few));
-            MasterDeck.Add(new CardInfo(EarthquakeOther, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Other, "earthquake.png", few));
-            MasterDeck.Add(new CardInfo(EarthquakeAll, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.All, "earthquake.png", few));
-            MasterDeck.Add(new CardInfo(FireSelf, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Self, "fire.png", few));
-            MasterDeck.Add(new CardInfo(FireOther, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Other, "fire.png", few));
-            MasterDeck.Add(new CardInfo(FireAll, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.All, "fire.png", few));
-            MasterDeck.Add(new CardInfo(FloodSelf, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Self, "flood.png", few));
-            MasterDeck.Add(new CardInfo(FloodOther, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Other, "flood.png", few));
-            MasterDeck.Add(new CardInfo(FloodAll, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.All, "flood.png", few));
-            MasterDeck.Add(new CardInfo(WolfSelf, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Self, "wolf.png", lots));
-            MasterDeck.Add(new CardInfo(WolfOther, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Other, "wolf.png", lots));
-            MasterDeck.Add(new CardInfo(WolfAll, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.All, "wolf.png", lots));
+            MasterDeck.Add(new CardInfo(EarthquakeSelf, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Self, "earthquake.png", few, Cards.Well));
+            MasterDeck.Add(new CardInfo(EarthquakeOther, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Other, "earthquake.png", few, Cards.Well));
+            MasterDeck.Add(new CardInfo(EarthquakeAll, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.All, "earthquake.png", few, Cards.Well));
+            MasterDeck.Add(new CardInfo(FireSelf, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Self, "fire.png", few, Cards.Wood, Cards.Rain));
+            MasterDeck.Add(new CardInfo(FireOther, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Other, "fire.png", few, Cards.Wood, Cards.Rain));
+            MasterDeck.Add(new CardInfo(FireAll, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.All, "fire.png", few, Cards.Wood, Cards.Rain));
+            MasterDeck.Add(new CardInfo(FloodSelf, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Self, "flood.png", few, Cards.Seeds, Cards.Levee));
+            MasterDeck.Add(new CardInfo(FloodOther, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Other, "flood.png", few, Cards.Seeds, Cards.Levee));
+            MasterDeck.Add(new CardInfo(FloodAll, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.All, "flood.png", few, Cards.Seeds, Cards.Levee));
+            MasterDeck.Add(new CardInfo(WolfSelf, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Self, "wolf.png", few, Cards.Livestock, Cards.Dog));
+            MasterDeck.Add(new CardInfo(WolfOther, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Other, "wolf.png", few, Cards.Livestock, Cards.Dog));
+            MasterDeck.Add(new CardInfo(WolfAll, CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.All, "wolf.png", few, Cards.Livestock, Cards.Dog));
 
             MasterDeck.Add(new CardInfo(GoodNeighbor, CardInfo.CardSuit.Action, false, CardInfo.CardImpact.None, "good-neighbor", some));
             MasterDeck.Add(new CardInfo(BadNeighbor, CardInfo.CardSuit.Action, false, CardInfo.CardImpact.None, "bad-neighbor", some));
@@ -134,14 +134,25 @@ namespace Homestead.Shared
         public CardImpact Impact { get; }
         public string ImageFilename { get; }
         public string ImageUrl => $"/Assets/Images/cards/{ImageFilename}";
+        public string? ImpactedCard { get; }
+        public string? PreventionCard { get; }
 
-        public CardInfo(string card, CardSuit suit, bool requiredToWin, CardImpact impact, string imageFilename, int numberOfCardsInDeck)
+        public CardInfo(string card, 
+            CardSuit suit,
+            bool requiredToWin,
+            CardImpact impact,
+            string imageFilename,
+            int numberOfCardsInDeck,
+            string? impactedCard = null,
+            string? preventionCard = null)
         {
             Card = card;
             Suit = suit;
             RequiredToWin = requiredToWin;
             Impact = impact;
             ImageFilename = imageFilename;
+            ImpactedCard = impactedCard;
+            PreventionCard = preventionCard;
             NumberOfCardsInDeck = numberOfCardsInDeck;
         }
     }

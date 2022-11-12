@@ -1,10 +1,12 @@
-﻿<div>
+﻿@using Homestead.Shared;
+
+<div>
     <!-- Visuals -->
     <div class="container">
         <div class="row">
             <!-- House -->
             <div class="home col-1">
-                <img height="200" src="/Assets/Images/house/house@(BoardFarm.Count).png" />
+                <img height="200" src="/Assets/Images/house/house@(BoardGarden.Count).png" />
             </div>
             <!-- Player -->
             <div class="player col-1">
@@ -12,7 +14,7 @@
             </div>
             <!-- Garden -->
             <div class="garden col-12 col-md-1 mt-5">
-                <img height="200" src="/Assets/Images/garden/garden@(BoardFarm.Count).png" />
+                <img height="200" src="/Assets/Images/garden/garden@(BoardGarden.Count).png" />
             </div>
         </div>
     </div>
@@ -24,24 +26,24 @@
                 @foreach (var card in BoardHouse)
                 {
                     <div class="col-1" style="height: 100px">
-                        <PlayerCard />
+                        <PlayerCard Image="@card.ImageUrl"/>
                     </div>
                 }
             </div>
 
             <!-- Farm Cards -->
             <div class="row gx-1">
-                @foreach (var card in BoardFarm)
+                @foreach (var card in BoardGarden)
                 {
                     <div class="col-1" style="height: 100px">
-                        <PlayerCard />
+                        <PlayerCard Image="@card.ImageUrl"/>
                     </div>
                 }
                 <!-- Livestock Cards -->
                 @foreach (var card in BoardLivestock)
                 {
                     <div class="col-1" style="height: 100px">
-                        <PlayerCard />
+                        <PlayerCard Image="@card.ImageUrl"/>
                     </div>
                 }
             </div>
@@ -50,14 +52,17 @@
 </div>
 
 @code {
-    public List<string> BoardLivestock { get; } = new List<string>();
-    public List<string> BoardFarm { get; } = new List<string>();
-    public List<string> BoardHouse { get; } = new List<string>();
+    [Parameter]
+    public Player Player { get; set; } = new();
+
+    public List<CardInfo> BoardLivestock { get => Player.Hand.Select(x => Cards.GetCardInfo(x)).Where(x => x.Suit == CardInfo.CardSuit.LiveStock).ToList(); }
+    public List<CardInfo> BoardGarden { get => Player.Hand.Select(x => Cards.GetCardInfo(x)).Where(x => x.Suit == CardInfo.CardSuit.Garden).ToList(); } 
+    public List<CardInfo> BoardHouse { get => Player.Hand.Select(x => Cards.GetCardInfo(x)).Where(x => x.Suit == CardInfo.CardSuit.House).ToList(); } 
 
     protected override void OnInitialized()
     {
-        BoardHouse.Add("1");
-        BoardFarm.Add("1");
-        BoardLivestock.Add("1");
+       
     }
+
+  
 }

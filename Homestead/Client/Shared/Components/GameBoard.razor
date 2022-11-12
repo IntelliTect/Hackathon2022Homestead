@@ -1,33 +1,36 @@
 ﻿@using Homestead.Shared
+@using Microsoft.AspNetCore.SignalR.Client
+
 <div class="map">
     <div class="row gx-1 mb-1">
-        <!-- Player 2 -->
-        <div class="col">
-                <PlayerHomestead />
+        @foreach(var opponent in Opponents)
+        {
+            <div class="col">
+                <PlayerHomestead Player="@opponent"/>
         </div>
-        <!-- Player 3 -->
-        <div class="col">
-            <PlayerHomestead />
-        </div>
-        <!-- Player 4 -->
-        <div class="col">
-            <PlayerHomestead />
-        </div>
+        }       
     </div>
 
-    <!-- Player 1 (YOU) -->
     <div class="col">
-        <PlayerHomestead />
+        <PlayerHomestead Player="CurrentPlayer"/>
     </div>
 </div>
 
-<PlayerHand HandList="CurrentPlayerHand"/>
+<PlayerHand HandList="@CurrentPlayer.Hand"/>
 
 
 @code {
+    private HubConnection? hubConnection;
+
+
     public Game GameState { get; set; } = new Game();
 
-    public List<string> CurrentPlayerHand { get; set; } = new();
+    //who we are (for testing purposes)
+    //this is just until we get local storage
+    public int CurrentPlayerId = 1;
+
+    public List<Player> Opponents { get => GameState.Players.Where(x => x.PlayerNumber != CurrentPlayerId).ToList(); }
+    public Player CurrentPlayer { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -38,6 +41,6 @@
 
     public void GetCurrentPlayerHand()
     {
-        
+        CurrentPlayer = GameState.Players.First(x => x.PlayerNumber == CurrentPlayerId);
     }
 }
