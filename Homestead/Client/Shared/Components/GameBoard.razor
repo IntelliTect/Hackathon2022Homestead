@@ -1,8 +1,15 @@
 ﻿@using Homestead.Shared
 @using Microsoft.AspNetCore.SignalR.Client
 @inject NavigationManager Navigation
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <div class="map">
+    <div class=row gx-1 mb-1>
+        @if(CurrentPlayerId == 1)
+        {
+        <button type="button">Start</button>
+        }
+    </div>
     <div class="row gx-1 mb-1">
         @foreach (var opponent in Opponents)
         {
@@ -21,75 +28,19 @@
 
 
 @code {
+    [CascadingParameter]
+    public int CurrentPlayerId { get; set; }
+
     private HubConnection? hubConnection;
 
-
     private Game GameState { get; set; }
-
-    //who we are (for testing purposes)
-    //this is just until we get local storage
-    public int CurrentPlayerId = 1;
 
     public List<Player> Opponents { get => GameState.Players.Where(x => x.PlayerNumber != CurrentPlayerId).ToList(); }
     public Player CurrentPlayer { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
-        // This is all test data
-        GameState = new Game()
-            {
-                GameId = "TestGame",
-                State = Game.GameState.Playing,
-                Winner = null
-            };
-
-        var player = new Player()
-            {
-                PlayerNumber = 1,
-                IsBot = false,
-                Name = "Player 1 Test",
-                SkinTone = Player.SkinTones.Light,
-                Gender = Player.Genders.Female
-            };
-        player.Board.Add(Cards.Shovel);
-        player.Board.Add(Cards.Seeds);
-        player.Board.Add(Cards.Livestock);
-        player.Board.Add(Cards.Wood);
-        player.Board.Add(Cards.Saw);
-        player.Board.Add(Cards.Hammer);
-        player.Hand.Add(Cards.Well);
-        GameState.Players.Add(player);
-
-        var player2 = new Player()
-            {
-                PlayerNumber = 2,
-                IsBot = true,
-                Name = "Player 2 Test",
-                SkinTone = Player.SkinTones.Dark,
-                Gender = Player.Genders.Female
-            };
-        player2.Hand.Add(Cards.Well);
-        player2.Hand.Add(Cards.Seeds);
-        GameState.Players.Add(player2);
-
-        GameState.Players.Add(new Player()
-            {
-                PlayerNumber = 3,
-                IsBot = true,
-                Name = "Player 3 Test",
-                SkinTone = Player.SkinTones.Light,
-                Gender = Player.Genders.Male
-            });
-
-        GameState.Players.Add(new Player()
-            {
-                PlayerNumber = 4,
-                IsBot = true,
-                Name = "Player 4 Test",
-                SkinTone = Player.SkinTones.Dark,
-                Gender = Player.Genders.Male
-            });
-
+        GameState = await localStorage.GetItemAsync<Game>("game");
         //get current player hand information
         hubConnection = new HubConnectionBuilder()
             .WithUrl(Navigation.ToAbsoluteUri("/comms"))
@@ -97,8 +48,7 @@
 
         hubConnection.On<Game>("ActionRecieved", (state) =>
         {
-            //this needs to be uncommented but for the time using the test data meg set up
-            //GameState = state;
+            GameState = state;
             InvokeAsync(StateHasChanged);
         });
 

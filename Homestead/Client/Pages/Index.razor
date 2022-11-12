@@ -3,6 +3,7 @@
 @using Homestead.Shared;
 @inject HttpClient Http
 @inject NavigationManager NavManager
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <PageTitle>Index</PageTitle>
 
@@ -39,9 +40,9 @@ else
 
     private async void CreateGame()
     {
-        var playerNum = await Http.GetFromJsonAsync<int>("Create");
-        games = await Http.GetFromJsonAsync<Game[]>("Lobby");
-        NavManager.NavigateTo("/gameboardpage");
+        var game = await Http.GetFromJsonAsync<Game>("Create");
+        await localStorage.SetItemAsync("game", System.Text.Json.JsonSerializer.Serialize(game));
+        NavManager.NavigateTo("/gameboardpage/1");
     }
 
     private async void JoinGame(string gameId)
@@ -61,7 +62,7 @@ else
         string playerNum = await result.Content.ReadAsStringAsync();
         if(int.Parse(playerNum) > 0)
         {
-              NavManager.NavigateTo("/gameboardpage");
+              NavManager.NavigateTo($"/gameboardpage/{playerNum}");
         }
 
         
