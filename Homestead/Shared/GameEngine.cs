@@ -3,7 +3,9 @@
     public class GameEngine : IGameEngine
     {
         /// <summary>
-        /// 
+        /// Creates a new game instance and returns it ready for play.<br />
+        /// Assumes the active player is player 1 with the only available actions as Draw from Deck.<br />
+        /// Player 1 must not be a bot.
         /// </summary>
         /// <returns></returns>
         public Game Start()
