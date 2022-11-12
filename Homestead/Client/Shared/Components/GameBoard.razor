@@ -15,10 +15,9 @@
                 <PlayerHomestead Player="@opponent" />
             </div>
         }
-    </div>
-
-    <div class="col">
+        <div class="col">
         <PlayerHomestead Player="CurrentPlayer" />
+        </div>
     </div>
 
     @if (IsOwnerOfGame && Board.State == Game.GameState.Joining)
@@ -30,7 +29,7 @@
     else
     {
         <div class="row justify-content-md-center">
-            <DeckPile  CanDraw="@Board.CanDrawFromDeck"></DeckPile>
+            <DeckPile CanDraw="@Board.CanDrawFromDeck"></DeckPile>
 
             @if (Board.TopDiscardCard != null)
             {

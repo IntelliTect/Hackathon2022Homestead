@@ -3,7 +3,7 @@
 @inject LobbyVm Lobby;
 
 
-<div class="hand-card  @(CanDraw ? "selected" : "")" @onclick="click"
+<div class="hand-card  mx-4 @(CanDraw ? "selected" : "")" @onclick="click"
         style="width:100px; height: 120px;">
     @if (Card == null)
     {

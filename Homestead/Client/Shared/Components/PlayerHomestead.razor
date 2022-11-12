@@ -28,29 +28,29 @@
     </div>
     <!-- Card Slots -->
     <div class="container">
-        <div class="container">
+        <div class="PlayerBoard" style="min-height:100px; min-width: 600px; border: 1px solid black;">
             <!-- House Cards -->
-            <div class="row gx-1 mb-1" style="min-height:100px;">
+            <div style="display:inline-block; min-height:100px; min-width: 300px; border: 2px solid black; ">
                 @foreach (var card in Player.BoardHouse)
                 {
-                    <div class="col-1 board-card">
+                    <div class="board-card" style="display:inline-block;">
                         <PlayerCard Card="@card" />
                     </div>
                 }
-            </div>
 
+            </div>
             <!-- Farm Cards -->
-            <div class="row gx-1"  style="min-height:100px;">
+            <div style="display:inline-block; min-height:100px; min-width: 300px; border: 2px solid black; ">
                 @foreach (var card in Player.BoardGarden)
                 {
-                    <div class="col-1 board-card">
+                    <div class="board-card" style="display:inline-block;">
                         <PlayerCard Card="@card" />
                     </div>
                 }
                 <!-- Livestock Cards -->
                 @foreach (var card in Player.BoardLivestock)
                 {
-                    <div class="col-1 board-card">
+                    <div class="board-card" style="display:inline-block;">
                         <PlayerCard Card="@card" />
                     </div>
                 }
