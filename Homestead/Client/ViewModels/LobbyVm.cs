@@ -7,7 +7,7 @@ namespace Homestead.Client.ViewModels
     {
         public BoardVm? Board { get; internal set; }
         public int PlayerNumber => _PlayerNumber;
-        public int _PlayerNumber;
+        private int _PlayerNumber;
         public bool InGame { get; set; }
 
 
@@ -21,7 +21,7 @@ namespace Homestead.Client.ViewModels
             if (_PlayerNumber > 0)
             {
                 InGame = true;
-                UpdateBoard(startGameResult!.Game);
+                Board = new BoardVm(startGameResult!.Game, PlayerNumber);
                 return true;
             }
             InGame = false;
@@ -35,7 +35,7 @@ namespace Homestead.Client.ViewModels
                 var result = await http.GetFromJsonAsync<StartGameDto>("Create");
                 if (result == null) throw new ArgumentException("Game not found");
                 _PlayerNumber = result.PlayerId;
-                UpdateBoard(result.Game);
+                Board = new BoardVm(result!.Game, PlayerNumber);
                 InGame = true;
                 return true;
             }
