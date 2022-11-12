@@ -7,9 +7,9 @@ namespace Homestead.Shared.Tests
         public void GetCard()
         {
             var card1 = Cards.GetCard(true);
-            Assert.AreEqual(Cards.WolfAll, card1);
+            Assert.AreEqual(Cards.BadNeighbor, card1);
             var card2 = Cards.GetCard(true);
-            Assert.AreEqual(Cards.FloodAll, card2);
+            Assert.AreEqual(Cards.FloodOther, card2);
         }
 
         [TestMethod]
