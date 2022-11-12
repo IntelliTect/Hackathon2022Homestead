@@ -22,7 +22,7 @@ public class CommunicationHub : Hub
         await Clients.Group(newState.GameId).SendAsync("ExecuteAction", newState);
         while (newState.Players[newState.ActivePlayer-1].IsBot)
         {
-            await Task.Delay(1000).ConfigureAwait(false);
+            await Task.Delay(100).ConfigureAwait(false);
             Random rand = new Random();
             int index = rand.Next(0, newState.AvailableActions.Count - 1);
             newState = engine.ProcessAction(newState, newState.AvailableActions[index]);
