@@ -39,37 +39,16 @@ else
         Console.WriteLine(games.Count());
     }
 
-    private async void CreateGame()
+    private async Task CreateGame()
     {
         await LobbyVm.CreateGame(Http);
         NavManager.NavigateTo("/gameboardpage");
     }
 
-    private async void JoinGame(string gameId)
+    private async Task JoinGame(string gameId)
     {
         var result = await LobbyVm.JoinGame(gameId, Http);
         if (result) NavManager.NavigateTo("/gameboardpage");
         
-        
-        //var payload = new
-        //{
-        //    gameId = gameId
-        //};
-        //var jsonPayload = System.Text.Json.JsonSerializer.Serialize(payload);
-        //HttpContent content = new StringContent(gameId);
-
-        //var playerNum = await Http.PostAsync($"Join", content);
-
-
-        //var playerNum = await Http.GetAsync($"Join?gameId={gameId}");
-        //var result = await Http.PostAsync($"Join/{gameId}", null);
-        //string playerNum = await result.Content.ReadAsStringAsync();
-        //if(int.Parse(playerNum) > 0)
-        //{
-        //      NavManager.NavigateTo($"/gameboardpage/{playerNum}");
-        //}
-
-        
-        //Console.WriteLine("Player " + playerNum);
     }
 }
