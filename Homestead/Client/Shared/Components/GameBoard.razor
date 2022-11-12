@@ -1,5 +1,6 @@
 ﻿@using Homestead.Shared
 @using Microsoft.AspNetCore.SignalR.Client
+@inject NavigationManager Navigation
 
 <div class="map">
     <div class="row gx-1 mb-1">
@@ -23,7 +24,7 @@
     private HubConnection? hubConnection;
 
 
-    public Game GameState { get; set; } = new Game();
+    private Game GameState { get; set; }
 
     //who we are (for testing purposes)
     //this is just until we get local storage
@@ -90,9 +91,21 @@
             });
 
         //get current player hand information
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(Navigation.ToAbsoluteUri("/comms"))
+            .Build();
+
+        hubConnection.On<Game>("ActionRecieved", (state) =>
+        {
+            //this needs to be uncommented but for the time using the test data meg set up
+            //GameState = state;
+            InvokeAsync(StateHasChanged);
+        });
+
+        await hubConnection.StartAsync();
         GetCurrentPlayerHand();
         await base.OnInitializedAsync();
-    }
+    }   
 
     public void GetCurrentPlayerHand()
     {
