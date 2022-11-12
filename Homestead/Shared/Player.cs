@@ -56,6 +56,7 @@ namespace Homestead.Shared
             Gender = (Genders)(values.GetValue(random.Next(values.Length))!);
         }
 
+        public IEnumerable<string> BoardBySuit(CardInfo.CardSuit suit) => Board.Where(f => Cards.GetCardInfo(f).Suit == suit);
 
     }
 }
