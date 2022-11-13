@@ -3,15 +3,24 @@
 
 <div>
     <!-- Visuals -->
-    <div class="" style="min-width: 600px; min-height:250px; border: 2px solid black; ">
-        <div style="font-size:2em;">
-            @if (Player.IsCurrentPlayer)
-            {
-                <span>🚩</span>
-            }
+    <div class="" style="min-width: 600px; min-height:210px; margin-top:20px; margin-left:10px;">
+        <div style="font-size:2em; float:left;">
+            <div style="min-width:50px; display: inline-block;">
+                @if (Player.IsCurrentPlayer)
+                {
+                    if (Lobby.Board.WinningPlayer == Player)
+                    {
+                        <span>🏆</span>
+                    }
+                    else
+                    {
+                        <span>🚩</span>
+                    }
+                }
+            </div>
             <span>@Player.PlayerNumber: @Player.Player.Name</span>
         </div>
-        <div>
+        <div style="float:none;">
             <!-- House -->
             <span class="home" style="min-width:200px; min-height: 200px;">
                 <img height="200" src="/Assets/Images/house/house@(Player.BoardHouse.Count()).png" />
@@ -28,9 +37,9 @@
     </div>
     <!-- Card Slots -->
     <div class="container">
-        <div class="PlayerBoard" style="min-height:100px; min-width: 600px; border: 1px solid black;">
+        <div class="PlayerBoard" style="min-height:100px; min-width: 600px;">
             <!-- House Cards -->
-            <div style="display:inline-block; min-height:100px; min-width: 300px; border: 2px solid black; ">
+            <div style="display:inline-block; min-height:100px; min-width: 300px;">
                 @foreach (var card in Player.BoardHouse)
                 {
                     <div class="board-card" style="display:inline-block;">
@@ -40,7 +49,7 @@
 
             </div>
             <!-- Farm Cards -->
-            <div style="display:inline-block; min-height:100px; min-width: 300px; border: 2px solid black; ">
+            <div style="display:inline-block; min-height:100px; min-width: 300px;">
                 @foreach (var card in Player.BoardGarden)
                 {
                     <div class="board-card" style="display:inline-block;">

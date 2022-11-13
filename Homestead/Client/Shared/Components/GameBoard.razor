@@ -26,6 +26,15 @@
             <button type="button" class="btn btn-success btn-lg col-sm" @onclick="StartGame">Start</button>
         </div>
     }
+    else if (Board.State == Game.GameState.Complete && Board.WinningPlayer != null)
+    {
+        <div class="row justify-content-md-center">
+            <h1 style="width: 100%; text-align: center; background-color:rgba(255,255,255,.5);">@Board.WinningPlayer.Player.Name Won the game!</h1>
+        </div>
+        <div class="row justify-content-md-center">
+            <button type="button" class="btn btn-success btn-lg col-sm" @onclick="()=>Navigation.NavigateTo('/'.ToString())">New Game</button>
+        </div>
+    }
     else
     {
         <div class="row justify-content-md-center">
