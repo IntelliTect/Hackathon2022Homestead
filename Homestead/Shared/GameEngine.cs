@@ -194,6 +194,7 @@
                 }
             }
 
+            game.LastPlayDate = DateTime.UtcNow;
             return game;
         }
 

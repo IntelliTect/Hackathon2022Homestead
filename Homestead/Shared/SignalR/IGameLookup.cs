@@ -6,6 +6,7 @@ public interface IGameLookup
     IEnumerable<Game> ListGames { get; }
 
     Game? GetGame(string gameId);
-
-    public bool AddGame(Game game);
+    
+    bool AddGame(Game game);
+    void CleanupGames();
 }

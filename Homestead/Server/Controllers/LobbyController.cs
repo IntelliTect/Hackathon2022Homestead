@@ -56,6 +56,8 @@ public class LobbyController
     [HttpGet]
 	public IEnumerable<Game> GetOpenGames() 
 	{
+		// Remove any games that are 30 minutes old regardless of state
+		lookup.CleanupGames();
 		return lookup.ListGames.Where(x => x.State == GameState.Joining);
 
     }
