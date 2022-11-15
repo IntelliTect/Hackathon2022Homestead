@@ -8,15 +8,15 @@
 @inject HttpClient Http
 
 <div class="map">
-    <div class="row">
+    <div class="row homestead-row">
         @foreach (var opponent in Opponents)
         {
-            <div class="col">
+            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
                 <PlayerHomestead Player="@opponent" />
             </div>
         }
-        <div class="col">
-        <PlayerHomestead Player="CurrentPlayer" />
+        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+            <PlayerHomestead Player="CurrentPlayer" />
         </div>
     </div>
 
@@ -29,10 +29,10 @@
     else if (Board.State == Game.GameState.Complete && Board.WinningPlayer != null)
     {
         <div class="row justify-content-md-center">
-            <h1 style="width: 100%; text-align: center; background-color:rgba(255,255,255,.5);">@Board.WinningPlayer.Player.Name Won the game!</h1>
+            <h1 class="winning-banner">@Board.WinningPlayer.Player.Name Won the game!</h1>
         </div>
         <div class="row justify-content-md-center">
-            <button type="button" class="btn btn-success btn-lg col-sm" @onclick="()=>Navigation.NavigateTo('/'.ToString())">New Game</button>
+            <button type="button" class="new-game-button btn btn-success btn-lg col-sm" @onclick="()=>Navigation.NavigateTo('/'.ToString())">New Game</button>
         </div>
     }
     else
@@ -42,7 +42,7 @@
 
             @if (Board.TopDiscardCard != null)
             {
-            <DiscardPile Card="@Board.TopDiscardCard" CanDraw="@Board.CanDrawFromDiscard"></DiscardPile>
+                <DiscardPile Card="@Board.TopDiscardCard" CanDraw="@Board.CanDrawFromDiscard"></DiscardPile>
             }
         </div>
         @if (Board.CanEndTurn)
@@ -80,13 +80,13 @@
             }
             Board.Update(game);
             Console.WriteLine(Board.LocalPlayer.ToString());
-            foreach(var player in Board.OtherPlayers)
+            foreach (var player in Board.OtherPlayers)
             {
                 Console.WriteLine(player);
             }
             if (Board.CanDrawFromDeck) Console.WriteLine("Can Draw from Deck");
             if (Board.CanDrawFromDiscard) Console.WriteLine("Can Draw from Discard");
-          
+
             foreach (var action in game.AvailableActions)
             {
                 Console.WriteLine($"Available Action: {action.Type}");
@@ -134,7 +134,7 @@
         var action = new PlayerAction(PlayerAction.ActionType.EndTurn, Board.LocalPlayerNumber);
         await SendAction(action);
     }
-  
+
 
 
     public void Dispose()

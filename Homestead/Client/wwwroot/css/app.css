@@ -37,14 +37,19 @@ img {
     height: 100%;
     width: 100%;
     border-radius: 5px;
+    border: 2px solid rgba(0,0,0,.2);
 }
 
     .hand-card.selected {
         border: 2px solid white;
     }
 
-    .hand-card {
-        border: 2px solid rgba(0,0,0,.2);
+    .hand-card.discard-pile {
+        width: 100px;
+    }
+
+    .hand-card.deck-pile {
+        width: 100px;
     }
 
 .card-image {
@@ -67,10 +72,61 @@ img {
     border-radius: 0 0 5px 5px;
 }
 
+div, img {
+    border: 1px solid black;
+}
+
+.homestead-row {
+    /*Put in a variable height for the homestead rows*/
+}
+
+.homestead {
+    width: 100%;
+}
+
+    .homestead .player-name {
+        /*Make the font adjust size based on the width*/
+
+        font-size: 1.2em;
+    }
+
+    .homestead .house-area {
+        float: none;
+        width: 100%;
+        /*TODO: Make this scalable so that the house-area overlaps the name*/
+        margin-top: -30px;
+
+    }
+
+
+        .homestead .house-area img.home {
+            width: 40%;
+            height: 50%;
+        }
+
+        .homestead .house-area img.player {
+            width: 20%;
+            height: 100%;
+        }
+
+        .homestead .house-area img.garden {
+            width: 35%;
+            height: 100%;
+        }
+
+.winning-banner {
+    width: auto;
+    text-align: center;
+    background-color: rgba(255,255,255,.5);
+}
+
+.new-game-button {
+}
 
 
 
 
+/*Blazor stuff*/
 h1:focus {
     outline: none;
 }
