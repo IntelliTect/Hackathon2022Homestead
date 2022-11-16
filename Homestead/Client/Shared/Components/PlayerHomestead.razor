@@ -1,11 +1,11 @@
 ﻿@using Homestead.Client.ViewModels
 @inject LobbyVm Lobby
 
-<div>
+<div class="homestead-outline  @(Player.IsCurrentPlayer ? "selected" : "")">
     <!-- Visuals -->
-    <div class="" style="min-width: 600px; min-height:210px; margin-top:20px; margin-left:10px;">
-        <div style="font-size:2em; float:left;">
-            <div style="min-width:50px; display: inline-block;">
+    <div class="homestead">
+        <div class="player-name">
+            <div>
                 @if (Player.IsCurrentPlayer)
                 {
                     if (Lobby.Board.WinningPlayer == Player)
@@ -19,56 +19,74 @@
                 }
             </div>
             <span>@Player.PlayerNumber: @Player.Player.Name</span>
+            @if (Player.IsLocalPlayer)
+            {
+                <span> (You)</span>
+            }
+            @if (Player.IsBot)
+            {
+                <span> 🤖</span>
+            }
         </div>
-        <div style="float:none;">
+        <div class="house-area">
             <!-- House -->
-            <span class="home" style="min-width:200px; min-height: 200px;">
-                <img height="200" src="/Assets/Images/house/house@(Player.BoardHouse.Count()).png" />
-            </span>
+            <img class="home" src="/Assets/Images/house/house@(Player.BoardHouse.Count()).png" />
             <!-- Player -->
-            <span class="player" style="width:200px; height: 200px;">
-                <img style="" height="70" src="@Player.GetImageUrl()" />
-            </span>
+            <img class="player" src="@Player.GetImageUrl()" />
             <!-- Garden -->
-            <span class="garden" style="width:200px; height: 200px;">
-                <img height="200" src="/Assets/Images/garden/garden@(Player.BoardGarden.Count()).png" />
-            </span>
+            <img class="garden" src="/Assets/Images/garden/garden@(Player.BoardGarden.Count()).png" />
         </div>
     </div>
     <!-- Card Slots -->
-    <div class="container">
-        <div class="PlayerBoard" style="min-height:100px; min-width: 600px;">
-            <!-- House Cards -->
-            <div style="display:inline-block; min-height:100px; min-width: 300px;">
-                @foreach (var card in Player.BoardHouse)
-                {
-                    <div class="board-card" style="display:inline-block;">
-                        <PlayerCard Card="@card" />
-                    </div>
-                }
+    <div class="row board-cards">
+        <!-- House Cards -->
+        <div class="board-card-area col-12 col-sm-6 col-md-12 col-lg-6 mx-0">
+            @foreach (var card in Player.BoardHouse)
+            {
+                <div class="board-card">
+                    <PlayerCard Card="@card" />
+                </div>
+            }
+            @for (int i = Player.BoardHouse.Count(); i < 4; i++)
+            {
+                <div class="board-card">
+                    <BlankCard />
+                </div>
 
-            </div>
-            <!-- Farm Cards -->
-            <div style="display:inline-block; min-height:100px; min-width: 300px;">
-                @foreach (var card in Player.BoardGarden)
-                {
-                    <div class="board-card" style="display:inline-block;">
-                        <PlayerCard Card="@card" />
-                    </div>
-                }
-                <!-- Livestock Cards -->
-                @foreach (var card in Player.BoardLivestock)
-                {
-                    <div class="board-card" style="display:inline-block;">
-                        <PlayerCard Card="@card" />
-                    </div>
-                }
-            </div>
+            }
+
+        </div>
+        <!-- Farm Cards -->
+        <div class="board-card-area col-12 col-sm-6 col-md-12 col-lg-6 mx-0">
+            @foreach (var card in Player.BoardGarden)
+            {
+                <div class="board-card">
+                    <PlayerCard Card="@card" />
+                </div>
+            }
+            @for (int i = Player.BoardGarden.Count(); i < 3; i++)
+            {
+                <div class="board-card">
+                    <BlankCard />
+                </div>
+
+            }
+            <!-- Livestock Cards -->
+            @foreach (var card in Player.BoardLivestock)
+            {
+                <div class="board-card">
+                    <PlayerCard Card="@card" />
+                </div>
+            }
+            @for (int i = Player.BoardLivestock.Count(); i < 1; i++)
+            {
+                <div class="board-card">
+                    <BlankCard />
+                </div>
+
+            }
         </div>
     </div>
-    <style>
-
-    </style>
 </div>
 
 @code {

@@ -3,20 +3,17 @@
 @inject LobbyVm Lobby;
 
 
-<div class="hand-card  mx-4 @(CanDraw ? "selected" : "")" @onclick="click"
-        style="width:100px; height: 120px;">
+<div class="discard-pile @(CanDraw ? "selected" : "")" @onclick="click">
     @if (Card == null)
     {
-        <div class="card-image" style="background-color: cadetblue;">
-        </div>
+        <img class="card-image" src="/Assets/Images/cards/blank.png" />
         <div class="card-text">
-            None
+            Discard
         </div>
     }
     else
     {
-        <div class="card-image" style="background-image: url(@Card.ImageUrl)">
-        </div>
+        <img class="card-image" src="@Card.ImageUrl" />
         <div class="card-text">
             @(Card.CardInfo.Name)
         </div>
@@ -30,7 +27,8 @@
 
     private void click()
     {
-        if(Lobby.Board.CanDrawFromDiscard){
+        if (Lobby.Board.CanDrawFromDiscard)
+        {
             Lobby.Board.DrawFromDiscard();
         }
     }

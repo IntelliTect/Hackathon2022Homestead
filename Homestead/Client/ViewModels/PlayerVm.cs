@@ -13,6 +13,7 @@ namespace Homestead.Client.ViewModels
         /// </summary>
         public int PlayerIndex { get; }
         public bool IsCurrentPlayer { get; internal set; }
+        public bool IsBot { get; internal set; }
 
         public List<PlayerCardVm> Hand
         { get; } = new();
@@ -38,6 +39,7 @@ namespace Homestead.Client.ViewModels
         /// <param name="player"></param>
         public void Update(Player player)
         {
+            IsBot = player.IsBot;
             // Mark all cards in the hand as not updated
             Hand.ForEach(f => f.Updated = false);
             // Iterate the hand and make changes
@@ -132,7 +134,7 @@ namespace Homestead.Client.ViewModels
             output.Append($"{PlayerNumber}:");
             output.Append(IsCurrentPlayer ? "Active" : "Waiting");
             output.Append("  ");
-            output.Append($"Hand: {string.Join(", ", Hand.Select(f=>f.Card))}");
+            output.Append($"Hand: {string.Join(", ", Hand.Select(f => f.Card))}");
             output.Append("  ");
             output.Append($"Board: {string.Join(", ", Board.Select(f => f.Card))}");
             return output.ToString();

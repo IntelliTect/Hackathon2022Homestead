@@ -1,15 +1,14 @@
 ﻿@using Homestead.Client.ViewModels
 @using Homestead.Shared;
 
-<div class="player-hand">
-    @foreach (var card in HandList)
-    {
-        <div style="width:250px; height: 120px;">
+@foreach (var card in HandList)
+{
+    <div class="player-hand-card">
+        <div class="hand-card">
             <PlayerCard Card="@card" />
         </div>
-    }
-
-</div>
+    </div>
+}
 @code {
     [Parameter]
     public List<PlayerCardVm> HandList { get; set; } = new();
