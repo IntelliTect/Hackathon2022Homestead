@@ -4,8 +4,7 @@
 
 
 <div class="hand-card  @(Card.IsPlayable || Card.IsDiscardable ? "selected" : "")" @onclick="click">
-   <div class="card-image" style="background-image: url(@Card.ImageUrl); margin: auto;">
-   </div>
+   <img class="card-image" src="@Card.ImageUrl"/>
    <div class="card-text">
        @(Card.CardInfo.Name)
    </div>

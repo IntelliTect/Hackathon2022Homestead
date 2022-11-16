@@ -30,39 +30,55 @@
         </div>
     </div>
     <!-- Card Slots -->
-    <div class="container">
-        <div class="PlayerBoard">
-            <!-- House Cards -->
-            <div style="display:inline-block;">
-                @foreach (var card in Player.BoardHouse)
-                {
-                    <div class="board-card" style="display:inline-block;">
-                        <PlayerCard Card="@card" />
-                    </div>
-                }
+    <div class="row board-cards">
+        <!-- House Cards -->
+        <div class="board-card-area col-12 col-sm-6 col-md-12 col-lg-6 mx-0">
+            @foreach (var card in Player.BoardHouse)
+            {
+                <div class="board-card">
+                    <PlayerCard Card="@card" />
+                </div>
+            }
+            @for (int i = Player.BoardHouse.Count(); i < 4; i++)
+            {
+                <div class="board-card">
+                    <BlankCard />
+                </div>
 
-            </div>
-            <!-- Farm Cards -->
-            <div style="display:inline-block;">
-                @foreach (var card in Player.BoardGarden)
-                {
-                    <div class="board-card" style="display:inline-block;">
-                        <PlayerCard Card="@card" />
-                    </div>
-                }
-                <!-- Livestock Cards -->
-                @foreach (var card in Player.BoardLivestock)
-                {
-                    <div class="board-card" style="display:inline-block;">
-                        <PlayerCard Card="@card" />
-                    </div>
-                }
-            </div>
+            }
+
+        </div>
+        <!-- Farm Cards -->
+        <div class="board-card-area col-12 col-sm-6 col-md-12 col-lg-6 mx-0">
+            @foreach (var card in Player.BoardGarden)
+            {
+                <div class="board-card">
+                    <PlayerCard Card="@card" />
+                </div>
+            }
+            @for (int i = Player.BoardGarden.Count(); i < 3; i++)
+            {
+                <div class="board-card">
+                    <BlankCard />
+                </div>
+
+            }
+            <!-- Livestock Cards -->
+            @foreach (var card in Player.BoardLivestock)
+            {
+                <div class="board-card">
+                    <PlayerCard Card="@card" />
+                </div>
+            }
+            @for (int i = Player.BoardLivestock.Count(); i < 1; i++)
+            {
+                <div class="board-card">
+                    <BlankCard />
+                </div>
+
+            }
         </div>
     </div>
-    <style>
-
-    </style>
 </div>
 
 @code {

@@ -8,7 +8,6 @@ html, body {
 .map {
     background-image: url("/Assets/Images/map.png");
     width: 100%;
-    height: 75vh;
 }
 
 img {
@@ -17,19 +16,39 @@ img {
 
 .player-hand {
     background-color: sandybrown;
-    height: 25vh;
-    display: grid;
-    grid-template-columns: .2fr .2fr .2fr .2fr .2fr;
-    column-gap: 20px;
+    height: 120px;
     padding: 15px;
 }
 
 
 
+.board-cards{
+    margin-left: 0;
+    padding-right: 12px;
+}
+.board-card-area {
+    padding: 0;
+}
+
 .board-card {
-    width: 80px;
-    height: 90px;
+    width: 25%;
     background-color: transparent;
+    display: inline-block;
+}
+
+.hand-card {
+    max-width: 80px;
+    background-color: transparent;
+    display: inline-block;
+}
+
+.blank-card {
+    background-color: rgba(10,10,10,.1);
+    height: 100%;
+    width: 100%;
+    border-radius: 5px;
+    border: 2px solid rgba(0,0,0,.2);
+    display: inline-block;
 }
 
 .hand-card {
@@ -38,6 +57,7 @@ img {
     width: 100%;
     border-radius: 5px;
     border: 2px solid rgba(0,0,0,.2);
+    display: inline-block;
 }
 
     .hand-card.selected {
@@ -45,17 +65,17 @@ img {
     }
 
     .hand-card.discard-pile {
-        width: 100px;
+        width: 80px;
+        height: 100px;
     }
 
     .hand-card.deck-pile {
-        width: 100px;
+        width: 80px;
+        height: 100px;
     }
 
 .card-image {
-    height: 70px;
-    width: 70px;
-    margin-left: 3px;
+    width: 100%;
     background-size: cover;
     background-color: transparent;
     border-radius: 5px 5px 0 0;
@@ -64,7 +84,7 @@ img {
 .card-text {
     height: 20px;
     width: 100%;
-    font-size: .9em;
+    font-size: .7em;
     text-align: center;
     overflow: hidden;
     color: white;
@@ -72,10 +92,11 @@ img {
     border-radius: 0 0 5px 5px;
 }
 
-div, img {
-    border: 1px solid black;
+/* TODO: Remove this. It only shows borders for figuring out CSS */
+/*div, img {
+    border: 1px dashed gray;
 }
-
+*/
 .homestead-row {
     /*Put in a variable height for the homestead rows*/
 }
