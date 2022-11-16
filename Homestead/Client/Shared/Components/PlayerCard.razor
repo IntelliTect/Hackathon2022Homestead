@@ -3,7 +3,7 @@
 @inject LobbyVm Lobby;
 
 
-<div class="hand-card  @(Card.IsPlayable || Card.IsDiscardable ? "selected" : "")" @onclick="click">
+<div class="player-card  @(Card.IsPlayable || Card.IsDiscardable ? "selected" : "")" @onclick="click">
    <img class="card-image" src="@Card.ImageUrl"/>
    <div class="card-text">
        @(Card.CardInfo.Name)

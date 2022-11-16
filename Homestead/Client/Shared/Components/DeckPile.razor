@@ -3,12 +3,11 @@
 @inject LobbyVm Lobby;
 
 
-<div class="hand-card deck-pile mx-4 col-2 @(CanDraw ? "selected" : "")" @onclick="click">
-<div class="card-image">
-   </div>
-   <div class="card-text">
-       Deck
-   </div>
+<div class="deck-pile @(CanDraw ? "selected" : "")" @onclick="click">
+    <img class="card-image" src="/Assets/Images/cards/blank.png" />
+    <div class="card-text">
+        Draw
+    </div>
 </div>
 @code {
     [Parameter]

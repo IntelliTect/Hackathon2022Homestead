@@ -1,11 +1,11 @@
 ﻿@using Homestead.Client.ViewModels
 @inject LobbyVm Lobby
 
-<div>
+<div class="homestead-outline  @(Player.IsCurrentPlayer ? "selected" : "")">
     <!-- Visuals -->
     <div class="homestead">
         <div class="player-name">
-            <span>
+            <div>
                 @if (Player.IsCurrentPlayer)
                 {
                     if (Lobby.Board.WinningPlayer == Player)
@@ -17,8 +17,16 @@
                         <span>🚩</span>
                     }
                 }
-            </span>
+            </div>
             <span>@Player.PlayerNumber: @Player.Player.Name</span>
+            @if (Player.IsLocalPlayer)
+            {
+                <span> (You)</span>
+            }
+            @if (Player.IsBot)
+            {
+                <span> 🤖</span>
+            }
         </div>
         <div class="house-area">
             <!-- House -->

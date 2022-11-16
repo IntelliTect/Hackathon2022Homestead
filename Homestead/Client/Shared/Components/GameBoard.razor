@@ -35,29 +35,33 @@
             <button type="button" class="new-game-button btn btn-success btn-lg col-sm" @onclick="()=>Navigation.NavigateTo('/'.ToString())">New Game</button>
         </div>
     }
-    else
-    {
-        <div class="row justify-content-md-center">
-            <DeckPile CanDraw="@Board.CanDrawFromDeck"></DeckPile>
-
-            @if (Board.TopDiscardCard != null)
-            {
-                <DiscardPile Card="@Board.TopDiscardCard" CanDraw="@Board.CanDrawFromDiscard"></DiscardPile>
-            }
-        </div>
-        @if (Board.CanEndTurn)
-        {
-            <div class="row justify-content-md-center">
-                <button type="button" class="btn btn-warning btn-lg col-sm" @onclick="EndTurn">End Turn</button>
-            </div>
-        }
-    }
-
-
 </div>
 
-<PlayerHand HandList="@CurrentPlayer.Hand" />
+<div class="player-hand">
+    <DeckPile CanDraw="@(Board.CanDrawFromDeck && Board.State == Game.GameState.Playing)"></DeckPile>
+    <DiscardPile Card="@Board.TopDiscardCard" CanDraw="@Board.CanDrawFromDiscard"></DiscardPile>
+    <div class="player-hand-card-area">
+        <PlayerHand HandList="@CurrentPlayer.Hand" />
+        @for (int i = CurrentPlayer.Hand.Count(); i < 5; i++)
+        {
+            <div class="board-card">
+                <BlankCard />
+            </div>
+        }
+    </div>
 
+    @if (Board.CanEndTurn)
+    {
+        <div class="end-turn" @onclick="EndTurn">
+            <img class="card-image" src="/Assets/Images/cards/blank.png" />
+            <div class="card-text">
+                Next
+            </div>
+
+        </div>
+    }
+
+</div>
 
 @code {
     //[CascadingParameter]
