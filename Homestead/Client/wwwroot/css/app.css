@@ -15,6 +15,18 @@ img {
     image-rendering: pixelated;
 }
 
+/* Home Page */
+@font-face {
+    font-family: Pinewood;
+    src: url('/Assets/Fonts/Pinewood.ttf');
+} 
+.log-font
+{
+    font-family: Pinewood;
+}
+
+
+/* Game Page */
 .player-hand {
     background-color: sandybrown;
     height: 25vh;
