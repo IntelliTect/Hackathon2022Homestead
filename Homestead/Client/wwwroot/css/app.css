@@ -19,7 +19,7 @@ img {
     font-family: Pinewood;
     src: url('/Assets/Fonts/Pinewood.ttf');
 } 
-.log-font
+.pinewood
 {
     font-family: Pinewood;
 }
@@ -159,9 +159,9 @@ img {
     border-radius: 0 0 5px 5px;
 }
 
-/* TODO: Remove this. It only shows borders for figuring out CSS */
+/* Change this to show borders to help wrangle CSS */
 div, img {
-    border: 1px dashed transparent;
+    border: 1px solid transparent;
 }
 
 .homestead-outline.selected{
