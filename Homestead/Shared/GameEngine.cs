@@ -8,7 +8,7 @@
         /// Player 1 must not be a bot.
         /// </summary>
         /// <returns></returns>
-        public Game Start()
+        public Game Start(string playerId)
         {
             Game game = new();
             game.GameId = Guid.NewGuid().ToString();
@@ -18,7 +18,14 @@
             for (int i = firstPlayer; i <= 4; i++)
             {
                 var player = new Player(i);
-                if (i != firstPlayer) player.IsBot = true;
+                if (i == firstPlayer)
+                {
+                    player.PlayerId = playerId;
+                }
+                else
+                {
+                    player.IsBot = true;
+                }
                 game.Players.Add(player);
             }
             game.ActivePlayer = firstPlayer;
@@ -261,7 +268,7 @@
                         //{
                         //    game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.EndTurn, game.ActivePlayer));
                         //}
-                        if(hand.Count > 4)
+                        if (hand.Count > 4)
                         {
                             game.AvailableActions.Add(new PlayerAction(PlayerAction.ActionType.Discard, game.ActivePlayer));
                         }

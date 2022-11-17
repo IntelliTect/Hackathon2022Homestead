@@ -22,21 +22,28 @@ public class LobbyController
 
 	}
 
-	[HttpGet("/Create")]
-	public StartGameDto CreateGame([FromServices] IGameEngine engine)
+	[HttpPost("/Create/{playerId}")]
+	public StartGameDto CreateGame([FromServices] IGameEngine engine, string playerId)
 	{
-		var game = engine.Start();
+		var game = engine.Start(playerId);
 
 		lookup.AddGame(game);
-		return new StartGameDto { Game = game, PlayerId = 1 };
+		return new StartGameDto { Game = game, PlayerNumber = 1 };
 	}
 
-	[HttpPost("/Join/{gameId}")]
-	public StartGameDto Join(string gameId)
+	[HttpPost("/Join/{gameId}/{playerId}")]
+	public StartGameDto Join(string gameId, string playerId)
 	{
         var game = lookup.GetGame(gameId);
         if (game == null) throw new ArgumentException("Game not found");
         int playerNumber;
+		// See if the player is already a player
+		var existingPlayer = game.Players.FirstOrDefault(f => f.PlayerId == playerId);
+		if (existingPlayer != null)
+		{
+            return new StartGameDto { Game = game, PlayerNumber = existingPlayer.PlayerNumber };
+        }
+
 
         lock (game)
         {
@@ -49,8 +56,9 @@ public class LobbyController
 
             player.IsBot = false;
             playerNumber = player.PlayerNumber;
+			player.PlayerId = playerId;
         }
-		return new StartGameDto { Game = game, PlayerId = playerNumber };
+		return new StartGameDto { Game = game, PlayerNumber = playerNumber };
 	}
 
     [HttpGet]
@@ -58,7 +66,7 @@ public class LobbyController
 	{
 		// Remove any games that are 30 minutes old regardless of state
 		lookup.CleanupGames();
-		return lookup.ListGames.Where(x => x.State == GameState.Joining);
+		return lookup.ListGames.Where(x => x.State != GameState.Complete);
 
     }
 }

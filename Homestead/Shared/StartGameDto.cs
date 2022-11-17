@@ -7,6 +7,6 @@ using System.Threading.Tasks;
 namespace Homestead.Shared;
 public class StartGameDto
 {
-    public int PlayerId { get; set; }
+    public int PlayerNumber { get; set; }
     public Game Game { get; set; } = null!;
 }

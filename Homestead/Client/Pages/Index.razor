@@ -36,21 +36,50 @@
                 <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3">
                     <div class="card">
                         <div class="card-header tree-background" style="padding-top: 15px;">
-                            <button class="btn btn-success" style="float:right;" disabled="@(GetHumanPlayerCount(game) > 3)" type="button" @onclick="()=>JoinGame(game.GameId)">Join</button>
+                            <button class="btn btn-success" style="float:right;" disabled="@(GetHumanPlayerCount(game) > 3)" type="button" @onclick="()=>JoinGame(game.GameId)">
+                                @if (game.Players.Any(f => f.PlayerId == Lobby.PlayerId))
+                                {
+                                    <span>Rejoin</span>
+                                }
+                                else
+                                {
+                                    <span>Join </span>
+                                }
+                            </button>
                             <h2>Game #@counter</h2>
                         </div>
                         <div class="card-body green-background">
                             <div class="row">
                                 <div class="col-12">
+                                    <div style="float:right">
+                                        @if (game.State == Game.GameState.Playing)
+                                        {
+                                            <span>In Progress</span>
+                                        }
+                                        else
+                                        {
+                                            <span>Looking for Players</span>
+                                        }
+                                    </div>
                                     <h3>Players</h3>
-                                    <ul>
+                                    <ul class="list-group">
                                         @foreach (var player in game.Players)
                                         {
-                                            <li>
+                                            <li class="list-group-item">
+                                                <img class="player" src="@PlayerVm.GetImageUrl(player)" />
                                                 @player.Name
+                                                @if (player.PlayerId == Lobby.PlayerId)
+                                                {
+                                                    <span> (You)</span>
+                                                }
+
                                                 @if (player.IsBot)
                                                 {
-                                                    <span> 🤖</span>
+                                                    <span style="float: right;"> 🤖</span>
+                                                }
+                                                else
+                                                {
+                                                    <span style="float: right;"> 🧑‍🦲</span>
                                                 }
                                             </li>
                                         }
@@ -59,7 +88,7 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            Last Play: @(Math.Round((DateTime.UtcNow - game.LastPlayDate).TotalMinutes,1)) minutes ago
+                            Last Play: @(Math.Round((DateTime.UtcNow - game.LastPlayDate).TotalMinutes, 1)) minutes ago
                         </div>
                     </div>
                 </div>
@@ -72,16 +101,22 @@
     private Game[]? games;
 
     private int GetHumanPlayerCount(Game game) => game.Players.Where(x => !x.IsBot).Count();
-    
+
     protected override async Task OnInitializedAsync()
     {
+        Lobby.PlayerId = await localStorage.GetItemAsync<string>("PlayerId");
+        if (string.IsNullOrEmpty(Lobby.PlayerId))
+        {
+            Lobby.PlayerId = Guid.NewGuid().ToString();
+            await localStorage.SetItemAsync("PlayerId", Lobby.PlayerId);
+        }
+        Console.WriteLine($"Player's Id: {Lobby.PlayerId}");
         await GetGames();
     }
 
     private async Task GetGames()
     {
         games = await Http.GetFromJsonAsync<Game[]>("Lobby");
-        Console.WriteLine(games!.Count());
     }
 
     private async Task CreateGame()

@@ -10,15 +10,17 @@ namespace Homestead.Client.ViewModels
         public int PlayerNumber => _PlayerNumber;
         private int _PlayerNumber;
         public bool InGame { get; set; }
+        public string PlayerId { get; set; } = ""; // This gets set by the index page
+
 
 
         public async Task<bool> JoinGame(string gameId, HttpClient http)
         {
-            var result = await http.PostAsync($"Join/{gameId}", null);
+            var result = await http.PostAsync($"Join/{gameId}/{PlayerId}", null);
             var startGameResult = await result.Content.ReadFromJsonAsync<StartGameDto>();
             if (startGameResult == null) throw new ArgumentException("Game not found");
 
-            _PlayerNumber = startGameResult?.PlayerId ?? 0;
+            _PlayerNumber = startGameResult?.PlayerNumber ?? 0;
             if (_PlayerNumber > 0)
             {
                 InGame = true;
@@ -33,10 +35,11 @@ namespace Homestead.Client.ViewModels
         {
             try
             {
-                var result = await http.GetFromJsonAsync<StartGameDto>("Create");
-                if (result == null) throw new ArgumentException("Game not found");
-                _PlayerNumber = result.PlayerId;
-                _Board = new BoardVm(result!.Game, PlayerNumber);
+                var result = await http.PostAsync($"Create/{PlayerId}", null);
+                var startGameResult = await result.Content.ReadFromJsonAsync<StartGameDto>();
+                if (startGameResult == null) throw new ArgumentException("Game not found");
+                _PlayerNumber = startGameResult.PlayerNumber;
+                _Board = new BoardVm(startGameResult!.Game, PlayerNumber);
                 InGame = true;
                 return true;
             }

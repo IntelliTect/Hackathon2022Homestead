@@ -122,9 +122,14 @@ namespace Homestead.Client.ViewModels
 
         public string GetImageUrl()
         {
-            string genderCode = Player.Gender == Player.Genders.Male ? "m" : "f";
-            string skinToneCode = Player.SkinTone == Player.SkinTones.Light ? "w" : "b";
-            string fileName = $"p{PlayerNumber}-{genderCode}{skinToneCode}-single.png";
+            return GetImageUrl(this.Player);
+        }
+
+        public static string GetImageUrl(Player player)
+        {
+            string genderCode = player.Gender == Player.Genders.Male ? "m" : "f";
+            string skinToneCode = player.SkinTone == Player.SkinTones.Light ? "w" : "b";
+            string fileName = $"p{player.PlayerNumber}-{genderCode}{skinToneCode}-single.png";
             return $"/Assets/Images/player/{fileName}";
         }
 
