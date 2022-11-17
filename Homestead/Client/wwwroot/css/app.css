@@ -14,6 +14,18 @@ img {
     image-rendering: pixelated;
 }
 
+div.page div.sidebar{
+    background-image: url("/Assets/Images/map.png");
+    background-size: 50%;
+    background-position: -40px -20px;
+}
+div.navbar div.pinewood a.navbar-brand, .brown {
+    color: #432900;
+}
+    div.navbar  div.pinewood a.navbar-brand:hover {
+        color: #533910;
+    }
+
 /* Home Page */
 @font-face {
     font-family: Pinewood;
