@@ -14,11 +14,15 @@ img {
     image-rendering: pixelated;
 }
 
-div.page div.sidebar{
+.tree-background{
     background-image: url("/Assets/Images/map.png");
-    background-size: 50%;
-    background-position: -40px -20px;
+    background-size: 30%;
+    background-position: -40px -40px;
 }
+.green-background{
+    background-color: #CCDDCC;
+}
+
 div.navbar div.pinewood a.navbar-brand, .brown {
     color: #432900;
 }

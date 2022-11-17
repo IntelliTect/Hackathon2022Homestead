@@ -14,34 +14,57 @@
     Homestead Games
 </h1>
 <div>
-    <button class="btn btn-success" @onclick="CreateGame" type="button">New Game</button>
+    <button class="btn btn-success" @onclick="CreateGame" type="button">Create a New Game</button>
+    <button class="btn btn-primary" @onclick="GetGames" type="button">Refresh Games</button>
 </div>
 <hr />
 
-<div>
+<div class="container-fluid">
     @if (games is null || !games.Any())
     {
         <p>No games found.</p>
     }
     else
     {
-        <table> 
-          <tr>
-            <th style="padding-right:20px">Game Number</th>
-            <th style="padding-right:20px">Active Players</th>
-            <th style="padding-right:20px">Actions</th>
-          </tr>
-          @foreach (var item in games)
-           {
-                <tr>
-                    <td style="padding-right:20px">@(Array.IndexOf(games, item) + 1)</td>
-                    <td style="padding-right:20px">@GetHumanPlayerCount(item)</td>
-                    <td style="padding-right:20px">
-                        <button class="btn btn-success" disabled="@(GetHumanPlayerCount(item) > 3)" type="button" @onclick="()=>JoinGame(item.GameId)">Join</button>
-                    </td>
-                </tr>
+        <div class="row">
+            @{
+                int counter = 0;
             }
-         </table>
+            @foreach (var game in games)
+            {
+                counter++;
+                <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3">
+                    <div class="card">
+                        <div class="card-header tree-background" style="padding-top: 15px;">
+                            <button class="btn btn-success" style="float:right;" disabled="@(GetHumanPlayerCount(game) > 3)" type="button" @onclick="()=>JoinGame(game.GameId)">Join</button>
+                            <h2>Game #@counter</h2>
+                        </div>
+                        <div class="card-body green-background">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h3>Players</h3>
+                                    <ul>
+                                        @foreach (var player in game.Players)
+                                        {
+                                            <li>
+                                                @player.Name
+                                                @if (player.IsBot)
+                                                {
+                                                    <span> 🤖</span>
+                                                }
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            Last Play: @(Math.Round((DateTime.UtcNow - game.LastPlayDate).TotalMinutes,1)) minutes ago
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
     }
 </div>
 
@@ -49,8 +72,13 @@
     private Game[]? games;
 
     private int GetHumanPlayerCount(Game game) => game.Players.Where(x => !x.IsBot).Count();
-
+    
     protected override async Task OnInitializedAsync()
+    {
+        await GetGames();
+    }
+
+    private async Task GetGames()
     {
         games = await Http.GetFromJsonAsync<Game[]>("Lobby");
         Console.WriteLine(games!.Count());
