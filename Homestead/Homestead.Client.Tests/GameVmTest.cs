@@ -9,7 +9,7 @@ namespace Homestead.Client.Tests
         [TestMethod]
         public void Create()
         {
-            var game = (new GameEngine()).Start();
+            var game = (new GameEngine()).Start("test");
 
             var board = new BoardVm(game,2);
             Assert.AreEqual(2, board.LocalPlayer.PlayerNumber);
@@ -20,7 +20,7 @@ namespace Homestead.Client.Tests
 
         public void UpdateWhenPlayersTurn()
         {
-            var game = (new GameEngine()).Start();
+            var game = (new GameEngine()).Start("test");
             var board = new BoardVm(game, 2);
 
             // Update the game
@@ -54,7 +54,7 @@ namespace Homestead.Client.Tests
 
         public void UpdateWhenNotPlayersTurn()
         {
-            var game = (new GameEngine()).Start();
+            var game = (new GameEngine()).Start("test");
             var board = new BoardVm(game, 2);
             
             // Update the game
