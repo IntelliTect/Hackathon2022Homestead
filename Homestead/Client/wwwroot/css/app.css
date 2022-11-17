@@ -30,6 +30,11 @@ div.navbar div.pinewood a.navbar-brand, .brown {
         color: #533910;
     }
 
+div.page {
+    background-color: burlywood;
+    height: 100vh;
+}
+
 /* Home Page */
 @font-face {
     font-family: Pinewood;
