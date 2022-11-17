@@ -18,19 +18,10 @@ public class CommunicationHub : Hub
     {
         var game = gameLookup.GetGame(gameId);
         if (game == null) throw new ArgumentNullException(nameof(game));
-        if (game.State is Game.GameState.Complete)
-        {
-            return;
-        }
-        
         var newState = engine.ProcessAction(game, action);
         await Clients.Group(newState.GameId).SendAsync("ExecuteAction", newState);
         while (newState.Players[newState.ActivePlayer-1].IsBot)
         {
-            if (game.State is Game.GameState.Complete)
-            {
-                return;
-            }
             await Task.Delay(500).ConfigureAwait(false);
             Random rand = new Random();
             int index = rand.Next(0, newState.AvailableActions.Count - 1);

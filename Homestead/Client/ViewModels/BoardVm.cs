@@ -103,7 +103,7 @@ namespace Homestead.Client.ViewModels
                 if (player.PlayerNumber == LocalPlayerNumber)
                 {
                     LocalPlayer.Update(player);
-                    LocalPlayer.IsCurrentPlayer = player.PlayerNumber == game.ActivePlayer;
+                    LocalPlayer.IsCurrentPlayer = player.PlayerNumber == game.ActivePlayer && game.State == Game.GameState.Playing;
                 }
                 else
                 {
@@ -117,9 +117,9 @@ namespace Homestead.Client.ViewModels
                     {
                         throw new ArgumentException("Player not found");
                     }
-                    otherPlayer.IsCurrentPlayer = player.PlayerNumber == game.ActivePlayer;
+                    otherPlayer.IsCurrentPlayer = player.PlayerNumber == game.ActivePlayer && game.State == Game.GameState.Playing;
                 }
-                
+
             }
 
             // Clear options

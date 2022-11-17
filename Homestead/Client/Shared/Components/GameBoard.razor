@@ -8,15 +8,15 @@
 @inject HttpClient Http
 
 <div class="map">
-    <div class="row">
+    <div class="row homestead-row">
         @foreach (var opponent in Opponents)
         {
-            <div class="col">
+            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
                 <PlayerHomestead Player="@opponent" />
             </div>
         }
-        <div class="col">
-        <PlayerHomestead Player="CurrentPlayer" />
+        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
+            <PlayerHomestead Player="CurrentPlayer" />
         </div>
     </div>
 
@@ -29,35 +29,39 @@
     else if (Board.State == Game.GameState.Complete && Board.WinningPlayer != null)
     {
         <div class="row justify-content-md-center">
-            <h1 style="width: 100%; text-align: center; background-color:rgba(255,255,255,.5);">@Board.WinningPlayer.Player.Name Won the game!</h1>
+            <h1 class="winning-banner">@Board.WinningPlayer.Player.Name Won the game!</h1>
         </div>
         <div class="row justify-content-md-center">
-            <button type="button" class="btn btn-success btn-lg col-sm" @onclick="()=>Navigation.NavigateTo('/'.ToString())">New Game</button>
+            <button type="button" class="new-game-button btn btn-success btn-lg col-sm" @onclick="()=>Navigation.NavigateTo('/'.ToString())">New Game</button>
         </div>
     }
-    else
-    {
-        <div class="row justify-content-md-center">
-            <DeckPile CanDraw="@Board.CanDrawFromDeck"></DeckPile>
-
-            @if (Board.TopDiscardCard != null)
-            {
-            <DiscardPile Card="@Board.TopDiscardCard" CanDraw="@Board.CanDrawFromDiscard"></DiscardPile>
-            }
-        </div>
-        @if (Board.CanEndTurn)
-        {
-            <div class="row justify-content-md-center">
-                <button type="button" class="btn btn-warning btn-lg col-sm" @onclick="EndTurn">End Turn</button>
-            </div>
-        }
-    }
-
-
 </div>
 
-<PlayerHand HandList="@CurrentPlayer.Hand" />
+<div class="player-hand">
+    <DeckPile CanDraw="@(Board.CanDrawFromDeck && Board.State == Game.GameState.Playing)"></DeckPile>
+    <DiscardPile Card="@Board.TopDiscardCard" CanDraw="@Board.CanDrawFromDiscard"></DiscardPile>
+    <div class="player-hand-card-area">
+        <PlayerHand HandList="@CurrentPlayer.Hand" />
+        @for (int i = CurrentPlayer.Hand.Count(); i < 5; i++)
+        {
+            <div class="board-card">
+                <BlankCard />
+            </div>
+        }
+    </div>
 
+    @if (Board.CanEndTurn)
+    {
+        <div class="end-turn" @onclick="EndTurn">
+            <img class="card-image" src="/Assets/Images/cards/blank.png" />
+            <div class="card-text">
+                Next
+            </div>
+
+        </div>
+    }
+
+</div>
 
 @code {
     //[CascadingParameter]
@@ -80,13 +84,13 @@
             }
             Board.Update(game);
             Console.WriteLine(Board.LocalPlayer.ToString());
-            foreach(var player in Board.OtherPlayers)
+            foreach (var player in Board.OtherPlayers)
             {
                 Console.WriteLine(player);
             }
             if (Board.CanDrawFromDeck) Console.WriteLine("Can Draw from Deck");
             if (Board.CanDrawFromDiscard) Console.WriteLine("Can Draw from Discard");
-          
+
             foreach (var action in game.AvailableActions)
             {
                 Console.WriteLine($"Available Action: {action.Type}");
@@ -134,7 +138,7 @@
         var action = new PlayerAction(PlayerAction.ActionType.EndTurn, Board.LocalPlayerNumber);
         await SendAction(action);
     }
-  
+
 
 
     public void Dispose()
