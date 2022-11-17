@@ -9,15 +9,15 @@
 
 <div class="map">
     <div class="row homestead-row">
+        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3">
+            <PlayerHomestead Player="CurrentPlayer" />
+        </div>
         @foreach (var opponent in Opponents)
         {
             <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3">
                 <PlayerHomestead Player="@opponent" />
             </div>
         }
-        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3">
-            <PlayerHomestead Player="CurrentPlayer" />
-        </div>
     </div>
 
     @if (IsOwnerOfGame && Board.State == Game.GameState.Joining)
