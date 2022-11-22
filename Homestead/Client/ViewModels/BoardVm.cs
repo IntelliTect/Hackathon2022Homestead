@@ -1,4 +1,5 @@
 ﻿using Homestead.Shared;
+using Microsoft.Extensions.Primitives;
 
 namespace Homestead.Client.ViewModels
 {
@@ -19,8 +20,10 @@ namespace Homestead.Client.ViewModels
         public bool CanDrawFromDiscard { get; internal set; } = false;
         public bool CanDiscard { get; internal set; } = false;
         public bool CanEndTurn { get; internal set; } = false;
+        public bool CanSelectPlayer { get; internal set; } = false;
         public CardVm? TopDiscardCard { get; internal set; } = null;
         public int DiscardCardCount { get; internal set; } = 0;
+        public string? SelectedCard { get; set; } = null; // Used when a card is selected and then some other action is required.
         public PlayerVm? WinningPlayer { get; internal set; }
 
 
@@ -63,6 +66,12 @@ namespace Homestead.Client.ViewModels
         public void Discard(PlayerCardVm card)
         {
             PlayerAction action = new(PlayerAction.ActionType.Discard, LocalPlayerNumber, card.Card);
+            OnPerformAction(action);
+        }
+
+        public void SelectPlayer(int playerNumber)
+        {
+            PlayerAction action = new(PlayerAction.ActionType.Play, LocalPlayerNumber,SelectedCard, playerNumber);
             OnPerformAction(action);
         }
 
@@ -127,6 +136,7 @@ namespace Homestead.Client.ViewModels
             CanDrawFromDiscard = false;
             CanEndTurn = false;
             CanDiscard = false;
+            CanSelectPlayer = false;
             LocalPlayer.ClearPlayableCards();
 
             var topDiscard = game.DiscardPile.LastOrDefault();
@@ -147,24 +157,24 @@ namespace Homestead.Client.ViewModels
                 // Set other local actions
                 foreach (var action in game.AvailableActions)
                 {
-                    if (action.Type == PlayerAction.ActionType.DrawFromDeck)
+                    switch (action.Type)
                     {
-                        CanDrawFromDeck = true;
+                        case PlayerAction.ActionType.DrawFromDeck:
+                            CanDrawFromDeck = true;
+                            break;
+                        case PlayerAction.ActionType.DrawFromDiscard:
+                            CanDrawFromDiscard = true;
+                            break;
+                        case PlayerAction.ActionType.Discard:
+                            CanDiscard = true;
+                            // TODO: See if we want to highlight all cards as playable.
+                            // This is likely to be the only available action.
+                            break;
+                        case PlayerAction.ActionType.EndTurn:
+                            CanEndTurn = true;
+                            break;
                     }
-                    else if (action.Type == PlayerAction.ActionType.DrawFromDiscard)
-                    {
-                        CanDrawFromDiscard = true;
-                    }
-                    else if (action.Type == PlayerAction.ActionType.Discard)
-                    {
-                        CanDiscard = true;
-                        // TODO: See if we want to highlight all cards as playable.
-                        // This is likely to be the only available action.
-                    }
-                    else if (action.Type == PlayerAction.ActionType.EndTurn)
-                    {
-                        CanEndTurn = true;
-                    }
+
                 }
             }
             else

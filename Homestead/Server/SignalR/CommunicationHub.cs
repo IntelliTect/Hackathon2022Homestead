@@ -24,7 +24,7 @@ public class CommunicationHub : Hub
         }
         var newState = engine.ProcessAction(game, action);
         await Clients.Group(newState.GameId).SendAsync("ExecuteAction", newState);
-        while (newState.Players[newState.ActivePlayer-1].IsBot)
+        while (newState.Players[newState.ActivePlayer - 1].IsBot)
         {
             if (game.State is Game.GameState.Complete)
             {
@@ -45,7 +45,7 @@ public class CommunicationHub : Hub
             await Clients.Group(newState.GameId).SendAsync("ExecuteAction", newState);
         }
     }
-    
+
     public async Task RequestPushGameState(string gameId)
     {
         var game = gameLookup.GetGame(gameId);

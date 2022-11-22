@@ -29,7 +29,7 @@ namespace Homestead.Shared.Actions
                             PlayCardToBoard(action.PlayerCard); break;
                         case CardInfo.CardSuit.Garden: PlayCardToBoard(action.PlayerCard); break;
                         case CardInfo.CardSuit.Action: PerformAction(action.PlayerCard); break;
-                        case CardInfo.CardSuit.Disaster: DoDisaster(action.PlayerCard); break;
+                        case CardInfo.CardSuit.Disaster: DoDisaster(action.PlayerCard, action.TargetPlayer); break;
                         default: throw new ArgumentException("Invalid card");
                     }
                 }
@@ -38,8 +38,12 @@ namespace Homestead.Shared.Actions
                     throw new KeyNotFoundException("Player doesn't have that card.");
                 }
             }
-            // Determine what can happen next
-            SetNextActionsFromHand();
+            // If no actions are set, determine what can happen next
+            if (!Game.AvailableActions.Any())
+            {
+                SetNextActionsFromHand();
+            }
+            Game.LastPlayedCard = action.PlayerCard;
         }
 
         private void PlayCardToBoard(string card)
@@ -56,14 +60,62 @@ namespace Homestead.Shared.Actions
 
             CurrentPlayer.Hand.Remove(card);
         }
-        private void DoDisaster(string card)
+        private void DoDisaster(string card, int? targetPlayer)
         {
-            // TODO: do the disaster
-            // Check which type of action it is and then add next actions
+            var impactedCard = (Cards.GetCardInfo(card).ImpactedCard);
 
+            if (impactedCard != null)
+            {
 
+                switch (Cards.GetCardInfo(card).Impact)
+                {
+                    case CardInfo.CardImpact.Self:
+                        // See if I have the impacted card and remove it
+                        RemoveCardFromPlayersBoard(Game.ActivePlayer, impactedCard);
+                        break;
+                    case CardInfo.CardImpact.All:
+                        foreach(var player in Game.Players)
+                        {
+                            RemoveCardFromPlayersBoard(player.PlayerNumber, impactedCard);
+                        }
+                        break;
+                    case CardInfo.CardImpact.Other:
+                        if (targetPlayer != null)
+                        {
+                            RemoveCardFromPlayersBoard(targetPlayer.Value, impactedCard);
+                        }
+                        else
+                        {
+                            throw new ArgumentException("No target player specified");
+                        }
+                        break;
+                    default:
+                        throw new ArgumentException("Wrong impact");
+                }
+                // TODO: do the disaster
+                // Check which type of action it is and then add next actions
+            }
+            else
+            {
+                throw new ArgumentException("Disaster doesn't have impacted card");
+            }
 
             CurrentPlayer.Hand.Remove(card);
+        }
+
+        private void RemoveCardFromPlayersBoard(int playerNumber, string card)
+        {
+            if (Game.Players[playerNumber - 1].Board.Contains(card))
+            {
+                Game.Players[playerNumber - 1].Board.Remove(card);
+            }
+        }
+        private void RemoveCardFromPlayersHand(int playerNumber, string card)
+        {
+            if (Game.Players[playerNumber - 1].Hand.Contains(card))
+            {
+                Game.Players[playerNumber - 1].Hand.Remove(card);
+            }
         }
     }
 }

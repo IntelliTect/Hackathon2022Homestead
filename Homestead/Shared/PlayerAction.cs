@@ -24,6 +24,9 @@ namespace Homestead.Shared
         public string? PlayerCard { get; set; }
         public int? TargetPlayer { get; set; }
         public string? TargetCard { get; set; }
+        // TODO: Set these up on the server and the client.
+        public bool PlayerSelectionRequired { get; set; }
+        public bool PlayerCardSelectionRequired { get; set; }
         
         public PlayerAction(ActionType type, int playerNumber, string? PlayerCard = null, int? TargetPlayer = null, string? TargetCard = null)
         {

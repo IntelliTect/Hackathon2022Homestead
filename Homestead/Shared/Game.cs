@@ -23,6 +23,7 @@ namespace Homestead.Shared
         public int ActivePlayer { get; set; } = 1;
         public List<PlayerAction> AvailableActions { get; set; } = new ();
         public List<PlayerAction> LastActions { get; set; } = new();
+        public string? LastPlayedCard { get; set; }
 
         public DateTime LastPlayDate { get; set; } = DateTime.UtcNow;
     }

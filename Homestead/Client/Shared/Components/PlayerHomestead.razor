@@ -32,7 +32,7 @@
             <!-- House -->
             <img class="home" src="/Assets/Images/house/house@(Player.BoardHouse.Count()).png" />
             <!-- Player -->
-            <img class="player" src="@Player.GetImageUrl()" />
+            <img class="player @(Lobby.Board.CanSelectPlayer ? "selected":"")" src="@Player.GetImageUrl()" @onclick="SelectPlayer"/>
             <!-- Garden -->
             <img class="garden" src="/Assets/Images/garden/garden@(Player.BoardGarden.Count()).png" />
         </div>
@@ -100,6 +100,11 @@
     protected override void OnInitialized()
     {
         Console.WriteLine($"Player {Player.PlayerNumber}");
+    }
+
+    protected void SelectPlayer()
+    {
+        Lobby.Board.SelectPlayer(Player.PlayerNumber);
     }
 
 

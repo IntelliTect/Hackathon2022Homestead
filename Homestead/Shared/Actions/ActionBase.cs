@@ -33,8 +33,8 @@ namespace Homestead.Shared.Actions
         internal void SetNextActionsFromHand()
         {
             ClearActions();
-            // See if the player has a new disaster card and force them to play it.
-            foreach (var card in CurrentPlayer.Hand.Where(f => Cards.GetCardInfo(f).Suit == CardInfo.CardSuit.Disaster))
+            // See if the player has a new disaster card that applies to them self, force them to play it.
+            foreach (var card in CurrentPlayer.Hand.Where(f => Cards.GetCardInfo(f).Suit == CardInfo.CardSuit.Disaster && Cards.GetCardInfo(f).Impact != CardInfo.CardImpact.Other))
             {
                 AddAction(PlayerAction.ActionType.Play, card);
             }
@@ -66,6 +66,11 @@ namespace Homestead.Shared.Actions
                     }
                     // See if there are action plays
                     foreach (var card in CurrentPlayer.Hand.Where(f => Cards.GetCardInfo(f).Suit == CardInfo.CardSuit.Action))
+                    {
+                        AddAction(PlayerAction.ActionType.Play, card);
+                    }
+                    // See if there are disaster plays
+                    foreach (var card in CurrentPlayer.Hand.Where(f => Cards.GetCardInfo(f).Suit == CardInfo.CardSuit.Disaster))
                     {
                         AddAction(PlayerAction.ActionType.Play, card);
                     }

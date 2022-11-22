@@ -86,14 +86,7 @@ namespace Homestead.Shared
         {
             foreach (var player in game.Players)
             {
-                if (player.Board.Contains(Cards.Livestock)
-                    && player.Board.Contains(Cards.Seeds)
-                    && player.Board.Contains(Cards.Well)
-                    && player.Board.Contains(Cards.Shovel)
-                    && player.Board.Contains(Cards.Saw)
-                    && player.Board.Contains(Cards.Hammer)
-                    && player.Board.Contains(Cards.Wood)
-                    && player.Board.Contains(Cards.Stove))
+                if (player.Board.Count(c => Cards.GetCardInfo(c).RequiredToWin) == 8)
                 {
                     game.State = Game.GameState.Complete;
                     game.Winner = game.ActivePlayer;
