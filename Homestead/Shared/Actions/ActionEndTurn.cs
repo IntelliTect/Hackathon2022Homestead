@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Homestead.Shared.PlayerAction;
 
 namespace Homestead.Shared.Actions
 {
@@ -25,7 +26,11 @@ namespace Homestead.Shared.Actions
             }
 
             // Determine what can happen next
-            SetNextActionsFromHand();
+            AddAction(ActionType.DrawFromDeck);
+            if (Game.DiscardPile.Count() > 0)
+            {
+                AddAction(ActionType.DrawFromDiscard);
+            }
         }
     }
 }

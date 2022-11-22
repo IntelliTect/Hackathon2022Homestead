@@ -48,7 +48,10 @@ namespace Homestead.Shared
                     return new ActionDrawDiscardCard(game);
                 case ActionType.DrawFromDeck:
                     return new ActionDrawDeckCard(game);
+                case ActionType.EndTurn:
+                    return new ActionEndTurn(game);
                 default:
+                    // TODO: Make this better handled on the client
                     throw new ArgumentException($"No action found for enum {type}");
             }
         }

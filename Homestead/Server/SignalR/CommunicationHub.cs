@@ -34,6 +34,7 @@ public class CommunicationHub : Hub
             Random rand = new Random();
             int index = rand.Next(0, newState.AvailableActions.Count - 1);
             var newAction = newState.AvailableActions[index];
+            // TODO: Move logic into ActionBase class
             if (newAction.Type is PlayerAction.ActionType.Discard
                 && string.IsNullOrWhiteSpace(newAction.PlayerCard))
             {
