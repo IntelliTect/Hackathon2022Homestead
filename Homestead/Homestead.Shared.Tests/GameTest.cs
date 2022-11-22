@@ -6,7 +6,7 @@ namespace Homestead.Shared.Tests
         [TestMethod]
         public void CreateGame()
         {
-            GameEngine engine = new();
+            GameEngineWithActions engine = new();
             Game game = engine.Start("test");
 
             Assert.AreEqual(4, game.Players.Count);

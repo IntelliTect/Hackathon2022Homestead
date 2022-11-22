@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddSignalR();
-builder.Services.AddSingleton<IGameEngine, GameEngine>();
+builder.Services.AddSingleton<IGameEngine, GameEngineWithActions>();
 builder.Services.AddSingleton<IGameLookup, GameLookup>();
 
 builder.Services.AddSwaggerGen();

@@ -6,16 +6,23 @@ using System.Threading.Tasks;
 
 namespace Homestead.Shared.Actions
 {
-    public class ActionDrawCard : ActionBase
+    public class ActionEndTurn : ActionBase
     {
-        public ActionDrawCard(Game game): base(game)
+        public ActionEndTurn(Game game): base(game)
         {
-            Type = PlayerAction.ActionType.DrawFromDeck;
+            Type = PlayerAction.ActionType.EndTurn;
         }
         
         public override void Run(PlayerAction action)
         {
-            CurrentPlayer.Hand.Add(Cards.GetCard());
+            if (Game.ActivePlayer < 4)
+            {
+                Game.ActivePlayer++;
+            }
+            else
+            {
+                Game.ActivePlayer = 1;
+            }
 
             // Determine what can happen next
             SetNextActionsFromHand();

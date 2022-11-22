@@ -18,16 +18,24 @@ namespace Homestead.Shared.Actions
         {
             if (action.PlayerCard is not null)
             {
-                switch (Cards.GetCardInfo(action.PlayerCard).Suit)
+                // Make sure the player has the card
+                if (CurrentPlayer.Hand.Contains(action.PlayerCard))
                 {
-                    case CardInfo.CardSuit.House:
-                        PlayCardToBoard(action.PlayerCard); break;
-                    case CardInfo.CardSuit.LiveStock:
-                        PlayCardToBoard(action.PlayerCard); break;
-                    case CardInfo.CardSuit.Garden: PlayCardToBoard(action.PlayerCard); break;
-                    case CardInfo.CardSuit.Action: PerformAction(action.PlayerCard); break;
-                    case CardInfo.CardSuit.Disaster: DoDisaster(action.PlayerCard); break;
-                    default: throw new ArgumentException("Invalid card");
+                    switch (Cards.GetCardInfo(action.PlayerCard).Suit)
+                    {
+                        case CardInfo.CardSuit.House:
+                            PlayCardToBoard(action.PlayerCard); break;
+                        case CardInfo.CardSuit.LiveStock:
+                            PlayCardToBoard(action.PlayerCard); break;
+                        case CardInfo.CardSuit.Garden: PlayCardToBoard(action.PlayerCard); break;
+                        case CardInfo.CardSuit.Action: PerformAction(action.PlayerCard); break;
+                        case CardInfo.CardSuit.Disaster: DoDisaster(action.PlayerCard); break;
+                        default: throw new ArgumentException("Invalid card");
+                    }
+                }
+                else
+                {
+                    throw new KeyNotFoundException("Player doesn't have that card.");
                 }
             }
             // Determine what can happen next

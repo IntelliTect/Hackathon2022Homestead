@@ -8,9 +8,9 @@ namespace Homestead.Shared.Tests
         // Do test setup!
         [TestMethod]
         public void StartGameTest()
-        { 
+        {
             // break this test up
-            GameEngine engine = new();
+            GameEngineWithActions engine = new();
             Game game = engine.Start("test");
             Assert.IsNotNull(game);
             Assert.IsFalse(string.IsNullOrEmpty(game.GameId));
@@ -25,7 +25,7 @@ namespace Homestead.Shared.Tests
         [TestMethod]
         public void DrawFromDeckTest()
         {
-            GameEngine engine = new();
+            GameEngineWithActions engine = new();
             Game game = engine.Start("test");
 
             game = engine.ProcessAction(game, new PlayerAction(PlayerAction.ActionType.DrawFromDeck, game.ActivePlayer));
@@ -42,7 +42,7 @@ namespace Homestead.Shared.Tests
         [Ignore]
         public void DiscardCardTest()
         {
-            GameEngine engine = new();
+            GameEngineWithActions engine = new();
             Game game = engine.Start("test");
 
             PlayerAction action = new(PlayerAction.ActionType.Discard, game.ActivePlayer, Cards.Well);
@@ -61,7 +61,7 @@ namespace Homestead.Shared.Tests
         [Ignore]
         public void DrawFromDiscardTest()
         {
-            GameEngine engine = new();
+            GameEngineWithActions engine = new();
             Game game = engine.Start("test");
 
             PlayerAction action = new(PlayerAction.ActionType.DrawFromDiscard, game.ActivePlayer);
@@ -86,7 +86,7 @@ namespace Homestead.Shared.Tests
         [Ignore]
         public void DrawFromDiscardWhenMultipleOfSameTypeExist()
         {
-            GameEngine engine = new();
+            GameEngineWithActions engine = new();
             Game game = engine.Start("test");
 
             PlayerAction action = new(PlayerAction.ActionType.DrawFromDiscard, game.ActivePlayer);
@@ -109,7 +109,7 @@ namespace Homestead.Shared.Tests
         [TestMethod]
         public void PlayCard()
         {
-            GameEngine engine = new();
+            GameEngineWithActions engine = new();
             Game game = engine.Start("test");
 
             game.Players[game.ActivePlayer-1].Hand.Add(Cards.Well);
@@ -124,7 +124,7 @@ namespace Homestead.Shared.Tests
         [TestMethod]
         public void PlayCardWithoutCardInHandThrowsKeyNotFound()
         {
-            GameEngine engine = new();
+            GameEngineWithActions engine = new();
             Game game = engine.Start("test");
 
             PlayerAction action = new(PlayerAction.ActionType.Play, game.ActivePlayer);
@@ -140,7 +140,7 @@ namespace Homestead.Shared.Tests
         [Ignore]
         public void PlayCardGiveCard()
         {
-            GameEngine engine = new();
+            GameEngineWithActions engine = new();
             Game game = engine.Start("test");
             game.Players.Add(new Player());
 
@@ -165,7 +165,7 @@ namespace Homestead.Shared.Tests
         [Ignore]
         public void PlayCardGiveCardWithoutAdditionalCardInHand()
         {
-            GameEngine engine = new();
+            GameEngineWithActions engine = new();
             Game game = engine.Start("test");
             game.Players.Add(new Player());
 
@@ -186,7 +186,7 @@ namespace Homestead.Shared.Tests
         [Ignore]
         public void PlayCardStealCard()
         {
-            GameEngine engine = new();
+            GameEngineWithActions engine = new();
             Game game = engine.Start("test");
             game.Players.Add(new Player());
 
@@ -217,7 +217,7 @@ namespace Homestead.Shared.Tests
         [Ignore]
         public void CannotEndTurn1()
         {
-            GameEngine engine = new();
+            GameEngineWithActions engine = new();
             Game game = engine.Start("test");
 
             game.Players[game.ActivePlayer].Hand.Add(Cards.Well);
@@ -234,7 +234,7 @@ namespace Homestead.Shared.Tests
         [Ignore]
         public void Wolves()
         {
-            GameEngine engine = new();
+            GameEngineWithActions engine = new();
             Game game = engine.Start("test");
             game.AvailableActions.Clear();
 
@@ -251,7 +251,7 @@ namespace Homestead.Shared.Tests
         [Ignore]
         public void GameTest()
         {
-            GameEngine engine = new();
+            GameEngineWithActions engine = new();
             Game game = engine.Start("test");
 
             game = engine.ProcessAction(game, game.AvailableActions.First());
