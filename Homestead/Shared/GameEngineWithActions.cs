@@ -3,7 +3,7 @@ using static Homestead.Shared.PlayerAction;
 
 namespace Homestead.Shared
 {
-    public class GameEngineWithActions : GameEngine
+    public class GameEngineWithActions : IGameEngine
     {
         /// <summary>
         /// Creates a new game instance and returns it ready for play.<br />
