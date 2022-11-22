@@ -16,6 +16,7 @@ namespace Homestead.Shared.Actions
         
         public override void Run(PlayerAction action)
         {
+            ClearActions();
             if (Game.ActivePlayer < 4)
             {
                 Game.ActivePlayer++;
