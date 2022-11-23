@@ -51,13 +51,13 @@ namespace Homestead.Shared
                     result += "drew from the discard pile";
                     break;
                 case PlayerAction.ActionType.Play:
-                    result += $"played the card '{PlayerCard}'";
+                    result += $"played the card '{Cards.GetCardInfo(PlayerCard!).Name}'";
                     break;
                 case PlayerAction.ActionType.EndTurn:
                     result += "ended their turn";
                     break;
                 case PlayerAction.ActionType.Discard:
-                    result += $"discarded a {PlayerCard}";
+                    result += $"discarded a {Cards.GetCardInfo(PlayerCard!).Name}";
                     break;
                 default:
                     result += "did something interesting";

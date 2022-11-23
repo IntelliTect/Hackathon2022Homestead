@@ -43,6 +43,11 @@ public class CommunicationHub : Hub
 
             newState = engine.ProcessAction(newState, newAction);
             await Clients.Group(newState.GameId).SendAsync("ExecuteAction", newState);
+            // If a bot played a disaster card, wait more time so players know what happened.
+            if (newAction.Type == PlayerAction.ActionType.Play && Cards.GetCardInfo(newAction.PlayerCard!).Suit == CardInfo.CardSuit.Disaster)
+            {
+                await Task.Delay(2000).ConfigureAwait(false);
+            }
         }
     }
 

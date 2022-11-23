@@ -64,6 +64,7 @@ namespace Homestead.Shared.Actions
         private void DoDisaster(string card, int? targetPlayer)
         {
             var impactedCard = (Cards.GetCardInfo(card).ImpactedCard);
+            var preventionCard = (Cards.GetCardInfo(card).PreventionCard);
 
             if (impactedCard != null)
             {
@@ -72,18 +73,18 @@ namespace Homestead.Shared.Actions
                 {
                     case CardInfo.CardImpact.Self:
                         // See if I have the impacted card and remove it
-                        RemoveCardFromPlayersBoard(Game.ActivePlayer, impactedCard);
+                        RemoveCardsBasedOnDisaster(Game.ActivePlayer, impactedCard, preventionCard);
                         break;
                     case CardInfo.CardImpact.All:
-                        foreach(var player in Game.Players)
+                        foreach (var player in Game.Players)
                         {
-                            RemoveCardFromPlayersBoard(player.PlayerNumber, impactedCard);
+                            RemoveCardsBasedOnDisaster(player.PlayerNumber, impactedCard, preventionCard);
                         }
                         break;
                     case CardInfo.CardImpact.Other:
                         if (targetPlayer != null)
                         {
-                            RemoveCardFromPlayersBoard(targetPlayer.Value, impactedCard);
+                            RemoveCardsBasedOnDisaster(targetPlayer.Value, impactedCard, preventionCard);
                         }
                         else
                         {
@@ -104,19 +105,34 @@ namespace Homestead.Shared.Actions
             CurrentPlayer.Hand.Remove(card);
         }
 
-        private void RemoveCardFromPlayersBoard(int playerNumber, string card)
+        private bool RemoveCardsBasedOnDisaster(int playerNumber, string impactedCard, string preventionCard)
         {
+            if (preventionCard==null || !RemoveCardFromPlayersHand(playerNumber, preventionCard))
+            {
+                return RemoveCardFromPlayersBoard(playerNumber, impactedCard);
+            }
+            return true;
+        }
+
+        private bool RemoveCardFromPlayersBoard(int playerNumber, string card)
+        {
+
+            // Remove the impacted card from the board
             if (Game.Players[playerNumber - 1].Board.Contains(card))
             {
                 Game.Players[playerNumber - 1].Board.Remove(card);
+                return true;
             }
+            return false;
         }
-        private void RemoveCardFromPlayersHand(int playerNumber, string card)
+        private bool RemoveCardFromPlayersHand(int playerNumber, string card)
         {
             if (Game.Players[playerNumber - 1].Hand.Contains(card))
             {
                 Game.Players[playerNumber - 1].Hand.Remove(card);
+                return true;
             }
+            return false;
         }
     }
 }
