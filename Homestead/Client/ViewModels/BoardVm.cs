@@ -71,11 +71,11 @@ namespace Homestead.Client.ViewModels
 
         public void SelectPlayer(int playerNumber)
         {
-            PlayerAction action = new(PlayerAction.ActionType.Play, LocalPlayerNumber,SelectedCard, playerNumber);
+            PlayerAction action = new(PlayerAction.ActionType.Play, LocalPlayerNumber, SelectedCard, playerNumber);
             OnPerformAction(action);
         }
 
-
+        public string? LastPlayText { get; internal set; } = string.Empty;
 
 
         public BoardVm(Game game, int localPlayerNumber)
@@ -195,6 +195,15 @@ namespace Homestead.Client.ViewModels
                 }
             }
 
+            // Set LastPlayText
+            if (game.LastActions.Any())
+            {
+                LastPlayText = string.Join(Environment.NewLine, game.LastActions.Select(f => f.ToString(game)));
+            }
+            else
+            {
+                LastPlayText = string.Empty;
+            }
         }
     }
 }

@@ -16,6 +16,7 @@ namespace Homestead.Shared.Actions
 
         public override void Run(PlayerAction action)
         {
+            Game.AvailableActions.Clear();
             if (action.PlayerCard is not null)
             {
                 // Make sure the player has the card

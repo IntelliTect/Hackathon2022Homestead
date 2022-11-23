@@ -37,6 +37,10 @@
     }
 </div>
 
+<div class="last-play">
+    @Lobby.Board.LastPlayText
+</div>
+
 <div class="player-hand">
     <DeckPile CanDraw="@(Board.CanDrawFromDeck && Board.State == Game.GameState.Playing)"></DeckPile>
     <DiscardPile Card="@Board.TopDiscardCard" CanDraw="@Board.CanDrawFromDiscard"></DiscardPile>
