@@ -61,9 +61,9 @@ namespace Homestead.Shared
             //MasterDeck.Add(new CardInfo(GoodNeighbor, "Give", CardInfo.CardSuit.Action, false, CardInfo.CardImpact.None, "good-neighbor", some));
             //MasterDeck.Add(new CardInfo(BadNeighbor, "Steal", CardInfo.CardSuit.Action, false, CardInfo.CardImpact.None, "bad-neighbor", some));
 
-            MasterDeck.Add(new CardInfo(Levee, "Levee", CardInfo.CardSuit.Prevention, false, CardInfo.CardImpact.None, "levee.png", tons));
-            MasterDeck.Add(new CardInfo(Dog, "D.O.G.", CardInfo.CardSuit.Prevention, false, CardInfo.CardImpact.None, "dog.png", tons));
-            MasterDeck.Add(new CardInfo(Rain, "Rain", CardInfo.CardSuit.Prevention, false, CardInfo.CardImpact.None, "rain.png", tons));
+            MasterDeck.Add(new CardInfo(Levee, "Levee", CardInfo.CardSuit.Prevention, false, CardInfo.CardImpact.None, "levee.png", lots));
+            MasterDeck.Add(new CardInfo(Dog, "D.O.G.", CardInfo.CardSuit.Prevention, false, CardInfo.CardImpact.None, "dog.png", lots));
+            MasterDeck.Add(new CardInfo(Rain, "Rain", CardInfo.CardSuit.Prevention, false, CardInfo.CardImpact.None, "rain.png", lots));
 
             MasterDeck.Add(new CardInfo(Livestock, "Animals", CardInfo.CardSuit.LiveStock, true, CardInfo.CardImpact.None, "livestock.png", lots));
             MasterDeck.Add(new CardInfo(Seeds, "Seeds", CardInfo.CardSuit.Garden, true, CardInfo.CardImpact.None, "seeds.png", lots));

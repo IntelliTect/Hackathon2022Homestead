@@ -14,19 +14,21 @@ img {
     image-rendering: pixelated;
 }
 
-.tree-background{
+.tree-background {
     background-image: url("/Assets/Images/map.png");
     background-size: 30%;
     background-position: -40px -40px;
 }
-.green-background{
+
+.green-background {
     background-color: #CCDDCC;
 }
 
 div.navbar div.pinewood a.navbar-brand, .brown {
     color: #432900;
 }
-    div.navbar  div.pinewood a.navbar-brand:hover {
+
+    div.navbar div.pinewood a.navbar-brand:hover {
         color: #533910;
     }
 
@@ -39,9 +41,9 @@ div.page {
 @font-face {
     font-family: Pinewood;
     src: url('/Assets/Fonts/Pinewood.ttf');
-} 
-.pinewood
-{
+}
+
+.pinewood {
     font-family: Pinewood;
 }
 
@@ -73,10 +75,11 @@ div.page {
 div.last-play {
     min-height: 26px;
 }
-div.last-play.last-play-disaster{
-    background-color: pink;
-    font-weight: bold;
-}
+
+    div.last-play.last-play-disaster {
+        background-color: pink;
+        font-weight: bold;
+    }
 
 
 .deck-pile {
@@ -192,11 +195,12 @@ div, img {
     border: 1px solid transparent;
 }
 
-.homestead-outline.selected{
+.homestead-outline.selected {
     border: 4px solid rgba(150,100,100,.7);
     background-color: rgba(255,255,255,.1)
 }
-.homestead-outline{
+
+.homestead-outline {
     border: 4px solid transparent;
 }
 
