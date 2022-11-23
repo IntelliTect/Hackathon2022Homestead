@@ -70,6 +70,13 @@ div.page {
         width: 50px;
     }
 
+div.last-play {
+    min-height: 26px;
+}
+div.last-play.last-play-disaster{
+    background-color: pink;
+    font-weight: bold;
+}
 
 
 .deck-pile {

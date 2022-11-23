@@ -75,8 +75,8 @@ namespace Homestead.Client.ViewModels
             OnPerformAction(action);
         }
 
-        public string? LastPlayText { get; internal set; } = string.Empty;
-
+        public string? LastPlayText { get; private set; } = string.Empty;
+        public bool IsLastPlayDisaster { get; private set; }
 
         public BoardVm(Game game, int localPlayerNumber)
         {
@@ -199,10 +199,12 @@ namespace Homestead.Client.ViewModels
             if (game.LastActions.Any())
             {
                 LastPlayText = string.Join(Environment.NewLine, game.LastActions.Select(f => f.ToString(game)));
+                IsLastPlayDisaster = game.LastActions.Any(game=> game.IsDisaster);
             }
             else
             {
                 LastPlayText = string.Empty;
+                IsLastPlayDisaster = false;
             }
         }
     }

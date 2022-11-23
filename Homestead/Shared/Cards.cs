@@ -27,7 +27,7 @@ namespace Homestead.Shared
         public const string BadNeighbor = "BadNeighbor";
         public const string Levee = "Levee";
         public const string Livestock = "Livestock";
-        public const string Rain = "Raid";
+        public const string Rain = "Rain";
         public const string Saw = "Saw";
         public const string Seeds = "Seeds";
         public const string Shovel = "Shovel";
@@ -40,32 +40,34 @@ namespace Homestead.Shared
 
         static Cards()
         {
-            int lots = 5;
-            int some = 3;
+            int extreme = 20;
+            int tons = 15;
+            int lots = 10;
+            int some = 2;
             int few = 1;
-            MasterDeck.Add(new CardInfo(EarthquakeSelf, "Quake: Me", CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Self, "earthquake.png", few, Cards.Well));
-            //MasterDeck.Add(new CardInfo(EarthquakeOther, "Quake: You", CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Other, "earthquake.png", few, Cards.Well));
-            MasterDeck.Add(new CardInfo(EarthquakeAll, "Quake: All", CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.All, "earthquake.png", few, Cards.Well));
-            MasterDeck.Add(new CardInfo(FireSelf, "Fire: Me", CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Self, "fire.png", few, Cards.Wood, Cards.Rain));
+            MasterDeck.Add(new CardInfo(EarthquakeSelf, "Quake: Me", CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Self, "earthquake.png", few, Cards.Well, null));
+            //MasterDeck.Add(new CardInfo(EarthquakeOther, "Quake: You", CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Other, "earthquake.png", few, Cards.Well, null));
+            MasterDeck.Add(new CardInfo(EarthquakeAll, "Quake: All", CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.All, "earthquake.png", few, Cards.Well, null));
+            MasterDeck.Add(new CardInfo(FireSelf, "Fire: Me", CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Self, "fire.png", some, Cards.Wood, Cards.Rain));
             //MasterDeck.Add(new CardInfo(FireOther, "Fire: You", CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Other, "fire.png", few, Cards.Wood, Cards.Rain));
             MasterDeck.Add(new CardInfo(FireAll, "Fire: All", CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.All, "fire.png", few, Cards.Wood, Cards.Rain));
-            MasterDeck.Add(new CardInfo(FloodSelf, "Flood: Me", CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Self, "flood.png", few, Cards.Seeds, Cards.Levee));
+            MasterDeck.Add(new CardInfo(FloodSelf, "Flood: Me", CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Self, "flood.png", some, Cards.Seeds, Cards.Levee));
             //MasterDeck.Add(new CardInfo(FloodOther, "Flood: You", CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Other, "flood.png", few, Cards.Seeds, Cards.Levee));
             MasterDeck.Add(new CardInfo(FloodAll, "Flood: All", CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.All, "flood.png", few, Cards.Seeds, Cards.Levee));
-            MasterDeck.Add(new CardInfo(WolfSelf, "Wolf: Me", CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Self, "wolf.png", few, Cards.Livestock, Cards.Dog));
+            MasterDeck.Add(new CardInfo(WolfSelf, "Wolf: Me", CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Self, "wolf.png", some, Cards.Livestock, Cards.Dog));
             //MasterDeck.Add(new CardInfo(WolfOther, "Wolf: You", CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.Other, "wolf.png", few, Cards.Livestock, Cards.Dog));
             MasterDeck.Add(new CardInfo(WolfAll, "Wolf: All", CardInfo.CardSuit.Disaster, false, CardInfo.CardImpact.All, "wolf.png", few, Cards.Livestock, Cards.Dog));
 
             //MasterDeck.Add(new CardInfo(GoodNeighbor, "Give", CardInfo.CardSuit.Action, false, CardInfo.CardImpact.None, "good-neighbor", some));
             //MasterDeck.Add(new CardInfo(BadNeighbor, "Steal", CardInfo.CardSuit.Action, false, CardInfo.CardImpact.None, "bad-neighbor", some));
 
-            MasterDeck.Add(new CardInfo(Levee, "Levee", CardInfo.CardSuit.Prevention, false, CardInfo.CardImpact.None, "levee.png", some));
-            MasterDeck.Add(new CardInfo(Dog, "D.O.G.", CardInfo.CardSuit.Prevention, false, CardInfo.CardImpact.None, "dog.png", lots));
-            MasterDeck.Add(new CardInfo(Rain, "Rain", CardInfo.CardSuit.Prevention, false, CardInfo.CardImpact.None, "rain.png", some));
+            MasterDeck.Add(new CardInfo(Levee, "Levee", CardInfo.CardSuit.Prevention, false, CardInfo.CardImpact.None, "levee.png", tons));
+            MasterDeck.Add(new CardInfo(Dog, "D.O.G.", CardInfo.CardSuit.Prevention, false, CardInfo.CardImpact.None, "dog.png", tons));
+            MasterDeck.Add(new CardInfo(Rain, "Rain", CardInfo.CardSuit.Prevention, false, CardInfo.CardImpact.None, "rain.png", tons));
 
             MasterDeck.Add(new CardInfo(Livestock, "Animals", CardInfo.CardSuit.LiveStock, true, CardInfo.CardImpact.None, "livestock.png", lots));
             MasterDeck.Add(new CardInfo(Seeds, "Seeds", CardInfo.CardSuit.Garden, true, CardInfo.CardImpact.None, "seeds.png", lots));
-            MasterDeck.Add(new CardInfo(Well, "Well", CardInfo.CardSuit.Garden, true, CardInfo.CardImpact.None, "well.png", lots));
+            MasterDeck.Add(new CardInfo(Well, "Well", CardInfo.CardSuit.Garden, true, CardInfo.CardImpact.None, "well.png", extreme));
             MasterDeck.Add(new CardInfo(Shovel, "Shovel", CardInfo.CardSuit.Garden, true, CardInfo.CardImpact.None, "shovel.png", lots));
             MasterDeck.Add(new CardInfo(Saw, "Saw", CardInfo.CardSuit.House, true, CardInfo.CardImpact.None, "saw.png", lots));
             MasterDeck.Add(new CardInfo(Hammer, "Hammer", CardInfo.CardSuit.House, true, CardInfo.CardImpact.None, "hammer.png", lots));

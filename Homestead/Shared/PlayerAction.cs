@@ -65,5 +65,6 @@ namespace Homestead.Shared
             }
             return result;
         }
+        public bool IsDisaster => Type == ActionType.Play && Cards.GetCardInfo(PlayerCard!).Suit == CardInfo.CardSuit.Disaster ;
     }
 }

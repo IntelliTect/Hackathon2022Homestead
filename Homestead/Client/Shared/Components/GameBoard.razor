@@ -37,7 +37,7 @@
     }
 </div>
 
-<div class="last-play">
+<div class="last-play @(Lobby.Board.IsLastPlayDisaster ? "last-play-disaster" : "")">
     @Lobby.Board.LastPlayText
 </div>
 

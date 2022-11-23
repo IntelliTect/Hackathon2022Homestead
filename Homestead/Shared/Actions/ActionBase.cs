@@ -64,6 +64,11 @@ namespace Homestead.Shared.Actions
                     {
                         AddAction(PlayerAction.ActionType.Discard, card);
                     }
+                    // Add discard of prevention cards
+                    foreach (var card in CurrentPlayer.Hand.Where(c=>Cards.GetCardInfo(c).Suit == CardInfo.CardSuit.Prevention))
+                    {
+                        AddAction(PlayerAction.ActionType.Discard, card);
+                    }
                     // See if there are action plays
                     foreach (var card in CurrentPlayer.Hand.Where(f => Cards.GetCardInfo(f).Suit == CardInfo.CardSuit.Action))
                     {
