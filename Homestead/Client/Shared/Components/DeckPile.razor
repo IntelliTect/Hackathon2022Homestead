@@ -15,7 +15,7 @@
 
     private void click()
     {
-        if (Lobby.Board.CanDrawFromDeck)
+        if (Lobby.Board.CanDrawFromDeck && Lobby.Board.State == Game.GameState.Playing)
         {
             Lobby.Board.DrawFromDeck();
         }

@@ -24,7 +24,7 @@ public class CommunicationHub : Hub
         }
         var newState = engine.ProcessAction(game, action);
         await Clients.Group(newState.GameId).SendAsync("ExecuteAction", newState);
-        while (newState.Players[newState.ActivePlayer-1].IsBot)
+        while (newState.Players[newState.ActivePlayer - 1].IsBot)
         {
             if (game.State is Game.GameState.Complete)
             {
@@ -34,6 +34,7 @@ public class CommunicationHub : Hub
             Random rand = new Random();
             int index = rand.Next(0, newState.AvailableActions.Count - 1);
             var newAction = newState.AvailableActions[index];
+            // TODO: Move logic into ActionBase class
             if (newAction.Type is PlayerAction.ActionType.Discard
                 && string.IsNullOrWhiteSpace(newAction.PlayerCard))
             {
@@ -42,9 +43,14 @@ public class CommunicationHub : Hub
 
             newState = engine.ProcessAction(newState, newAction);
             await Clients.Group(newState.GameId).SendAsync("ExecuteAction", newState);
+            // If a bot played a disaster card, wait more time so players know what happened.
+            if (newAction.Type == PlayerAction.ActionType.Play && Cards.GetCardInfo(newAction.PlayerCard!).Suit == CardInfo.CardSuit.Disaster)
+            {
+                await Task.Delay(2000).ConfigureAwait(false);
+            }
         }
     }
-    
+
     public async Task RequestPushGameState(string gameId)
     {
         var game = gameLookup.GetGame(gameId);

@@ -23,7 +23,7 @@
     @if (IsOwnerOfGame && Board.State == Game.GameState.Joining)
     {
         <div class="row justify-content-md-center">
-            <button type="button" class="btn btn-success btn-lg col-sm" @onclick="StartGame">Start</button>
+            <button type="button" class="btn btn-primary btn-lg col-sm" @onclick="StartGame">Start</button>
         </div>
     }
     else if (Board.State == Game.GameState.Complete && Board.WinningPlayer != null)
@@ -35,6 +35,10 @@
             <button type="button" class="new-game-button btn btn-success btn-lg col-sm" @onclick="()=>Navigation.NavigateTo('/'.ToString())">New Game</button>
         </div>
     }
+</div>
+
+<div class="last-play @(Lobby.Board.IsLastPlayDisaster ? "last-play-disaster" : "")">
+    @Lobby.Board.LastPlayText
 </div>
 
 <div class="player-hand">
@@ -77,25 +81,25 @@
         Console.WriteLine($"Game Board Component with {Opponents.Count() + 1} Players");
         hubConnection.On<Game>("ExecuteAction", (game) =>
         {
-            Console.WriteLine("Got Game Update");
+            //Console.WriteLine("Got Game Update");
             foreach (var action in game.LastActions)
             {
                 Console.WriteLine($"Last Action: {action.Type}");
             }
             Board.Update(game);
-            Console.WriteLine(Board.LocalPlayer.ToString());
+            //Console.WriteLine(Board.LocalPlayer.ToString());
             foreach (var player in Board.OtherPlayers)
             {
                 Console.WriteLine(player);
             }
-            if (Board.CanDrawFromDeck) Console.WriteLine("Can Draw from Deck");
-            if (Board.CanDrawFromDiscard) Console.WriteLine("Can Draw from Discard");
+            //if (Board.CanDrawFromDeck) Console.WriteLine("Can Draw from Deck");
+            //if (Board.CanDrawFromDiscard) Console.WriteLine("Can Draw from Discard");
 
             foreach (var action in game.AvailableActions)
             {
                 Console.WriteLine($"Available Action: {action.Type}");
             }
-            Console.WriteLine($"Cards: Hand: {Board.LocalPlayer.Hand.Count}  Board: {Board.LocalPlayer.Board.Count}");
+            Console.WriteLine($"Player Cards: Hand: {Board.LocalPlayer.Hand.Count}  Board: {Board.LocalPlayer.Board.Count}");
             StateHasChanged();
         });
         Board.PerformAction += SendActionEvent!;
