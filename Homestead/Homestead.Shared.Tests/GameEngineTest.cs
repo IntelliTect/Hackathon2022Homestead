@@ -1,5 +1,4 @@
-﻿using NuGet.Frameworks;
-
+﻿
 namespace Homestead.Shared.Tests
 {
     [TestClass]
@@ -130,7 +129,7 @@ namespace Homestead.Shared.Tests
             PlayerAction action = new(PlayerAction.ActionType.Play, game.ActivePlayer);
             action.PlayerCard = Cards.Well;
 
-            Assert.ThrowsException<KeyNotFoundException>(() => engine.ProcessAction(game, action));
+            Assert.Throws<KeyNotFoundException>(() => engine.ProcessAction(game, action));
         }
 
         // Active Player reverts to 1 after 4
@@ -176,7 +175,7 @@ namespace Homestead.Shared.Tests
             Assert.AreEqual(1, game.Players[game.ActivePlayer].Hand.Count);
             Assert.AreEqual(0, game.Players[2].Hand.Count);
 
-            Assert.ThrowsException<NullReferenceException>(() => engine.ProcessAction(game, action));
+            Assert.Throws<NullReferenceException>(() => engine.ProcessAction(game, action));
 
             Assert.AreEqual(0, game.Players[game.ActivePlayer].Hand.Count);
             Assert.AreEqual(0, game.Players[2].Hand.Count);
