@@ -106,7 +106,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Lobby.PlayerId = await localStorage.GetItemAsync<string>("PlayerId");
+        Lobby.PlayerId = await localStorage.GetItemAsync<string>("PlayerId") ?? string.Empty;
         if (string.IsNullOrEmpty(Lobby.PlayerId))
         {
             Lobby.PlayerId = Guid.NewGuid().ToString();
