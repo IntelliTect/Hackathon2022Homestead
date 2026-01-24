@@ -69,7 +69,7 @@ namespace Homestead.Shared.Tests
             game = engine.ProcessAction(game, action);
             Assert.IsFalse(game.DiscardPile.Any());
             Assert.IsTrue(game.Players[game.ActivePlayer].Hand.Any());
-            Assert.IsTrue(game.Players[game.ActivePlayer].Hand[0] is Cards.Well);
+            Assert.AreEqual(Cards.Well, game.Players[game.ActivePlayer].Hand[0]);
 
             Assert.IsFalse(game.AvailableActions.Any(a => a.Type is PlayerAction.ActionType.DrawFromDeck));
             Assert.IsFalse(game.AvailableActions.Any(a => a.Type is PlayerAction.ActionType.DrawFromDiscard));
@@ -96,11 +96,11 @@ namespace Homestead.Shared.Tests
 
             game = engine.ProcessAction(game, action);
             Assert.IsTrue(game.Players[game.ActivePlayer].Hand.Any());
-            Assert.IsTrue(game.Players[game.ActivePlayer].Hand[0] is Cards.Well);
+            Assert.AreEqual(Cards.Well, game.Players[game.ActivePlayer].Hand[0]);
 
             Assert.IsTrue(game.DiscardPile.Any());
-            Assert.IsTrue(game.DiscardPile.First() is Cards.Well);
-            Assert.IsTrue(game.DiscardPile.Last() is Cards.Wood);
+            Assert.AreEqual(Cards.Well, game.DiscardPile.First());
+            Assert.AreEqual(Cards.Wood, game.DiscardPile.Last());
         }
 
         // Draw from discard with no discard
@@ -151,13 +151,13 @@ namespace Homestead.Shared.Tests
             action.TargetCard = Cards.Well;
             //action.PlayerCard = "Give";
 
-            Assert.AreEqual(2, game.Players[game.ActivePlayer].Hand.Count);
-            Assert.AreEqual(0, game.Players[2].Hand.Count);
+            Assert.HasCount(2, game.Players[game.ActivePlayer].Hand);
+            Assert.IsEmpty(game.Players[2].Hand);
 
             game = engine.ProcessAction(game, action);
 
-            Assert.AreEqual(0, game.Players[game.ActivePlayer].Hand.Count);
-            Assert.AreEqual(1, game.Players[2].Hand.Count);
+            Assert.IsEmpty(game.Players[game.ActivePlayer].Hand);
+            Assert.HasCount(1, game.Players[2].Hand);
         }
 
         [TestMethod]
@@ -172,13 +172,13 @@ namespace Homestead.Shared.Tests
             PlayerAction action = new(PlayerAction.ActionType.Play, game.ActivePlayer);
             action.PlayerCard = Cards.GoodNeighbor;
 
-            Assert.AreEqual(1, game.Players[game.ActivePlayer].Hand.Count);
-            Assert.AreEqual(0, game.Players[2].Hand.Count);
+            Assert.HasCount(1, game.Players[game.ActivePlayer].Hand);
+            Assert.IsEmpty(game.Players[2].Hand);
 
             Assert.Throws<NullReferenceException>(() => engine.ProcessAction(game, action));
 
-            Assert.AreEqual(0, game.Players[game.ActivePlayer].Hand.Count);
-            Assert.AreEqual(0, game.Players[2].Hand.Count);
+            Assert.IsEmpty(game.Players[game.ActivePlayer].Hand);
+            Assert.IsEmpty(game.Players[2].Hand);
         }
 
         [TestMethod]
@@ -197,13 +197,13 @@ namespace Homestead.Shared.Tests
             action.TargetCard = Cards.Well;
             //action.PlayerCard = "Give";
 
-            Assert.AreEqual(1, game.Players[game.ActivePlayer].Hand.Count);
-            Assert.AreEqual(1, game.Players[2].Hand.Count);
+            Assert.HasCount(1, game.Players[game.ActivePlayer].Hand);
+            Assert.HasCount(1, game.Players[2].Hand);
 
             game = engine.ProcessAction(game, action);
 
-            Assert.AreEqual(1, game.Players[game.ActivePlayer].Hand.Count);
-            Assert.AreEqual(0, game.Players[2].Hand.Count);
+            Assert.HasCount(1, game.Players[game.ActivePlayer].Hand);
+            Assert.IsEmpty(game.Players[2].Hand);
         }
 
         // Player cannot draw two cards from deck
@@ -242,7 +242,7 @@ namespace Homestead.Shared.Tests
             PlayerAction action = new(PlayerAction.ActionType.Play, game.ActivePlayer, Cards.WolfAll);
 
             game = engine.ProcessAction(game, action);
-            Assert.AreEqual(4, game.AvailableActions.Count);
+            Assert.HasCount(4, game.AvailableActions);
             Assert.IsTrue(game.AvailableActions.All(a => a.Type is PlayerAction.ActionType.Discard));
         }
 

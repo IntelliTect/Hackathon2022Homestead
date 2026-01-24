@@ -41,7 +41,6 @@ namespace Homestead.Shared
         static Cards()
         {
             int extreme = 20;
-            int tons = 15;
             int lots = 10;
             int some = 2;
             int few = 1;
