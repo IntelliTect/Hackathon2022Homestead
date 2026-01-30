@@ -105,7 +105,7 @@ namespace Homestead.Shared.Actions
             CurrentPlayer.Hand.Remove(card);
         }
 
-        private bool RemoveCardsBasedOnDisaster(int playerNumber, string impactedCard, string preventionCard)
+        private bool RemoveCardsBasedOnDisaster(int playerNumber, string impactedCard, string? preventionCard)
         {
             if (preventionCard==null || !RemoveCardFromPlayersHand(playerNumber, preventionCard))
             {

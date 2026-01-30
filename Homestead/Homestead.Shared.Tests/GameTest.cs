@@ -9,8 +9,8 @@ namespace Homestead.Shared.Tests
             GameEngineWithActions engine = new();
             Game game = engine.Start("test");
 
-            Assert.AreEqual(4, game.Players.Count);
-            Assert.IsTrue(game.Players[3].Name != null);
+            Assert.HasCount(4, game.Players);
+            Assert.IsNotNull(game.Players[3].Name);
         }
     }
 }

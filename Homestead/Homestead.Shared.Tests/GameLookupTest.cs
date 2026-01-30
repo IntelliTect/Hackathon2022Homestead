@@ -5,12 +5,13 @@ namespace Homestead.Shared.Tests
     [TestClass]
     public class GameLookupTest
     {
-        GameLookup _lookup { get; set; }
-        GameLookupTest(GameLookup lookup)
-        {
-            _lookup = lookup;
-        }
+        GameLookup _lookup { get; set; } = new GameLookup();
+        
         [TestInitialize]
+        public void Initialize()
+        {
+            _lookup = new GameLookup();
+        }
 
         [TestMethod]
         public void addGame()
