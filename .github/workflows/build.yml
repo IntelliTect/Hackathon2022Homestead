@@ -57,6 +57,6 @@ jobs:
         app-name: HomesteadGame
         package: website
     - name: logout
-        run: |
-          az logout
+      run: |
+        az logout
       
