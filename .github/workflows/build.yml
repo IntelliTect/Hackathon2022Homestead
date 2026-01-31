@@ -61,6 +61,7 @@ jobs:
       with:
         app-name: HomesteadGame
         package: website
+        startup-command: dotnet Homestead.Server.dll
     - name: logout
       run: |
         az logout
